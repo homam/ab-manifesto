@@ -18,7 +18,7 @@
             <table class='results'>
                 <thead>
                     <tr>
-                        <th>Trial</th>
+                        <th>Toss</th>
                         <th>Rssult</th>
                     </tr>
                 </thead>
@@ -76,35 +76,26 @@
             <table class='results'>
                 <thead>
                     <tr>
-                        <th>Trial</th>
+                        <th>Toss</th>
                         <th>Rssult</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
                 <tfoot class="summary">
                     <tr>
-                        <td colspan="2">
-                            <table>
-                                <tr>
-                                    <th>Heads:</th><td data-value='Heads'></td>
-                                </tr>
-                                <tr>
-                                    <th>Tails:</th><td data-value='Tails'></td>
-                                </tr>
-                            </table>
-                        </td>
+                        <th>Heads:</th>
+                        <td data-value='Heads'></td>
                     </tr>
                 </tfoot>
             </table>
-            <svg>
-            </svg>
+            <svg id="binomial-n-tries"></svg>
         </section>
         <section>
             Now let's toss a coin for 100 times and count the number of heads. We expect
             the number of times that the coin lands on head be equal to the number of times that it lands on
             tail and equal to 50.
         </section>
-        <svg id="binomial-n-tries"></svg>
+        
     </article>
     <script src="javascript/libs/prelude-browser.js"></script>
     <script src="home/javascript/utils.js"></script>

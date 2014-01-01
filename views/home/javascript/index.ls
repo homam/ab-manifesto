@@ -21,7 +21,7 @@ table-coin-data = (table-selecor , data) ->
 	$tbody = $table.select \tbody
 	$tr = $tbody.selectAll \tr .data data
 		..enter! .append \tr 
-			..append \td .attr \calss \n
+			..append \td .attr \class \n
 			..append \td .attr \class \value
 	$tr.select \.n .text ((_,i)->i+1)
 	$tr.select \.value .text bool-to-headtail
@@ -49,7 +49,7 @@ table-coin-n-times-t 10 20
 draw-binomial-n-tries = ($svg, data, {duration = 1000, width = 600, height = 260, on-transition-started = noop, on-transition-ended = noop}) ->
 	
 	dlength = data.length
-	dgroups = group-by id, data |> obj-to-pairs |> map ([key, arr]) -> key: +key, prob: arr.length / dlength
+	dgroups = group-by id, data |> obj-to-pairs |> map ([key, arr]) -> key: +key, count: arr.length, prob: arr.length / dlength
 
 
 	margin =
@@ -112,7 +112,7 @@ draw-binomial-n-tries = ($svg, data, {duration = 1000, width = 600, height = 260
 
 
 	$vpEnter.append 'g' .attr 'class', 'y axis'
-	yAxis = d3.svg.axis! .scale y .orient 'left' .tickFormat (d3.format "0%") .tickSize(-width,0,0) .ticks(5)
+	yAxis = d3.svg.axis! .scale y .orient 'left' .tickFormat ((d3.format ",") . (*dlength)) .tickSize(-width,0,0) .ticks(5)
 	$yAxis = $vp.select '.y.axis'
 		..transition! .duration 200 .call yAxis
 
@@ -124,11 +124,10 @@ draw-binomial-n-tries = ($svg, data, {duration = 1000, width = 600, height = 260
 
 _ <- $!
 
-data = many-random-bins 10, 100
-draw-binomial-n-tries (d3.select '#binomial-n-tries'), data, {
+
+draw-binomial-n-tries (d3.select '#binomial-n-tries'), (many-random-bins 10, 20),
 	on-transition-started: ({key})->
 		fake = (heads) -> 
 			shuffle <| (map -> 0, [1 to heads]) ++ (map  -> 1, [1 to (10 - heads)])
-		table-coin-data '#coin-10-times table.results', (fake key)
-	duration: 15000
-}
+		table-coin-data '#coin-10-times-20 table.results', (fake key)
+	duration: 30000

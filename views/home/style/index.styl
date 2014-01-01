@@ -2,11 +2,17 @@ body
 	background-color: white
 	font-family: sans-serif
 
+section
+	margin-bottom: 1em
+	&:after
+		content: ' '
+		display: block
+		clear: both
 
 svg 
 	display: block
 		text
-		font: normal 12px Arial;
+		font: normal 12px Arial
 	.axis
 		path
 			fill: none
@@ -21,3 +27,11 @@ line
 	stroke: #000000
 	fill: none
 
+
+#coin-10-times-20
+	table.results
+		float: left
+	svg
+		margin-left: 20px
+		display: block
+		float: left

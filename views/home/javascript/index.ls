@@ -15,7 +15,8 @@ many-random-bins = (number-of-bins, trials) -->
  
 bool-to-headtail = (-> if 0 == it then 'Head' else 'Tail')
 
-table-coin-data = (table-selecor , data) ->
+table-coin-data = (table-selecor , data , {duration = 1000}) ->
+	duration = duration / data.length
 
 	$table = d3.select table-selecor
 	$tbody = $table.select \tbody
@@ -25,26 +26,24 @@ table-coin-data = (table-selecor , data) ->
 			..append \td .attr \class \value
 	$tr.select \.n .text ((_,i)->i+1)
 	$tr.select \.value .text bool-to-headtail
+	$tr.style 'opacity', 0 .transition! .duration 10 .delay ((_,i) -> duration*i) .style \opacity, 1 
 
 	summary = 
 		Heads: (filter (==0), data).length
 		Tails: (filter (==1), data).length
-	$ table-selecor .find '.summary [data-value]' .each ->
-		$this = $ this
-		$this.text <| summary[$ this .data \value]
+	$summary = $ table-selecor .find '.summary [data-value]' 
+		..text ''
+	setTimeout ->
+		$summary.each ->
+			$this = $ this
+			$this.text <| summary[$ this .data \value]
+	, duration*data.length
 
-table-coin-data '#coin-2-times table.results', (map toss, [1 to 2])
-table-coin-data '#coin-10-times table.results', (map toss, [1 to 10])
-
-
-table-coin-n-times-t = (n, t) ->
-	data = many-random-bins n, t
-	fake = (heads) -> 
-		shuffle <| (map -> 0, [1 to heads]) ++ (map  -> 1, [1 to (n - heads)])
-	console.log <| map fake, data
+table-coin-data '#coin-2-times table.results', (map toss, [1 to 2]), {}
+table-coin-data '#coin-10-times table.results', (map toss, [1 to 10]), {}
 
 
-table-coin-n-times-t 10 20
+
 
 draw-binomial-n-tries = ($svg, data, {duration = 1000, width = 600, height = 260, on-transition-started = noop, on-transition-ended = noop}) ->
 	
@@ -106,8 +105,9 @@ draw-binomial-n-tries = ($svg, data, {duration = 1000, width = 600, height = 260
 	$block = $vp.selectAll 'rect.block' .data id
 		..enter! .append \rect .attr \class, \block 
 	$block.attr \width, x.rangeBand! .attr \height, block-height
-		..attr \x, (.x) .attr \y -1*(block-height + margin.top)
-		..transition! .delay ((_,i)-> i*duration) .duration duration .attr \y, (.y) 
+		..attr \x, (.x) .attr \y -2*(block-height + margin.top)
+		#..transition! .delay ((_,i)-> 1.2*(i)*duration) .duration 2*duration .attr \y, -1*(block-height + margin.top)
+		..transition! .delay ((_,i)-> (i)*duration) .duration duration .attr \y, (.y) 
 			.each \start, on-transition-started .each \end, on-transition-ended
 
 
@@ -125,9 +125,16 @@ draw-binomial-n-tries = ($svg, data, {duration = 1000, width = 600, height = 260
 _ <- $!
 
 
-draw-binomial-n-tries (d3.select '#binomial-n-tries'), (many-random-bins 10, 20),
+trials = 100
+duration = 5000
+bins = 10
+draw-binomial-n-tries (d3.select '#binomial-n-tries'), (many-random-bins bins, trials),
 	on-transition-started: ({key})->
 		fake = (heads) -> 
-			shuffle <| (map -> 0, [1 to heads]) ++ (map  -> 1, [1 to (10 - heads)])
-		table-coin-data '#coin-10-times-20 table.results', (fake key)
-	duration: 30000
+			shuffle <| (map -> 0, [1 to heads]) ++ (map  -> 1, [1 to (bins - heads)])
+		table-coin-data '#coin-10-times-20 table.results', (fake key), {duration: 0.2*duration/trials}
+	on-transition-ended: (_,i) ->
+		if i == (trials - 1)
+			$ '#coin-10-times-20 table.results' .css \opacity, 0
+	duration: duration
+

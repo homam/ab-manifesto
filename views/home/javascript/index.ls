@@ -1,4 +1,5 @@
 {mean, sum, id, map, fold, filter, group-by, obj-to-pairs, head, tail, split-at} = require 'prelude-ls'
+exports = exports ? this
 
 random = Math.random
 floor = Math.floor
@@ -15,36 +16,34 @@ many-random-bins = (number-of-bins, trials) -->
  
 bool-to-headtail = (-> if 0 == it then 'Head' else 'Tail')
 
-table-coin-data = (table-selecor , data , {duration = 1000}) ->
+
+# binomial trial table
+table-coin-data = ($jqtable , data , {duration = 1000}) ->
 	duration = duration / data.length
 
-	$table = d3.select table-selecor
+	$table = d3.select $jqtable.get 0
 	$tbody = $table.select \tbody
 	$tr = $tbody.selectAll \tr .data data
 		..enter! .append \tr 
 			..append \td .attr \class \n
-			..append \td .attr \class \value
+			..append \td .attr \class \value .append \span
 	$tr.select \.n .text ((_,i)->i+1)
-	$tr.select \.value .text bool-to-headtail
-	$tr.style 'opacity', 0 .transition! .duration 10 .delay ((_,i) -> duration*i) .style \opacity, 1 
+	$value = $tr.select \.value .select \span .text bool-to-headtail
+	$value.style 'opacity', 0 .transition! .duration 10 .delay ((_,i) -> duration*i) .style \opacity, 1 
 
 	summary = 
 		Heads: (filter (==0), data).length
 		Tails: (filter (==1), data).length
-	$summary = $ table-selecor .find '.summary [data-value]' 
+	$summary = $jqtable.find '.summary [data-value]' 
 		..text ''
 	setTimeout ->
 		$summary.each ->
 			$this = $ this
 			$this.text <| summary[$ this .data \value]
-	, duration*data.length
-
-table-coin-data '#coin-2-times table.results', (map toss, [1 to 2]), {}
-table-coin-data '#coin-10-times table.results', (map toss, [1 to 10]), {}
+	, duration*(data.length-1)
 
 
-
-
+# binomial trial histogram
 draw-binomial-n-tries = ($svg, data, {duration = 1000, width = 600, height = 260, on-transition-started = noop, on-transition-ended = noop}) ->
 	
 	dlength = data.length
@@ -124,17 +123,38 @@ draw-binomial-n-tries = ($svg, data, {duration = 1000, width = 600, height = 260
 
 _ <- $!
 
+actions =
+	'coin-n-items': (n) ->
+		$ '#coin-' + n + '-times .experiment' .show!
+		table-coin-data ($ '#coin-' + n + '-times table.results'), (map toss, [1 to n]), {}
+	'coin-2-times': -> actions['coin-n-items'] 2
+	'coin-10-times': -> actions['coin-n-items'] 10
 
-trials = 100
-duration = 5000
-bins = 10
-draw-binomial-n-tries (d3.select '#binomial-n-tries'), (many-random-bins bins, trials),
-	on-transition-started: ({key})->
-		fake = (heads) -> 
-			shuffle <| (map -> 0, [1 to heads]) ++ (map  -> 1, [1 to (bins - heads)])
-		table-coin-data '#coin-10-times-20 table.results', (fake key), {duration: 0.2*duration/trials}
-	on-transition-ended: (_,i) ->
-		if i == (trials - 1)
-			$ '#coin-10-times-20 table.results' .css \opacity, 0
-	duration: duration
+	'con-n-times-t-trials': ($container, bins, trials, duration) ->
+		$container.find \.experiment .show!
+		$results = $container.find \table.results .css \opacity, 1
+		draw-binomial-n-tries (d3.select <| $container.find \svg .get 0), (many-random-bins bins, trials),
+			on-transition-started: ({key})->
+				fake = (heads) -> 
+					shuffle <| (map -> 0, [1 to heads]) ++ (map  -> 1, [1 to (bins - heads)])
+				table-coin-data $results, (fake key), {duration: 0.2*duration/trials}
+			on-transition-ended: (_,i) ->
+				if i == (trials - 1)
+					$results .css \opacity, 0
+			duration: duration
+	'coin-10-times-20-trials': ->
+		actions['con-n-times-t-trials'] ($ '#coin-10-times-20-trials'), 10, 20, 12000
 
+	'coin-10-times-1000-trials': ->
+		actions['con-n-times-t-trials'] ($ '#coin-10-times-1000-trials'), 10, 1000, 20000
+
+
+$ 'button[data-action]' .each ->
+	$this = $ this 
+	act = $this .attr \data-action
+	$this.click -> actions[act]!
+
+
+
+
+exports.actions = actions

@@ -12,10 +12,12 @@
     </header>
     <article id="graphs">
         <section id='coin-2-times'>
+            <h2>Binomial Experiment</h2>
             <p>
-                Let's toss a coin for a couple of times:
+                Let's
+                <button data-action='coin-2-times'>toss a coint for a coule of times</button>
             </p>
-            <table class='results'>
+            <table class='results experiment' cellpadding="0" cellspacing="0" border="1">
                 <thead>
                     <tr>
                         <th>Toss</th>
@@ -34,17 +36,23 @@
                                     <th>Tails:</th><td data-value='Tails'></td>
                                 </tr>
                             </table>
+                            <p>
+                                <button data-action='coin-2-times'>Repeat</button>
+                            </p>
                         </td>
                     </tr>
                 </tfoot>
             </table>
+            <p>
+
+            </p>
 
         </section>
         <section id='coin-10-times'>
             <p>
-                Now let's toss a coin for 10 times:
+                Now let's <button data-action='coin-10-times'>toss a coin for 10 times</button>:
             </p>
-            <table class='results'>
+            <table class='results experiment' cellpadding="0" cellspacing="0" border="1">
                 <thead>
                     <tr>
                         <th>Trial</th>
@@ -63,32 +71,90 @@
                                     <th>Tails:</th><td data-value='Tails'></td>
                                 </tr>
                             </table>
+                            <p>
+                                <button data-action='coin-10-times'>Repeat</button>
+                            </p>
                         </td>
                     </tr>
                 </tfoot>
             </table>
         </section>
-        <section id="coin-10-times-20">
+        <section id="coin-10-times-20-trials">
              <p>
                 Now let's toss a coin for 10 times, count the number of heads and 
                 repeat this experiment for 20 more times.
+                <button data-action='coin-10-times-20-trials'>Do it!</button>
             </p>
-            <table class='results'>
-                <thead>
-                    <tr>
-                        <th>Toss</th>
-                        <th>Rssult</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-                <tfoot class="summary">
-                    <tr>
-                        <th>Heads:</th>
-                        <td data-value='Heads'></td>
-                    </tr>
-                </tfoot>
-            </table>
-            <svg id="binomial-n-tries"></svg>
+            <div class="experiment">
+                <table class='results'>
+                    <thead>
+                        <tr>
+                            <th>Toss</th>
+                            <th>Rssult</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot class="summary">
+                        <tr>
+                            <th>Heads:</th>
+                            <td data-value='Heads'></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <svg></svg>
+            </div>
+        </section>
+        <section id="coin-10-times-1000-trials">
+             <p>
+                Now let's repeat the experiment, but this time repeat the trials for 1000 times.
+                <button data-action='coin-10-times-1000-trials'>Do it!</button>
+            </p>
+            <div class="experiment">
+                <table class='results'>
+                    <thead>
+                        <tr>
+                            <th>Toss</th>
+                            <th>Rssult</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot class="summary">
+                        <tr>
+                            <th>Heads:</th>
+                            <td data-value='Heads'></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <svg></svg>
+            </div>
+        </section>
+        <section>
+            <h2>Chance</h2>
+
+            Change of Y axis from numbers to probability
+        </section>
+        <section>
+            <h2>Confidence Intervals</h2>
+        </section>
+        <section>
+            <h2>Formula</h2>
+
+            Haskell code
+        </section>
+        <section>
+            <h2>Normal approximation</h2>
+        </section>
+        <section>
+            <h2>A/B Test</h2>
+
+            Two/or more binomial distributions
+
+            Next post:
+                A/B confidence intervals
+
+            Next post:
+                Holy grail of A/B: case assignment
+
         </section>
         <section>
             Now let's toss a coin for 100 times and count the number of heads. We expect

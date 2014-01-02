@@ -17,67 +17,86 @@
                 Let's
                 <button data-action='coin-2-times'>toss a coint for a coule of times</button>
             </p>
-            <table class='results experiment' cellpadding="0" cellspacing="0" border="1">
-                <thead>
-                    <tr>
+            <table style="width:280px" class='results experiment' cellpadding="0" cellspacing="0" border="1">
+                <tbody>
+                    <tr class='toss'>
                         <th>Toss</th>
-                        <th>Rssult</th>
                     </tr>
-                </thead>
-                <tbody></tbody>
+                    <tr class='result'>
+                        <th>Result</th>
+                    </tr>
+                </tbody>
                 <tfoot class="summary">
                     <tr>
                         <td colspan="2">
                             <table>
                                 <tr>
-                                    <th>Heads:</th><td data-value='Heads'></td>
-                                </tr>
-                                <tr>
-                                    <th>Tails:</th><td data-value='Tails'></td>
+                                    <th>Heads:</th><td style="width:30px"><span data-value='Heads'></span></td>
+                                    <th>Tails:</th><td style="width:30px"><span data-value='Tails'></span></td>
                                 </tr>
                             </table>
-                            <p>
-                                <button data-action='coin-2-times'>Repeat</button>
-                            </p>
+                            <button data-action='coin-2-times'>Repeat</button>
                         </td>
                     </tr>
                 </tfoot>
             </table>
-            <p>
-
-            </p>
-
         </section>
         <section id='coin-10-times'>
             <p>
                 Now let's <button data-action='coin-10-times'>toss a coin for 10 times</button>:
             </p>
             <table class='results experiment' cellpadding="0" cellspacing="0" border="1">
-                <thead>
-                    <tr>
-                        <th>Trial</th>
-                        <th>Rssult</th>
+                <tbody>
+                    <tr class='toss'>
+                        <th>Toss</th>
                     </tr>
-                </thead>
-                <tbody></tbody>
+                    <tr class='result'>
+                        <th>Result</th>
+                    </tr>
+                </tbody>
                 <tfoot class="summary">
                     <tr>
                         <td colspan="2">
                             <table>
                                 <tr>
-                                    <th>Heads:</th><td data-value='Heads'></td>
-                                </tr>
-                                <tr>
-                                    <th>Tails:</th><td data-value='Tails'></td>
+                                    <th>Heads:</th><td style="width:30px"><span data-value='Heads'></span></td>
+                                    <th>Tails:</th><td style="width:30px"><span data-value='Tails'></span></td>
                                 </tr>
                             </table>
-                            <p>
-                                <button data-action='coin-10-times'>Repeat</button>
-                            </p>
+                            <button data-action='coin-10-times'>Repeat</button>
                         </td>
                     </tr>
                 </tfoot>
             </table>
+        </section>
+        <section id="coin-10-times-20-trials-table">
+            <p>
+                <button data-action='coin-10-times-20-trials-table'>Count the number of heads after tossing a coin 10 times, for 20 trials</button>
+            </p>
+            <table class='results experiment' cellpadding="0" cellspacing="0" border="1">
+                <tbody>
+                    <tr class='toss'>
+                        <th>Toss</th>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        <section id="coin-10-times-20-trials-table-sum">
+            <p> 
+                 In this 20 trial experiment, let's summerize the result by 
+                 putting the number of times that we got a Head
+                 in a table, like this: 
+            </p>
+            <pre>
+[(NumberOfHeads, HowManyTimesInOurExperimentWeGotHead)]
+            </pre>
+            <p>
+                For example in the above experiment, in <span>n</span> trials we got 3 Heads 
+                and in <span>m</span> trial we got 4 Heads and so on...
+            </p>
+            <p>
+                <button>Summerize the experiment</button>
+            </p>
         </section>
         <section id="coin-10-times-20-trials">
              <p>
@@ -146,6 +165,14 @@
         </section>
         <section>
             <h2>A/B Test</h2>
+
+            So far we've been interpreting satistics as doing a random experiment over and over again.
+            Another interpretation of statistics is that we're drawing randomly selected subsets (samples)
+            of a very large population: Frequentism
+            This interpretation is useful when dealing with popular polls.
+            (polls: sample is less than population)
+            draw over and over again
+
 
             Two/or more binomial distributions
 

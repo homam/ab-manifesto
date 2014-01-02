@@ -23,8 +23,11 @@ shuffle = (arr) ->
 	arr `zip-all` (map (-> Math.random!), [0 to alength]) |> sort-by (([v,r]) -> r) |> map ([v,r]) -> v
 
 
+wait = (time, f) -> setTimeout f, time
+
 exports.sequence = sequence
 exports.sequenceA = sequenceA
 exports.parseNum = parseNum
 exports.shuffle = shuffle
+exports.wait = wait
 exports.noop = $.noop

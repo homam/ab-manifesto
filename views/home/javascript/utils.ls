@@ -3,6 +3,9 @@ prelude = require('prelude-ls')
 exports = exports || this
 
 random = Math.random
+floor = Math.floor
+ceil = Math.ceil
+round = Math.round
 
 # sequence  :: ([f], v) -> [f v]
 sequence = (fs, v) --> [f v for f in fs]
@@ -25,9 +28,34 @@ shuffle = (arr) ->
 
 wait = (time, f) -> setTimeout f, time
 
+
+
+
+toss = -> round random!
+
+random-bin = (number-of-bins) -> 
+	sum <| map toss, [1 to number-of-bins]
+
+many-random-bins = (number-of-bins, trials) -->
+	map (-> random-bin number-of-bins), [1 to trials]
+ 
+bool-to-headtail = (-> if 0 == it then 'Head' else 'Tail')
+
+
+
+exports.random = random
+exports.floor = floor
+exports.ceil = ceil
+exports.round = round
+
 exports.sequence = sequence
 exports.sequenceA = sequenceA
 exports.parseNum = parseNum
 exports.shuffle = shuffle
 exports.wait = wait
 exports.noop = $.noop
+
+exports.toss = toss
+exports.random-bin = random-bin
+exports.many-random-bins = many-random-bins
+exports.bool-to-headtail = bool-to-headtail

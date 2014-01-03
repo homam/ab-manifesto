@@ -15,7 +15,7 @@
             <h2>Binomial Experiment</h2>
             <p>
                 Let's
-                <button data-action='coin-2-times'>toss a coint for a coule of times</button>
+                <button data-action='coin-2-times'>toss a coint for a couple of times</button>
             </p>
             <table style="width:280px" class='results experiment' cellpadding="0" cellspacing="0" border="1">
                 <tbody>
@@ -40,6 +40,61 @@
                     </tr>
                 </tfoot>
             </table>
+            <p>
+                Click on the <button data-action='coin-2-times'>Repeat</button> button to repeat the experiment.
+                As we repeat the experiment we see that sometimes we get 1 Head and 1 Tails, sometimes 2 Heads and 0 Tails, etc.
+                In fact there are only three possible outcomes of this experiment:
+            </p>
+            <pre>
+0 Head , 2 Tails
+1 Head , 1 Tail
+2 Heads, 0 Tail</pre>
+            <p>
+                As you're repeating the experiment, you might notice that we get the result of 1 Head and 1 Tail 
+                more frequently.
+                This is due the fact that that we we toss a coin for the first time and then pick it up and toss
+                it again for a second time, we're actually doing two independent experiments. Whether we get a Head
+                or a Tail at the first toss, does not affect the result of our second toss.
+            </p>
+            <p>
+                That means to fully understand this experiment, we should treat first and second tosses as separate
+                trials. So actually there are four possible outcomes to this experiments: 
+            </p>
+            <pre>
+First Toss Head, Second Toss Head
+First Toss Head, Second Toss Tail
+First Toss Tail, Second Toss Tail
+First Toss Tail, Second Toss Head</pre>
+            <p>
+                We can summerize this result by this notation:
+            </p>
+            <pre>
+(H, H)
+(H, T)
+(T, T)
+(T, H)</pre>
+        <p>
+            We see that in two out of four possible outcomes, 
+            we have 1 Head and 1 Tail: <code>(H, T)</code> and <code>(T, H)</code>.
+        </p>
+        <p>
+            Back to our original experiment, now it's clear why we had a sense that
+            we're more likely to have 1 Head and 1 Tail result. It's because in 2/4 times or 50% of the time
+            the result of our experiment is <code>1 Head and 1 Tail</code>:
+        </p>
+        <pre>
+(H, H) -> 25%
+(H, T) -> 25%
+(T, T) -> 25%
+(T, H) -> 25%</pre>
+        <pre>
+0 Head , 2 Tails  -> 25%
+1 Head , 1 Tail   -> 25% + 25% = 50%
+2 Heads, 0 Tail   -> 25%</pre>
+        <p>
+            When we toss a coin for two times, we're twice as much likely to get <code>1 Head and 1 Tail</code> than
+            <code>2 Heads and 0 Tails</code> or <code>0 Heads and 2 Tails</code>.
+        </p>
         </section>
         <section id='coin-10-times'>
             <p>
@@ -68,8 +123,44 @@
                     </tr>
                 </tfoot>
             </table>
+            <p>
+                Keep repeating the experiment. We'll almost never end up in a situation that we get 
+                <code>10 Heads and 0 Tails</code> or <code>0 Heads and 10 Tails</code>.
+                You have to be very lucky that you get trow a coin for 10 times and you each time you get a Head.
+                Don't get me wrong, it might happen, but it's very rare.
+            </p>
+            <p>
+                If you keep repeating this experiment, you'll notice that is also very unlikely that we end up with
+                even <code>2 Heads and 8 Tails</code> or <code>8 Heads and 2 Tails</code> etc.
+            </p>
+            <p>
+                You might think that when we throw a coin for 10 times, the most expected outcome is that we end up with
+                <code>5 Heads and 5 Tails</code>. That's true, but you will consider yourself lucky if you end up with exactly
+                <code>5 Heads and 5 Tails</code>. In fact by repeating this experiment, we see that
+                though we call outselves lucky if we have exactly <code>5 Heads and 5 Tails</code> but
+                we're almost always close to that magic middle.
+            </p>
+            <p>
+                Two things, before we go forward;
+                <ul>
+                <li>
+                    First, notice the pattern: we're repeating an experiment over and over agian.
+                    The experiment is 'Trowing a coin for 10 times', and we keep repeating it. And each time we're counting the number of Heads and Tails.
+                </li>
+                <li>
+                    Second, if we know the number of Heads in each experiment, then we know the number of Tails.
+                    <pre>
+Number of Heads + Number of Tails =  Number of times throws (10 times in this example)
+                    </pre>
+                </li>
+                </ul>
+                For simplicity, from here on, we only count the number of Heads.
+            </p>
         </section>
         <section id="coin-10-times-20-trials-table">
+            <p>
+                Instead of keep clicking on the repeat button, let's repeat our experiment (thorwing a coin 10 times and counting the number of Heads), for 20 trials. It's like clicking on the repeat button for 20 times.
+            </p>
             <p>
                 <button data-action='coin-10-times-20-trials-table'>Count the number of heads after tossing a coin 10 times, for 20 trials</button>
             </p>
@@ -80,25 +171,55 @@
                     </tr>
                 </tbody>
             </table>
+            <p>
+                The table above contains the full dataset of our experiment. Each cell indiacates a toss of coin.
+                Each row is a trial (10 times tossing a coin).
+                The result of the trial (the number of times we got a Head in each 10 tosses) is shown in the last column.
+            </p>
+            <p>
+                Note that in 20 trials, we might get some of the less likely results of <code>2 Heads</code> or
+                <code>8 Heads</code>.
+            </p>
         </section>
         <section id="coin-10-times-20-trials-table-sum">
+            <p>
+                This table can be overwhelming. Especially you might have guessed that soon we will be doing
+                this experiment not just for 20 trials but for houndrads or thousands of trials.
+            </p>
             <p> 
-                 In this 20 trial experiment, let's summerize the result by 
-                 putting the number of times that we got a Head
-                 in a table, like this: 
-            </p>
-            <pre>
-[(NumberOfHeads, HowManyTimesInOurExperimentWeGotHead)]
-            </pre>
-            <p>
-                For example in the above experiment, in <span>n</span> trials we got 3 Heads 
-                and in <span>m</span> trial we got 4 Heads and so on...
+                We can summerize the table by counting how many times we ended up with <code>0 Heads</code>, 
+                <code>1 Head</code>, <code>2 Heads</code> and so on.
             </p>
             <p>
-                <button>Summerize the experiment</button>
+                <button data-action='coin-10-times-20-trials-table-sum'>Summerize the experiment</button>
+            </p>
+            <table class='results experiment' cellpadding="0" cellspacing="0" border="1">
+                <tbody>
+                    <tr class='count'>
+                        <th>Count of Heads</th>
+                    </tr>
+                    <tr class='trials'>
+                        <th>Number of Trials</th>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                At each trial, we're throwing a coin for 10 times. So the numeber of times that we get a Head is
+                between 0 and 10 each time (we cannot get 11 Heads by tossing a coin for 10 times!).
+            </p>
+            <p>
+                Take a look the summary table above, I think it proves our suspicion that we're most likely
+                to be somewhere in the middle. Meaning that if toss a coin for 10 times, we're most likely to
+                have a 4,5 or 6 number of Heads.
             </p>
         </section>
         <section id="coin-10-times-20-trials">
+            <p>
+                We're going to love visualization and prefer graphs to data tables.
+            </p>
+            <p>
+                ..graph..
+            </p>
              <p>
                 Now let's toss a coin for 10 times, count the number of heads and 
                 repeat this experiment for 20 more times.
@@ -122,9 +243,16 @@
                 </table>
                 <svg></svg>
             </div>
+            <p>
+                One way to think about this, is that we have 10 bins.
+                At the end of each trial, when we count the number of Heads, we add one item to correspoding bin.
+                For example if we have 3 Heads, we add one to the 3rth bin and so on.
+                Click on the animate button to see how this happens.
+            </p>
         </section>
         <section id="coin-10-times-1000-trials">
              <p>
+                Utilizing our bins thinking ...
                 Now let's repeat the experiment, but this time repeat the trials for 1000 times.
                 <button data-action='coin-10-times-1000-trials'>Do it!</button>
             </p>
@@ -146,6 +274,19 @@
                 </table>
                 <svg></svg>
             </div>
+            <p>
+                The data summary table corresoinding to the above graph is:
+            </p>
+            <p>
+                This graph has a very distinctive shape.
+                Bell curve
+            </p>
+        </section>
+        <section>
+            <h2>Unfair Coins</h2>
+            How it's all related to UX
+            Binomial distribution and bell curve, data table for an unfir coins.
+            Notice the bell curve is shifted, its shape has not changed, but it's center of mass not in the middle anymore
         </section>
         <section>
             <h2>Chance</h2>
@@ -192,6 +333,7 @@
     </article>
     <script src="javascript/libs/prelude-browser.js"></script>
     <script src="home/javascript/utils.js"></script>
+    <script src="home/javascript/binomial-histogram.js"></script>
     <script src="home/javascript/index.js"></script>
 </body>
 </html>

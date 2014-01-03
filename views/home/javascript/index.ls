@@ -60,9 +60,8 @@ table-coin-data-many = ($jqtable , data , {duration = 1000}) !->
 			..text ''
 			..transition! .delay delay .text( (d,i) -> if (isNaN d) then (filter isHead, d).length else (bool-to-headtail d))
 
+# data :: [{count :: Int, trials :: Int}]
 table-coin-data-many-sum = ($jqtable, data) !->
-	data = experiment-data-to-histogram data
-
 
 	$table = d3.select $jqtable.get 0
 	$tbody = $table.select \tbody
@@ -75,11 +74,21 @@ table-coin-data-many-sum = ($jqtable, data) !->
 
 
 math-sum = ($jqpre, data) ->
-	ds = experiment-data-to-histogram data
 	exp-val = 
-		sum . (map ({count, trials}) -> count * trials) <| ds
-	$jqpre.html <| (join ' + ' <| map (({count, trials}) -> count + "*" + trials), ds) + " = " + exp-val
+		sum . (map ({count, trials}) -> count * trials) <| data
+	$jqpre.html <| (join ' + ' <| map (({count, trials}) -> count + "*" + trials), data) + " = " + exp-val
 
+
+
+# data: [Int]
+graph-coin-data-many =($svg, {data = null, number-of-bins = null, duration = 500}) ->
+	data = data ? $svg.data \data
+	number-of-bins = number-of-bins ? $svg.data \number-of-bins
+	$svg.data \data, data .data \number-of-bins, number-of-bins
+
+	draw-binomial-n-tries (d3.select <| $svg.show! .get 0), data,
+		duration: duration
+		xExtents: [0, number-of-bins]
 
 
 _ <- $!
@@ -96,33 +105,27 @@ actions =
 	'coin-10-times': -> actions['coin-n-items'] 10, {duration: 500}
 
 	
-	# 3
-	'coin-10-times-20-trials-graph': ({data = null, duration = 500}) ->
-		$svg = $ '#coin-10-times-20-trials svg'
-		data = data ? $svg.data \results
-		$svg.data \results, data
-		binsData = map sum, data
-		actions['coin-n-times-t-trials'] $svg, binsData, data[0].length, duration
-
 	'coin-10-times-20-trials-graph-slow': ->
-		actions['coin-10-times-20-trials-graph'] {duration: 2000}
+		graph-coin-data-many ($ '#coin-10-times-20-trials svg'), {duration: 2000}
 
-	# 1, 2, 3
+
 	'coin-10-times-20-trials-all': ->
-		#actions['coin-10-times-20-trials-table']!
-		data = 
-			map (fake 10) <| many-random-bins 10, 20
+		
+		data = many-trials 10, 20
 
 		# dataset table
 		table-coin-data-many ($ '#coin-10-times-20-trials-table table.results' .show!), data, {}
 
+		
+		hisogram-data = experiment-data-to-histogram data
+		
 		# summary table
-		table-coin-data-many-sum ($ '#coin-10-times-20-trials-table-sum table.results' .show!), data
+		table-coin-data-many-sum ($ '#coin-10-times-20-trials-table-sum table.results' .show!), hisogram-data
 
 		# sum is ~100
-		math-sum ($ '#coin-10-times-20-trials-table-sum .math-sum'), data
+		math-sum ($ '#coin-10-times-20-trials-table-sum .math-sum'), hisogram-data
 
-		actions['coin-10-times-20-trials-graph'] {data: data}
+		graph-coin-data-many ($ '#coin-10-times-20-trials svg'), {data: (map sum, data), number-of-bins: 10}
 
 		
 
@@ -134,11 +137,15 @@ actions =
 
 
 
-	# binsData: [array of ints]
-	'coin-n-times-t-trials': ($jqSvg, binsData, binSize, duration) ->
-		draw-binomial-n-tries (d3.select <| $jqSvg.show! .get 0), binsData,
+	# data: [Int]
+	'coin-n-times-t-trials': ($svg, {data = null, number-of-bins = null, duration = 500}) ->
+		data = data ? $svg.data \data
+		number-of-bins = number-of-bins ? $svg.data \number-of-bins
+		$svg.data \data, data .data \number-of-bins, number-of-bins
+
+		draw-binomial-n-tries (d3.select <| $svg.show! .get 0), data,
 			duration: duration
-			xExtents: [0, binSize]
+			xExtents: [0, number-of-bins]
 
 
 

@@ -33,11 +33,19 @@ wait = (time, f) -> setTimeout f, time
 
 toss = -> round random!
 
-random-bin = (number-of-bins) -> 
-	sum <| map toss, [1 to number-of-bins]
+# -> [Int]
+trial = (number-of-bins) ->
+	map toss, [1 to number-of-bins]
 
-many-random-bins = (number-of-bins, trials) -->
-	map (-> random-bin number-of-bins), [1 to trials]
+# -> [[Int]]
+many-trials = (number-of-bins, number-of-trials) -->
+	map (-> trial number-of-bins), [1 to number-of-trials]	
+
+random-bin = (number-of-bins) -> 
+	sum trial number-of-bins
+
+many-random-bins = (number-of-bins, number-of-trials) -->
+	map sum, (many-trials number-of-bins, number-of-trials)
  
 bool-to-headtail = (-> if (isHead it) then 'Head' else 'Tail')
 
@@ -59,6 +67,8 @@ exports.wait = wait
 exports.noop = $.noop
 
 exports.toss = toss
+exports.trial = trial
+exports.many-trials = many-trials
 exports.random-bin = random-bin
 exports.many-random-bins = many-random-bins
 exports.bool-to-headtail = bool-to-headtail

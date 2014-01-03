@@ -2,8 +2,9 @@
 exports = exports ? this
 
 # binomial trial histogram
-draw-binomial-n-tries = ($svg, data, {duration = 1000, width = 600, height = 260, on-transition-started = noop, on-transition-ended = noop}) ->
+draw-binomial-n-tries = ($svg, data, {duration = 1000, width = 600, height = 260, xExtents = null, on-transition-started = noop, on-transition-ended = noop}) ->
 	
+
 	dlength = data.length
 	dgroups = group-by id, data |> obj-to-pairs |> map ([key, arr]) -> key: +key, count: arr.length, prob: arr.length / dlength
 
@@ -21,7 +22,7 @@ draw-binomial-n-tries = ($svg, data, {duration = 1000, width = 600, height = 260
 
 	
 	x = d3.scale.ordinal!
-		..domain (map (.key), dgroups) .rangeRoundBands([0,width], 0.1)
+		..domain(if !!xExtents then [xExtents[0] to xExtents[1]] else (map (.key), dgroups) ).rangeRoundBands([0,width], 0.1)
 	y = d3.scale.linear! .domain [0, d3.max map (.prob), dgroups] .range [height,0]
 
 

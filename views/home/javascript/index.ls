@@ -16,8 +16,8 @@ table-coin-data = ($jqtable , data , {duration = 1000}) !->
 		..select \span .text '-'
 
 	summary = 
-		Heads: (filter (==0), data).length
-		Tails: (filter (==1), data).length
+		Heads: (filter isHead, data).length
+		Tails: (filter isTail, data).length
 	
 	$summary = $jqtable.find '.summary > tr > td' 
 		.attr \colspan data.length+1
@@ -51,7 +51,7 @@ table-coin-data-many = ($jqtable , data , {duration = 1000}) !->
 		..selectAll \td .data (-> it ++ [it])
 			..enter! .append \td
 			..text ''
-			..transition! .delay delay .text( (d,i) -> if (isNaN d) then (filter (==0), d).length else (bool-to-headtail d))
+			..transition! .delay delay .text( (d,i) -> if (isNaN d) then (filter isHead, d).length else (bool-to-headtail d))
 
 table-coin-data-many-sum = ($jqtable, data) !->
 	length = data[0].length
@@ -88,13 +88,26 @@ actions =
 		$results = $ '#coin-10-times-20-trials-table table.results' .show!
 		table-coin-data-many $results, data, {}
 		$results.data \results, data
+	
 	'coin-10-times-20-trials-table-sum': ->
 		data = $ '#coin-10-times-20-trials-table table.results' .data \results
 		$results = $ '#coin-10-times-20-trials-table-sum table.results' .show!
 		table-coin-data-many-sum $results, data
+	
+	'coin-10-times-20-trials-graph': ->
+		data = $ '#coin-10-times-20-trials-table table.results' .data \results
+		binsData = map sum, data
+		actions['con-n-times-t-trials'] ($ '#coin-10-times-20-trials'), binsData, data[0].length, 500
+
+	'con-n-times-t-trials': ($container, binsData, binSize, duration) ->
+		$container.find \.experiment .show!
+		draw-binomial-n-tries (d3.select <| $container.find \svg .get 0), binsData,
+			duration: duration
+			xExtents: [0, binSize]
 
 
-	'con-n-times-t-trials': ($container, bins, trials, duration) ->
+
+	'con-n-times-t-trials-animate': ($container, bins, trials, duration) ->
 		$container.find \.experiment .show!
 		$results = $container.find \table.results .css \opacity, 1
 		draw-binomial-n-tries (d3.select <| $container.find \svg .get 0), (many-random-bins bins, trials),
@@ -104,8 +117,9 @@ actions =
 				if i == (trials - 1)
 					$results .css \opacity, 0
 			duration: duration
+
 	'coin-10-times-20-trials': ->
-		actions['con-n-times-t-trials'] ($ '#coin-10-times-20-trials'), 10, 20, 12000
+		actions['con-n-times-t-trials'] ($ '#coin-10-times-20-trials'), 10, 20, 2000
 
 	'coin-10-times-1000-trials': ->
 		actions['con-n-times-t-trials'] ($ '#coin-10-times-1000-trials'), 10, 1000, 20000

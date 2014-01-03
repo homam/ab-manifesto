@@ -39,7 +39,10 @@ random-bin = (number-of-bins) ->
 many-random-bins = (number-of-bins, trials) -->
 	map (-> random-bin number-of-bins), [1 to trials]
  
-bool-to-headtail = (-> if 0 == it then 'Head' else 'Tail')
+bool-to-headtail = (-> if (isHead it) then 'Head' else 'Tail')
+
+isHead = (i) -> i == 1
+isTail = (i) -> not isHead i
 
 
 
@@ -59,3 +62,5 @@ exports.toss = toss
 exports.random-bin = random-bin
 exports.many-random-bins = many-random-bins
 exports.bool-to-headtail = bool-to-headtail
+exports.isHead = isHead
+exports.isTail = isTail

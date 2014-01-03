@@ -95,55 +95,54 @@ actions =
 	'coin-2-times': -> actions['coin-n-items'] 2
 	'coin-10-times': -> actions['coin-n-items'] 10, {duration: 500}
 
-	# 1
-	'coin-10-times-20-trials-table': ->
-		data = 
-			map (fake 10) <| many-random-bins 10, 20
-		$results = $ '#coin-10-times-20-trials-table table.results' .show!
-		table-coin-data-many $results, data, {}
-		$results.data \results, data
-	
-	# 2
-	'coin-10-times-20-trials-table-sum': ->
-		data = $ '#coin-10-times-20-trials-table table.results' .data \results
-		$results = $ '#coin-10-times-20-trials-table-sum table.results' .show!
-		table-coin-data-many-sum $results, data
 	
 	# 3
-	'coin-10-times-20-trials-graph': (duration = 500) ->
-		data = $ '#coin-10-times-20-trials-table table.results' .data \results
+	'coin-10-times-20-trials-graph': ({data = null, duration = 500}) ->
+		$svg = $ '#coin-10-times-20-trials svg'
+		data = data ? $svg.data \results
+		$svg.data \results, data
 		binsData = map sum, data
-		actions['con-n-times-t-trials'] ($ '#coin-10-times-20-trials'), binsData, data[0].length, duration
+		actions['coin-n-times-t-trials'] $svg, binsData, data[0].length, duration
 
 	'coin-10-times-20-trials-graph-slow': ->
-		actions['coin-10-times-20-trials-graph'] 2000
-
-	# 4
-	'coin-10-times-20-trials-mathsum': ->
-		data = $ '#coin-10-times-20-trials-table table.results' .data \results
-		math-sum ($ '#coin-10-times-20-trials-table-sum .math-sum'), data
+		actions['coin-10-times-20-trials-graph'] {duration: 2000}
 
 	# 1, 2, 3
 	'coin-10-times-20-trials-all': ->
-		actions['coin-10-times-20-trials-table']!
-		actions['coin-10-times-20-trials-table-sum']!
-		actions['coin-10-times-20-trials-graph']!
-		actions['coin-10-times-20-trials-mathsum']!
+		#actions['coin-10-times-20-trials-table']!
+		data = 
+			map (fake 10) <| many-random-bins 10, 20
+
+		# dataset table
+		table-coin-data-many ($ '#coin-10-times-20-trials-table table.results' .show!), data, {}
+
+		# summary table
+		table-coin-data-many-sum ($ '#coin-10-times-20-trials-table-sum table.results' .show!), data
+
+		# sum is ~100
+		math-sum ($ '#coin-10-times-20-trials-table-sum .math-sum'), data
+
+		actions['coin-10-times-20-trials-graph'] {data: data}
+
+		
+
+
+	'coin-10-times-1000-trials-all': ->
+		0
 
 
 
 
 
-
-	'con-n-times-t-trials': ($container, binsData, binSize, duration) ->
-		$container.find \.experiment .show!
-		draw-binomial-n-tries (d3.select <| $container.find \svg .get 0), binsData,
+	# binsData: [array of ints]
+	'coin-n-times-t-trials': ($jqSvg, binsData, binSize, duration) ->
+		draw-binomial-n-tries (d3.select <| $jqSvg.show! .get 0), binsData,
 			duration: duration
 			xExtents: [0, binSize]
 
 
 
-	'con-n-times-t-trials-animate': ($container, bins, trials, duration) ->
+	'coin-n-times-t-trials-animate': ($container, bins, trials, duration) ->
 		$container.find \.experiment .show!
 		$results = $container.find \table.results .css \opacity, 1
 		draw-binomial-n-tries (d3.select <| $container.find \svg .get 0), (many-random-bins bins, trials),
@@ -155,7 +154,7 @@ actions =
 			duration: duration
 
 	'coin-10-times-1000-trials': ->
-		actions['con-n-times-t-trials'] ($ '#coin-10-times-1000-trials'), 10, 1000, 20000
+		actions['coin-n-times-t-trials'] ($ '#coin-10-times-1000-trials'), 10, 1000, 20000
 
 
 $ 'button[data-action]' .each ->

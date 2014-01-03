@@ -4,6 +4,7 @@ exports = exports ? this
 # binomial trial histogram
 draw-binomial-n-tries = ($svg, data, {duration = 1000, width = 600, height = 260, xExtents = null, on-transition-started = noop, on-transition-ended = noop}) ->
 	
+	console.log data
 
 	dlength = data.length
 	dgroups = group-by id, data |> obj-to-pairs |> map ([key, arr]) -> key: +key, count: arr.length, prob: arr.length / dlength

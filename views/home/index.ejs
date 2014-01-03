@@ -145,7 +145,7 @@ First Toss Tail, Second Toss Head</pre>
                 <ul>
                 <li>
                     First, notice the pattern: we're repeating an experiment over and over agian.
-                    The experiment is 'Trowing a coin for 10 times', and we keep repeating it. And each time we're counting the number of Heads and Tails.
+                    The experiment is 'Trowing a coin for 10 times', and we keep repeating it. And each time we're counting the number of he Heads and the Tails.
                 </li>
                 <li>
                     Second, if we know the number of Heads in each experiment, then we know the number of Tails.
@@ -201,12 +201,13 @@ Number of Heads + Number of Tails =  Number of times throws (10 times in this ex
                 </tbody>
             </table>
             <p>
-                At each trial, we're throwing a coin for 10 times. So the numeber of times that we get a Head is
-                between 0 and 10 each time (we cannot get 11 Heads by tossing a coin for 10 times!).
+                At each trial, we're throwing a coin for 10 times. So at each trial,
+                the numeber of times that we get a Head is
+                between 0 and 10 (we cannot get 11 Heads by tossing a coin for 10 times!).
             </p>
             <p>
                 Take a look the summary table above, I think it proves our suspicion that we're most likely
-                to be somewhere in the middle. Meaning that if toss a coin for 10 times, we're most likely to
+                to be somewhere in the middle. Meaning that if we toss a coin for 10 times, we're most likely to
                 have a 4,5 or 6 number of Heads.
             </p>
             <div class="interesting">
@@ -239,9 +240,7 @@ Number of Heads + Number of Tails =  Number of times throws (10 times in this ex
                 Technically we say that the number of Heads is the independant variable, each time that we
                 repeat a trial (tossing a coin 10 times) we end up with some number of Heads.
             </p>
-            <div class="experiment results">
-                <svg></svg>
-            </div>
+            <svg class='experiment results'></svg>
             <p>
                 We call this graph a histogram. The height of each bar (at each X)
                 shows how many times we had X number of Heads in our experiment.
@@ -250,7 +249,7 @@ Number of Heads + Number of Tails =  Number of times throws (10 times in this ex
                 One way to think about histogram, is that the histogram is made of 10 bins.
                 At the end of each trial, when we count the number of Heads, we add one item to the correspoding bin.
                 For example if we have 3 Heads, we add one to the 3rd bin and so on.
-                Click on the <button data-action='coin-10-times-20-trials-graph-slow'>animate</button> button to see how this happens.
+                Click on the <button data-action='coin-10-times-20-trials-graph-slow'>animate</button> button to see how this happens slowly.
             </p>
             <p>
                 <button data-action='coin-10-times-20-trials-all'>Repeat</button> the experiment a few of times and
@@ -261,26 +260,18 @@ Number of Heads + Number of Tails =  Number of times throws (10 times in this ex
              <p>
                 Utilizing our bins thinking ...
                 Now let's repeat the experiment, but this time repeat the trials for 1000 times.
-                <button data-action='coin-10-times-1000-trials'>Do it!</button>
+                <button data-action='coin-10-times-1000-trials-all'>Do it!</button>
             </p>
-            <div class="experiment">
-                <table class='results'>
-                    <thead>
-                        <tr>
-                            <th>Toss</th>
-                            <th>Rssult</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                    <tfoot class="summary">
-                        <tr>
-                            <th>Heads:</th>
-                            <td data-value='Heads'></td>
-                        </tr>
-                    </tfoot>
-                </table>
-                <svg></svg>
-            </div>
+            <table class='results experiment' cellpadding="0" cellspacing="0" border="1">
+                <tbody>
+                    <tr class='count'>
+                        <th>Count of Heads</th>
+                    </tr>
+                    <tr class='trials'>
+                        <th>Number of Trials</th>
+                    </tr>
+                </tbody>
+            </table>
             <p>
                 The data summary table corresoinding to the above graph is:
             </p>

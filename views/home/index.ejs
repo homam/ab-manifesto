@@ -162,7 +162,7 @@ Number of Heads + Number of Tails =  Number of times throws (10 times in this ex
                 Instead of keep clicking on the repeat button, let's repeat our experiment (thorwing a coin 10 times and counting the number of Heads), for 20 trials. It's like clicking on the repeat button for 20 times.
             </p>
             <p>
-                <button data-action='coin-10-times-20-trials-table'>Count the number of heads after tossing a coin 10 times, for 20 trials</button>
+                <button data-action='coin-10-times-20-trials-all'>Count the number of heads after tossing a coin 10 times, for 20 trials</button>
             </p>
             <table class='results experiment' cellpadding="0" cellspacing="0" border="1">
                 <tbody>
@@ -190,9 +190,6 @@ Number of Heads + Number of Tails =  Number of times throws (10 times in this ex
                 We can summerize the table by counting how many times we ended up with <code>0 Heads</code>, 
                 <code>1 Head</code>, <code>2 Heads</code> and so on.
             </p>
-            <p>
-                <button data-action='coin-10-times-20-trials-table-sum'>Summerize the experiment</button>
-            </p>
             <table class='results experiment' cellpadding="0" cellspacing="0" border="1">
                 <tbody>
                     <tr class='count'>
@@ -212,47 +209,52 @@ Number of Heads + Number of Tails =  Number of times throws (10 times in this ex
                 to be somewhere in the middle. Meaning that if toss a coin for 10 times, we're most likely to
                 have a 4,5 or 6 number of Heads.
             </p>
+            <div class="interesting">
+                <p>
+                    If we sum up
+                    <pre>
+  (0  * Number of trials that we got 0  Heads) 
++ (1  * Number of trials that we got 1  Head ) 
++ (2  * Number of trials that we got 2  Heads)
++  ...
++ (10 * Number of trials that we got 10 Heads)</pre>
+                    We end up with a number that is very close to 100:
+                </p>
+                <pre class='math-sum'></pre>
+                <p>
+                    100 is indeed (200/2) or (200 * 0.5). Where 200 is the total number of times that we tossed the coin
+                    and 0.5 is the probability of getting a Head at each toss.
+                    If our coin was not fair (meaning that the probability of getting Head was not 0.5, or 50%) 
+                    then this number would have been different. More about this later.
+                </p>
+            </div>
         </section>
         <section id="coin-10-times-20-trials">
             <p>
                 We're going to love visualization and prefer graphs to data tables.
+                We can put the number Heads on X axis and the the number of times that
+                we ended up with that number of Heads on Y.
             </p>
             <p>
-                <button data-action='coin-10-times-20-trials-graph'>Graph it</button>
+                Technically we say that the number of Heads is the independant variable, each time that we
+                repeat a trial (tossing a coin 10 times) we end up with some number of Heads.
             </p>
             <div class="experiment results">
                 <svg></svg>
             </div>
-        </section>
-        <section>
-             <p>
-                Now let's toss a coin for 10 times, count the number of heads and 
-                repeat this experiment for 20 more times.
-                <button data-action='coin-10-times-20-trials'>Do it!</button>
-            </p>
-            <div class="experiment">
-                <table class='results'>
-                    <thead>
-                        <tr>
-                            <th>Toss</th>
-                            <th>Rssult</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                    <tfoot class="summary">
-                        <tr>
-                            <th>Heads:</th>
-                            <td data-value='Heads'></td>
-                        </tr>
-                    </tfoot>
-                </table>
-                <svg></svg>
-            </div>
             <p>
-                One way to think about this, is that we have 10 bins.
-                At the end of each trial, when we count the number of Heads, we add one item to correspoding bin.
-                For example if we have 3 Heads, we add one to the 3rth bin and so on.
-                Click on the animate button to see how this happens.
+                We call this graph a histogram. The height of each bar (at each X)
+                shows how many times we had X number of Heads in our experiment.
+            </p>
+            <p>
+                One way to think about histogram, is that the histogram is made of 10 bins.
+                At the end of each trial, when we count the number of Heads, we add one item to the correspoding bin.
+                For example if we have 3 Heads, we add one to the 3rd bin and so on.
+                Click on the <button data-action='coin-10-times-20-trials-graph-slow'>animate</button> button to see how this happens.
+            </p>
+            <p>
+                <button data-action='coin-10-times-20-trials-all'>Repeat</button> the experiment a few of times and
+                check the shape of the histogram.
             </p>
         </section>
         <section id="coin-10-times-1000-trials">

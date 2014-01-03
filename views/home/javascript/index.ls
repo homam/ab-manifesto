@@ -1,5 +1,12 @@
-{mean, sum, id, map, fold, filter, group-by, obj-to-pairs, head, tail, split-at} = require 'prelude-ls'
+{mean, sum, id, map, fold, filter, group-by, obj-to-pairs, head, tail, split-at, join} = require 'prelude-ls'
 exports = exports ? this
+
+
+experiment-data-to-histogram = (data) ->
+	length = data[0].length
+	count = (f, xs) -> (filter f, xs).length
+	data = map sum, data
+	data = map ((i)-> {count: i, trials: count (==i), data}), [0 to length]
 
 
 # binomial trial table
@@ -54,10 +61,7 @@ table-coin-data-many = ($jqtable , data , {duration = 1000}) !->
 			..transition! .delay delay .text( (d,i) -> if (isNaN d) then (filter isHead, d).length else (bool-to-headtail d))
 
 table-coin-data-many-sum = ($jqtable, data) !->
-	length = data[0].length
-	count = (f, xs) -> (filter f, xs).length
-	data = map sum, data
-	data = map ((i)-> {count: i, trials: count (==i), data}), [0 to length]
+	data = experiment-data-to-histogram data
 
 
 	$table = d3.select $jqtable.get 0
@@ -70,7 +74,16 @@ table-coin-data-many-sum = ($jqtable, data) !->
 		..text (.trials)
 
 
+math-sum = ($jqpre, data) ->
+	ds = experiment-data-to-histogram data
+	exp-val = 
+		sum . (map ({count, trials}) -> count * trials) <| ds
+	$jqpre.html <| (join ' + ' <| map (({count, trials}) -> count + "*" + trials), ds) + " = " + exp-val
+
+
+
 _ <- $!
+
 
 fake = (bins, heads) --> 
 	shuffle <| (map -> 0, [1 to heads]) ++ (map  -> 1, [1 to (bins - heads)])
@@ -82,6 +95,7 @@ actions =
 	'coin-2-times': -> actions['coin-n-items'] 2
 	'coin-10-times': -> actions['coin-n-items'] 10, {duration: 500}
 
+	# 1
 	'coin-10-times-20-trials-table': ->
 		data = 
 			map (fake 10) <| many-random-bins 10, 20
@@ -89,15 +103,37 @@ actions =
 		table-coin-data-many $results, data, {}
 		$results.data \results, data
 	
+	# 2
 	'coin-10-times-20-trials-table-sum': ->
 		data = $ '#coin-10-times-20-trials-table table.results' .data \results
 		$results = $ '#coin-10-times-20-trials-table-sum table.results' .show!
 		table-coin-data-many-sum $results, data
 	
-	'coin-10-times-20-trials-graph': ->
+	# 3
+	'coin-10-times-20-trials-graph': (duration = 500) ->
 		data = $ '#coin-10-times-20-trials-table table.results' .data \results
 		binsData = map sum, data
-		actions['con-n-times-t-trials'] ($ '#coin-10-times-20-trials'), binsData, data[0].length, 500
+		actions['con-n-times-t-trials'] ($ '#coin-10-times-20-trials'), binsData, data[0].length, duration
+
+	'coin-10-times-20-trials-graph-slow': ->
+		actions['coin-10-times-20-trials-graph'] 2000
+
+	# 4
+	'coin-10-times-20-trials-mathsum': ->
+		data = $ '#coin-10-times-20-trials-table table.results' .data \results
+		math-sum ($ '#coin-10-times-20-trials-table-sum .math-sum'), data
+
+	# 1, 2, 3
+	'coin-10-times-20-trials-all': ->
+		actions['coin-10-times-20-trials-table']!
+		actions['coin-10-times-20-trials-table-sum']!
+		actions['coin-10-times-20-trials-graph']!
+		actions['coin-10-times-20-trials-mathsum']!
+
+
+
+
+
 
 	'con-n-times-t-trials': ($container, binsData, binSize, duration) ->
 		$container.find \.experiment .show!
@@ -118,9 +154,6 @@ actions =
 					$results .css \opacity, 0
 			duration: duration
 
-	'coin-10-times-20-trials': ->
-		actions['con-n-times-t-trials'] ($ '#coin-10-times-20-trials'), 10, 20, 2000
-
 	'coin-10-times-1000-trials': ->
 		actions['con-n-times-t-trials'] ($ '#coin-10-times-1000-trials'), 10, 1000, 20000
 
@@ -132,5 +165,8 @@ $ 'button[data-action]' .each ->
 
 
 
+actions['coin-2-times']!
+actions['coin-10-times']!
+actions['coin-10-times-20-trials-all']!
 
 exports.actions = actions

@@ -63,6 +63,7 @@ draw-binomial-n-tries = ($svg, data, {duration = 1000, width = 600, height = 260
 
 	$block = $vp.selectAll 'rect.block' .data id
 		..enter! .append \rect .attr \class, \block 
+		..exit! .remove!
 	$block.attr \width, x.rangeBand! .attr \height, block-height
 		..attr \x, (.x) .attr \y -2*(block-height + margin.top)
 		#..transition! .delay ((_,i)-> 1.2*(i)*duration) .duration 2*duration .attr \y, -1*(block-height + margin.top)

@@ -68,9 +68,11 @@ table-coin-data-many-sum = ($jqtable, data) !->
 	$tbody.select \tr.count .selectAll \th.count .data data
 		..enter! .append \th .attr \class, \count
 		..text (.count)
+		..exit! .remove!
 	$tbody.select \tr.trials .selectAll \td.trials .data data
 		..enter! .append \td .attr \class, \trials
 		..text (.trials)
+		..exit! .remove!
 
 
 math-sum = ($jqpre, data) ->
@@ -129,9 +131,23 @@ actions =
 
 		
 
+	'coin-10-times-1000-trials-graph-slow': ->
+		graph-coin-data-many ($ '#coin-10-times-1000-trials svg'), {duration: 8000}
 
 	'coin-10-times-1000-trials-all': ->
-		0
+		number-of-bins = 
+			parseInt <| $ '#coin-10-times-1000-trials input[name=number-of-bins]' .val!
+
+		number-of-trials = 
+			parseInt <| $ '#coin-10-times-1000-trials input[name=number-of-trials]' .val!
+		
+		data = many-trials number-of-bins, number-of-trials
+
+		hisogram-data = experiment-data-to-histogram data
+		
+		# summary table
+		table-coin-data-many-sum ($ '#coin-10-times-1000-trials .table-summary' .show!), hisogram-data
+		graph-coin-data-many ($ '#coin-10-times-1000-trials svg'), {data: (map sum, data), number-of-bins: number-of-bins, duration: 500}
 
 
 
@@ -164,10 +180,23 @@ actions =
 		actions['coin-n-times-t-trials'] ($ '#coin-10-times-1000-trials'), 10, 1000, 20000
 
 
+
+
+$ '#coin-10-times-1000-trials input[name=number-of-bins]' .change ->
+	$ '#coin-10-times-1000-trials label[data-value-for=number-of-bins]' .text <| $ this .val!
+
+$ '#coin-10-times-1000-trials input[name=number-of-trials]' .change ->
+	$ '#coin-10-times-1000-trials label[data-value-for=number-of-trials]' .text <| $ this .val!
+
+
+
+
 $ 'button[data-action]' .each ->
 	$this = $ this 
 	act = $this .attr \data-action
 	$this.click -> actions[act]!
+
+
 
 
 

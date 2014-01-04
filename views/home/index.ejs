@@ -259,10 +259,10 @@ Number of Heads + Number of Tails =  Number of times throws (10 times in this ex
         <section id="coin-10-times-1000-trials">
              <p>
                 Utilizing our bins thinking ...
-                Now let's repeat the experiment, but this time repeat the trials for 1000 times.
+                Now let's repeat the experiment, but this time repeat the trials for 500 times.
                 <button data-action='coin-10-times-1000-trials-all'>Do it!</button>
             </p>
-            <table class='results experiment' cellpadding="0" cellspacing="0" border="1">
+            <table class='results experiment table-summary' cellpadding="0" cellspacing="0" border="1">
                 <tbody>
                     <tr class='count'>
                         <th>Count of Heads</th>
@@ -272,12 +272,122 @@ Number of Heads + Number of Tails =  Number of times throws (10 times in this ex
                     </tr>
                 </tbody>
             </table>
+            <svg class='experiment results'></svg>
             <p>
-                The data summary table corresoinding to the above graph is:
+                <button data-action='coin-10-times-1000-trials-graph-slow'>Slower</button>
+            </p>
+            <p>
+                There's nothing magic about number 10. Use the slider below to change the number of tosses
+                in each trial, and see how the summary data table and the graph changes for different number of tosses
+                per trial.
+            </p>
+            <div>
+                <input type="range" min="1" max="15" value="10" name='number-of-bins'>
+                <button data-action='coin-10-times-1000-trials-all'>Redo with <label data-value-for='number-of-bins'>10</label> bins</button>
+            </div>
+            <p>
+                When we toss a coin for 15 times, we might get 0 Heads, 1 Heads, ... 15 Heads.
+                We are more likely to get 7 or 8 Heads. But if we're very lucky, there's still a chance that get 13, 14 or 
+                15 Heads.
+            </p>
+            <p>
+                This is exactly what our histogram is showing. In this example, the height of the bar
+                ar 7 for instance, shows how many times we got a Head after 500 trials.
+                Go ahead and <button data-action='coin-10-times-1000-trials-all'>redo</button> the experiment a few times.
+                Note that unlike when we were doing the experiment by only 20 trials, this time (that we do 500 trials),
+                the shape of the histogram change very little. We always have a pick in the middle and the sides are
+                shallow.
+            </p>
+            <p>
+                Change the number trials:
+            </p>
+            <div>
+                <input type="range" min="1" max="500" value="500" name='number-of-trials'>
+                <button data-action='coin-10-times-1000-trials-all'>Repeat the trial <label data-value-for='number-of-trials'>500</label> times</button>
+            </div>
+            <p>
+                Note that the shape of the histogram becomes less predictable with smaller number of trials.
+            </p>
+        </section>
+        <section>
+            <h2>Chance</h2>
+            <p>
+                When we toss a coin for 10 times, we might have any number of Heads (between 0 and 10).
+                Some number of Heads are more likely than others. For instance you consider youself very
+                lucky if you get a Head only 2 times after tossing a coin for 10 times.
+            </p>
+            <p>
+                A very interesting question is that what's the chance of getting 2 Heads or 5 Heads or 7 Heads
+                by tossing a coin for 10 times?
+            </p>
+            <p>
+                Our intuition says the number of Heads after tossing a coin for 10 times should be close to 5.
+                And the chance of getting extreme values of 0 and 1 or 9 and 10 Heads are very shallow.
+                Again this is exactly what our histogram is showing.
+                In fact there's a direct relationship between the height of the bars and the likelyhood of 
+                getting that number of Heads.
+            </p>
+
+            <!-- Change of Y axis from numbers to probability -->
+        </section>
+        <section>
+            <p>
+                Let's say we want to study the conversion rate of a landing page.
+            </p>
+                First, note that conversion of a landing page, very much like tossing a coin
+                has two outcomes: Success and Failure
+                (in tossing a coin our outcomes were Head and Tail).
+            </p>
+            <p>
+                Second, when we have let's say 15 visitors, it's very much like throwing a coin for 15 times.
+                Each time that we toss a coin we get either a Head or a Tail. And the number of Heads or Tails after 15
+                tosses is between 0 and 15. Similarly the number of Successes or Failures in 15 trials is 
+                between 0 and 15. And knowing the numebr of Successes or Failures is sufficient. For example if we
+                have 6 Successes, then we have 9 Failures <code>(15 - 6 = 9)</code>.
+            </p>
+            <p>
+                The whole idea of statistics is that we can't or we don't want to do an experiment with all the members of
+                our population. In our landing page scenario, the population is anybody
+                that will ever visit our landing page.
+                As long as our page is getting more visits everyday, we're not going to know our whole population. Simply 
+                because tomorrow we have more people visited our landing page.
+            </p>
+            <p>
+                We're almost always dealing with a sample (subset) of our population.
+            </p>
+            <p>
+                One way of thinking about the statistics of tossing a coin is that, we have an infinitely large
+                dataset of tosses (our population is an infinite list of toss results: Heads or Tails). Tossing
+                a coin for 10 times is equivalent to randomly pickining 10 items from this infinite list.
+            </p>
+            <pre>
+              ...
+              T  ,  H  ,  T  ,  H  ,  H  ,  T  , [H] ,  H  ,  T  ,  H 
+              H  ,  T  ,  H  ,  H  ,  T  ,  H  ,  H  ,  T  ,  H  ,  T
+              T  , [H] ,  T  ,  T  ,  H  , [T] ,  H  ,  H  ,  T  ,  H 
+              H  ,  T  , [H] ,  H  ,  T  ,  H  ,  T  ,  T  ,  H  , [T] 
+              T  ,  H  ,  T  ,  T  ,  H  ,  T  ,  H  ,  H  ,  T  ,  H 
+              ...
+            </pre>
+
+
+
+
+            <p>
+                Now, when we're testing a landing page, we're usually dealing with a number of subjects that is 
+                very larger than 15.
+            </p>
+
+
+            <p>
+                For now, let's assume we have 100 subjects.
+                The result of the test for each subject is either Success or Failure.
+                Let's assume that we have a luxary to perform
             </p>
             <p>
                 This graph has a very distinctive shape.
                 Bell curve
+                Why we repeat?
             </p>
         </section>
         <section>
@@ -287,12 +397,12 @@ Number of Heads + Number of Tails =  Number of times throws (10 times in this ex
             Notice the bell curve is shifted, its shape has not changed, but it's center of mass is not in the middle anymore
         </section>
         <section>
-            <h2>Chance</h2>
-
-            Change of Y axis from numbers to probability
-        </section>
-        <section>
             <h2>Confidence Intervals</h2>
+            <p>
+                We usually perform A/B tests with a number of subjects that is way larger than 15.
+                In fact, a little bit later, we're going to calculate the minimum number of subjects that are
+                needed to confidently conclude a test.
+            </p>
         </section>
         <section>
             <h2>Formula</h2>

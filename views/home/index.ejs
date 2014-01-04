@@ -141,19 +141,25 @@ First Toss Tail, Second Toss Head</pre>
                 we're almost always close to that magic middle.
             </p>
             <p>
-                Two things, before we go forward;
-                <ul>
-                <li>
-                    First, notice the pattern: we're repeating an experiment over and over agian.
-                    The experiment is 'Trowing a coin for 10 times', and we keep repeating it. And each time we're counting the number of he Heads and the Tails.
-                </li>
-                <li>
-                    Second, if we know the number of Heads in each experiment, then we know the number of Tails.
+                This time the set of all the possible outcomes is enormous:
+            </p>
+            <pre>
+(T, T, T, T, T, T, T, T, T, T)
+(H, T, T, T, T, T, T, T, T, T)
+(T, H, T, T, T, T, T, T, T, T)
+...
+(H, H, T, H, T, T, T, T, H, T)
+...
+(H, H, H, H, H, H, H, H, H, H)</pre>
+            <p>
+                In fact we have 2^10 = 1024 number of distinct outcomes.
+            </p>
+            <p>
+                Before we go forward note that if we know the number of Heads in each experiment is sufficient.
+                If we know how many times we got a Head, then we know the number of Tails.
                     <pre>
 Number of Heads + Number of Tails =  Number of times throws (10 times in this example)
                     </pre>
-                </li>
-                </ul>
                 For simplicity, from here on, we only count the number of Heads.
             </p>
         </section>
@@ -327,9 +333,25 @@ Number of Heads + Number of Tails =  Number of times throws (10 times in this ex
                 In fact there's a direct relationship between the height of the bars and the likelyhood of 
                 getting that number of Heads.
             </p>
-
-            <!-- Change of Y axis from numbers to probability -->
         </section>
+            <!-- 
+
+                then show the plot of binomial distribution for 30 trials. (if instead of repeating the experiment 
+                a million times, we use the correct precise mathematical formulas to calculate the chance
+                that we get X Heads by 10 toss of a coin)
+                
+                Change of Y axis from numbers to probability -> Normalization
+
+
+
+                forget the detailed explanation of 10000 times. Just say as #trials grow the shape looks
+                closer to normal bell curve. To get a better shape let's do 30 trials 10000 times. + sliders
+
+                law of large numebrs (10000).
+
+                
+                then Landing Page
+             -->
         <section>
             <p>
                 Let's say we want to study the conversion rate of a landing page.
@@ -354,11 +376,14 @@ Number of Heads + Number of Tails =  Number of times throws (10 times in this ex
             </p>
             <p>
                 We're almost always dealing with a sample (subset) of our population.
+                Because we're always studying a part of the population, we cannot be sure that our
+                statistics are 100% accurate. For example if we measure that the conversion rate of our landing page
+                is 30%,
             </p>
             <p>
                 One way of thinking about the statistics of tossing a coin is that, we have an infinitely large
                 dataset of tosses (our population is an infinite list of toss results: Heads or Tails). Tossing
-                a coin for 10 times is equivalent to randomly pickining 10 items from this infinite list.
+                a coin for 200 times is equivalent to randomly pickining 200 items from this infinite list.
             </p>
             <pre>
               ...
@@ -369,6 +394,17 @@ Number of Heads + Number of Tails =  Number of times throws (10 times in this ex
               T  ,  H  ,  T  ,  T  ,  H  ,  T  ,  H  ,  H  ,  T  ,  H 
               ...
             </pre>
+            <p>
+                This interpretation is very useful in our landing page problem.
+                Each cell is a visitor.
+
+                We are interested to know how likely it is that we get the actual conversion rate of a landing page
+                if our sample made of only 200 visitors.
+
+                It's like picking 200 subjects from the infinite list of visitors.
+
+                Hence uncertainty
+            </p>
 
 
 
@@ -395,6 +431,9 @@ Number of Heads + Number of Tails =  Number of times throws (10 times in this ex
             How it's all related to UX
             Binomial distribution and bell curve, data table for an unfir coins.
             Notice the bell curve is shifted, its shape has not changed, but it's center of mass is not in the middle anymore
+            <!-- use correct binomial numbers
+             for binomial coefficient use Multiplicative form: http://en.wikipedia.org/wiki/Binomial_coefficient 
+             -->
         </section>
         <section>
             <h2>Confidence Intervals</h2>

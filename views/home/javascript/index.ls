@@ -60,6 +60,7 @@ table-coin-data-many = ($jqtable , data , {duration = 1000}) !->
 			..text ''
 			..transition! .delay delay .text( (d,i) -> if (isNaN d) then (filter isHead, d).length else (bool-to-headtail d))
 
+# summary table
 # data :: [{count :: Int, trials :: Int}]
 table-coin-data-many-sum = ($jqtable, data) !->
 
@@ -138,8 +139,8 @@ actions =
 		number-of-bins = 
 			parseInt <| $ '#coin-10-times-1000-trials input[name=number-of-bins]' .val!
 
-		number-of-trials = 
-			parseInt <| $ '#coin-10-times-1000-trials input[name=number-of-trials]' .val!
+		number-of-trials = 1000
+		#	parseInt <| $ '#coin-10-times-1000-trials input[name=number-of-trials]' .val!
 		
 		data = many-trials number-of-bins, number-of-trials
 
@@ -185,8 +186,8 @@ actions =
 $ '#coin-10-times-1000-trials input[name=number-of-bins]' .change ->
 	$ '#coin-10-times-1000-trials label[data-value-for=number-of-bins]' .text <| $ this .val!
 
-$ '#coin-10-times-1000-trials input[name=number-of-trials]' .change ->
-	$ '#coin-10-times-1000-trials label[data-value-for=number-of-trials]' .text <| $ this .val!
+# $ '#coin-10-times-1000-trials input[name=number-of-trials]' .change ->
+# 	$ '#coin-10-times-1000-trials label[data-value-for=number-of-trials]' .text <| $ this .val!
 
 
 

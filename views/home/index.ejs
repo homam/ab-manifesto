@@ -275,8 +275,14 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 So far we've seen that at each trial that toss a coin for 10 times, we end with a different number of Heads.
             </p>
             <p>
-                Utilizing our bins thinking ...
-                Now let's repeat the experiment, but this time repeat the trials for 500 times.
+                The above histogram doesn't tell us much. But as we had expected, there seems to be some pattern here.
+                The bars are longer near the middle of the graph (number of 5), and our intuition was telling us
+                that we expect to get 5 Heads when we toss a coin for 10 times.
+            </p>
+            <p>
+                Let's repeat our experiment for 1000 times:
+                throw a coin for 10 times, count the number of Heads and repeat it for 1000 times.
+                
                 <button data-action='coin-10-times-1000-trials-all'>Do it!</button>
             </p>
             <table class='results experiment table-summary' cellpadding="0" cellspacing="0" border="1">
@@ -293,11 +299,25 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             <p>
                 <button data-action='coin-10-times-1000-trials-graph-slow'>Slower</button>
             </p>
+
             <p>
-                There's nothing magic about number 10. Use the slider below to change the number of tosses
-                in each trial, and see how the summary data table and the graph changes for different number of tosses
-                per trial.
+                This time our histogram has a very distinctive shape.
             </p>
+            <p>
+                The answer to our quesiton:
+                By throwing a coin for 10 times, 
+                The number of times that we expect 3 = height of the bar at (3 / number of trials (1000)) * 10
+            </p>
+            <p>
+                Height ~= Probability
+            
+                Binomial distribution
+                Sum (Area covered by bars) = 2^10
+                
+                Sum (Probability) = 1
+                Play with number of bins in binomial distribution graph
+            </p>
+
             <div>
                 <input type="range" min="1" max="15" value="10" name='number-of-bins'>
                 <button data-action='coin-10-times-1000-trials-all'>Redo with <label data-value-for='number-of-bins'>10</label> bins</button>
@@ -315,6 +335,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 the shape of the histogram change very little. We always have a pick in the middle and the sides are
                 shallow.
             </p>
+            <!--
             <p>
                 Change the number trials:
             </p>
@@ -325,6 +346,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             <p>
                 Note that the shape of the histogram becomes less predictable with smaller number of trials.
             </p>
+            -->
         </section>
 
         <section>
@@ -378,6 +400,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 then Landing Page
              -->
         <section>
+            <h2>Interpretation of Statistics</h2>
             <p>
                 Let's say we want to study the conversion rate of a landing page.
             </p>
@@ -422,6 +445,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             <p>
                 This interpretation is very useful in our landing page problem.
                 Each cell is a visitor.
+                The size of population is huge, we assume it's infinite (everyday we get more visitors).
 
                 We are interested to know how likely it is that we get the actual conversion rate of a landing page
                 if our sample made of only 200 visitors.
@@ -496,11 +520,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 Holy grail of A/B: case assignment
 
         </section>
-        <section>
-            Now let's toss a coin for 100 times and count the number of heads. We expect
-            the number of times that the coin lands on head be equal to the number of times that it lands on
-            tail and equal to 50.
-        </section>
+
         
     </article>
     <script src="javascript/libs/prelude-browser.js"></script>

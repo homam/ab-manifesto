@@ -1,5 +1,5 @@
 prelude = require('prelude-ls')
-{id, Obj,map, concat, filter, each, find, fold, foldr, fold1, all, flatten, sum, zip-all, group-by, obj-to-pairs, partition, join, unique, sort-by, reverse, empty} = require 'prelude-ls'
+{id, Obj,map, concat, filter, each, find, fold, foldr, fold1, all, flatten, sum, product, zip-all, group-by, obj-to-pairs, partition, join, unique, sort-by, reverse, empty} = require 'prelude-ls'
 exports = exports || this
 
 random = Math.random
@@ -53,6 +53,13 @@ isHead = (i) -> i == 1
 isTail = (i) -> not isHead i
 
 
+choose = (n, k) --> 
+	product . map (-> (n - (k - it)) / it ) <| [1 to k]
+
+binomial-coefficient = (n) ->
+	map (choose n), [0 to n]
+
+
 
 exports.random = random
 exports.floor = floor
@@ -74,3 +81,6 @@ exports.many-random-bins = many-random-bins
 exports.bool-to-headtail = bool-to-headtail
 exports.isHead = isHead
 exports.isTail = isTail
+
+exports.choose = choose
+exports.binomial-coefficient = binomial-coefficient

@@ -309,8 +309,17 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 The number of times that we expect 3 = height of the bar at (3 / number of trials (1000)) * 10
             </p>
             <p>
+            there's some chance that we get 0 Heads, some chance for 1 Head ...
+            No chance for less than 0 Heads or more than 10 Heads.
+            Sum of Chances = 100% or 1
+
+            Sum of area covered by bars = number of trials (1000)
+            Normalization
+
                 Height ~= Probability
-            
+
+
+
                 Binomial distribution
                 Sum (Area covered by bars) = 2^10
                 
@@ -359,6 +368,10 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                     Choose (10, k) = \begin{pmatrix} 10 \\ k \end{pmatrix}
                 \]
                 In our
+            </p>
+            <p>
+                sum Choose(10,x) from x=0 to 10
+                http://www.wolframalpha.com/input/?i=sum+Choose%2810%2Cx%29+from+x%3D0+to+10
             </p>
         </section>
 

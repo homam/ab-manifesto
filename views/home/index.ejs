@@ -257,7 +257,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 shows how many times we had that X number of Heads in our experiment.
             </p>
             <p>
-                One way to think about histogram, is that the histogram is made of 10 bins.
+                One way to think about this histogram, is that it is made of 10 bins.
                 At the end of each trial, when we count the number of Heads, we add one item to the correspoding bin.
                 For example if we have 3 Heads, we add one to the 3rd bin and so on.
                 Click on the <button data-action='coin-10-times-20-trials-graph-slow'>animate</button> button to see how this happens slowly.
@@ -272,15 +272,16 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             <p>
                 Just a reminder, our original question was: when we toss a coin for 10 times, how many times we expect it to land on its Head?
                 We're trying to answer this question by actually doing the experiment.
-                So far we've seen that at each trial that toss a coin for 10 times, we end with a different number of Heads.
+                After repeating the experiment for a few times we realized that it's a question of chance;
+                we've seen that at each trial we end with a different number of Heads.
             </p>
             <p>
                 The above histogram doesn't tell us much. But as we had expected, there seems to be some pattern here.
-                The bars are longer near the middle of the graph (number of 5), and our intuition was telling us
-                that we expect to get 5 Heads when we toss a coin for 10 times.
+                The bars are longer near the middle of the graph (number 5), and our intuition was telling
+                that we should expect to get 5 Heads when we toss a coin for 10 times.
             </p>
             <p>
-                Let's repeat our experiment for 1000 times:
+                Let's repeat this experiment for 1000 times:
                 throw a coin for 10 times, count the number of Heads and repeat it for 1000 times.
                 
                 <button data-action='coin-10-times-1000-trials-all'>Do it!</button>
@@ -296,22 +297,30 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 </tbody>
             </table>
             <svg class='experiment results'></svg>
-            <p>
-                <button data-action='coin-10-times-1000-trials-graph-slow'>Slower</button>
-            </p>
 
             <p>
-                This time our histogram has a very distinctive shape.
+                This time our histogram has a very distinctive shape. And the shape doesn't seems to be changing
+                when we <button data-action='coin-10-times-1000-trials-all'>repeat</button> the experiment.
             </p>
             <p>
-                The answer to our quesiton:
-                By throwing a coin for 10 times, 
-                The number of times that we expect 3 = height of the bar at (3 / number of trials (1000)) * 10
+                Think about our bins analogy: at the end of each trial we count the number of Heads and we add a 
+                an item to the corresponding bin; <button data-action='coin-10-times-1000-trials-graph-slow'>See</button>
+                how it happens. At the end of experiment the total number of items that we have put into the bins
+                is equal to 1000. Run the experiment in <button data-action='coin-10-times-1000-trials-graph-slow'>slow motion</button>,
+                and see we're adding 1000 tiny items to the bars.
             </p>
             <p>
-            there's some chance that we get 0 Heads, some chance for 1 Head ...
-            No chance for less than 0 Heads or more than 10 Heads.
-            Sum of Chances = 100% or 1
+                In the above experiment, in <span>231</span> trials we got 5 Heads.
+                After repeating the trial for 1000 times
+                we can say that we're confident that the chance of getting 5 Heads is almost equals to 231/1000 or 23.1%.
+            </p>
+            <p>
+                Genrally, there's some chance that we get 0 Heads, some chance for 1 Head ...
+                The chance of getting less than 0 Heads or more than 10 Heads is 0.
+                The chance of getting X Heads is directly related the height of the bars in the histogram;
+                higher bars mean greater chance.
+
+                Sum of Chances = 100% or 1
 
             Sum of area covered by bars = number of trials (1000)
             Normalization

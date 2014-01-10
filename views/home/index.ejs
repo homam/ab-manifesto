@@ -257,7 +257,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 shows how many times we had that X number of Heads in our experiment.
             </p>
             <p>
-                One way to think about this histogram, is that it is made of 10 bins.
+                One way to think about this histogram, is that it is made of 11 bins (11 = 10 + 1).
                 At the end of each trial, when we count the number of Heads, we add one item to the correspoding bin.
                 For example if we have 3 Heads, we add one to the 3rd bin and so on.
                 Click on the <button data-action='coin-10-times-20-trials-graph-slow'>animate</button> button to see how this happens slowly.
@@ -312,47 +312,50 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             <p>
                 In the above experiment, in <span>231</span> trials we got 5 Heads.
                 After repeating the trial for 1000 times
-                we can say that we're confident that the chance of getting 5 Heads is almost equals to 231/1000 or 23.1%.
+                we can say that we're confident that the chance of getting 5 Heads is almost equals to 231/1000 or ~23%.
             </p>
             <p>
                 Genrally, there's some chance that we get 0 Heads, some chance for 1 Head ...
                 The chance of getting less than 0 Heads or more than 10 Heads is 0.
                 The chance of getting X Heads is directly related the height of the bars in the histogram;
-                higher bars mean greater chance.
-
-                Sum of Chances = 100% or 1
-
-            Sum of area covered by bars = number of trials (1000)
-            Normalization
-
-                Height ~= Probability
-
-
-
-                Binomial distribution
-                Sum (Area covered by bars) = 2^10
-                
-                Sum (Probability) = 1
-                Play with number of bins in binomial distribution graph
+                higher bars mean greater chance:
             </p>
-
+            <table class='results experiment table-summary-chance' cellpadding="0" cellspacing="0" border="1">
+                <tbody>
+                    <tr class='count'>
+                        <th>Count of Heads</th>
+                    </tr>
+                    <tr class='trials'>
+                        <th>Chance</th>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                We can say that if the chance of getting 5 Heads is 23%, then after tossing a coin for 10 times
+                we expect to have by average 2.3 number of Heads \( 2.3 = 23\% \times 10 \).
+            </p>
+            <p>
+                When we sum up the chance of getting 0 Heads + the chance of getting 1 Head + ... + the 
+                chance of getting 10 Heads we get 100%:
+            </p>
+                <pre class='math-sum-chance'></pre>
+            <p>                
+                Sum of Chances = 100%
+            </p>
+            <p>
+                That means that when we throw a coin for 10 times, 
+                we're anyway going to get 0 or 1 or ... or 10 Heads.
+            </p>
+            <p>
+                We're of course not bound to 10 bins (10 tosses of coin per trial),
+                use this slider to chane the number of bins (tosses):
+            </p>
             <div>
                 <input type="range" min="1" max="15" value="10" name='number-of-bins'>
-                <button data-action='coin-10-times-1000-trials-all'>Redo with <label data-value-for='number-of-bins'>10</label> bins</button>
+                <button data-action='coin-10-times-1000-trials-all'>Redo with <label data-value-for='number-of-bins'>11</label> bins</button>
             </div>
-            <p>
-                When we toss a coin for 15 times, we might get 0 Heads, 1 Heads, ... 15 Heads.
-                We are more likely to get 7 or 8 Heads. But if we're very lucky, there's still a chance that get 13, 14 or 
-                15 Heads.
-            </p>
-            <p>
-                This is exactly what our histogram is showing. In this example, the height of the bar
-                ar 7 for instance, shows how many times we got a Head after 500 trials.
-                Go ahead and <button data-action='coin-10-times-1000-trials-all'>redo</button> the experiment a few times.
-                Note that unlike when we were doing the experiment by only 20 trials, this time (that we do 500 trials),
-                the shape of the histogram change very little. We always have a pick in the middle and the sides are
-                shallow.
-            </p>
+
+          
             <!--
             <p>
                 Change the number trials:
@@ -370,17 +373,80 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
         <section>
             <h2>Binomial Trial</h2>
             <p>
-                Obviously \( 0 \le k \le 10 \). For example we want to know what are our chances of getting exactly 3 Heads when
-                we throw a coin 10 times. There's a very well defined mathematical function that give us our results. It's called
-                Choose or Combination function:
+                The dumb thing about our way so far has been that, we tried to solve our problem
+                with a brute force approach. We tossed a coin 10 &times; 1000 times to find the
+                chance of getting 5 Heads. There's indeed a mathematically smarter way to calculate
+                this number.
+            </p>
+            <p>
+                Remember that when we tossed a coin for 10 times, the set of all possible 
+                out comes has \( 2^{10} = 1024 \) members:
+            </p>
+            <pre>
+1.    (T, T, T, T, T, T, T, T, T, T)
+2.    (H, T, T, T, T, T, T, T, T, T)
+3.    (T, H, T, T, T, T, T, T, T, T)
+      ...
+1023. (H, H, H, H, H, H, H, H, H, T)
+1024. (H, H, H, H, H, H, H, H, H, H)</pre>
+            <p>
+                By looking at the above set of outcomes, we can count that in 1 out of 1024
+                ( \( \frac{1}{1024} \) ) ways our outcome has 0 Heads. In a same manner, if we list
+                all the members we can count the number of outcomes with exactly 1 Head, 2 Heads ...
+            </p>
+            <p>
+                Instead of listing and counting the outcomes, there's a math funciton that gives us 
+                those numbers, it's called Choose (or Combinaiton):
                 \[
                     Choose (10, k) = \begin{pmatrix} 10 \\ k \end{pmatrix}
                 \]
-                In our
+                Choose(10, k) gives us the number of outcomes that have exactly k Heads.
+                Obviously \( 0 \le k \le 10 \). And since we have a total 1024 distinct outcomes,
+                the chance of getting k Heads is equal to
+                \[
+                    \frac{Choose (10, k)}{2^{10}} = \frac{Choose (10, k)}{1024}
+                \]
+            </p>
+            <p class="tip">
+                Chance is the ratio of how many different ways we can get a particular outcome 
+                (here for example in how many different ways we can get 5 Heads) over the total
+                number of possible outcomes.
+            </p>
+            <p>
+                Let's calculate this chance for \( 0 \le k \le 10 \):
+            </p>
+            <table class='results table-summary-chance' cellpadding="0" cellspacing="0" border="1" id="binomial-10-chance">
+                <tbody>
+                    <tr class='count'>
+                        <th>Count of Heads</th>
+                    </tr>
+                    <tr class='trials'>
+                        <th>Chance</th>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+
+            Sum of area covered by bars = number of trials (1000)
+            Normalization
+
+                Height ~= Probability
+
+
+
+                Binomial distribution
+                Sum (Area covered by bars) = 2^10
+                
+                Sum (Probability) = 1
+                Play with number of bins in binomial distribution graph
             </p>
             <p>
                 sum Choose(10,x) from x=0 to 10
                 http://www.wolframalpha.com/input/?i=sum+Choose%2810%2Cx%29+from+x%3D0+to+10
+            </p>
+            <p>
+                Original quesiton, how many Heads... it's a random experiment. We cannot come up with a definitive
+                number, but we can talk about probability.
             </p>
         </section>
 
@@ -547,6 +613,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
     </article>
     <script src="javascript/libs/prelude-browser.js"></script>
     <script src="home/javascript/utils.js"></script>
+    <script src="home/javascript/coin-trial-table.js"></script>
     <script src="home/javascript/binomial-histogram.js"></script>
     <script src="home/javascript/index.js"></script>
 

@@ -295,6 +295,14 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "Procfile",
+			"settings":
+			{
+				"buffer_size": 17,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -343,14 +351,7 @@
 	},
 	"console":
 	{
-		"height": 126.0,
-		"history":
-		[
-			"dir",
-			"ls",
-			"build",
-			"import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read())"
-		]
+		"height": 126.0
 	},
 	"distraction_free":
 	{
@@ -442,7 +443,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 90.0,
+		"height": 0.0,
 		"where_history":
 		[
 			""
@@ -578,8 +579,35 @@
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "Procfile",
+					"settings":
+					{
+						"buffer_size": 17,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -618,7 +646,6 @@
 	{
 		"height": 0.0
 	},
-	"project": "viz.sublime-project",
 	"replace":
 	{
 		"height": 46.0
@@ -724,24 +751,10 @@
 		],
 		"width": 0.0
 	},
-	"select_symbol":
-	{
-		"height": 392.0,
-		"selected_items":
-		[
-		],
-		"width": 392.0
-	},
-	"settings":
-	{
-	},
 	"show_minimap": false,
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
 	"side_bar_width": 181.0,
-	"status_bar_visible": true,
-	"template_settings":
-	{
-	}
+	"status_bar_visible": true
 }

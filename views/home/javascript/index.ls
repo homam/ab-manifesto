@@ -1,4 +1,4 @@
-{mean, sum, id, map, fold, filter, group-by, obj-to-pairs, head, tail, split-at, join} = require 'prelude-ls'
+{mean, sum, id, map, fold, zip, filter, group-by, obj-to-pairs, head, tail, split-at, join} = require 'prelude-ls'
 exports = exports ? this
 
 
@@ -9,60 +9,11 @@ experiment-data-to-histogram = (data) ->
 	data = map ((i)-> {count: i, trials: count (==i), data}), [0 to length]
 
 
-# binomial trial table
-table-coin-data = ($jqtable , data , {duration = 1000}) !->
-	duration = duration / (data.length+1)
 
-	$table = d3.select $jqtable.get 0
-	$tbody = $table.select \tbody
-	$toss = $tbody.select \tr.toss .selectAll \th.toss .data data
-		..enter! .append \th  .attr \class, \toss
-		..text ((_,i) -> i+1)
-	$result = $tbody.select \tr.result .selectAll \td .data data
-		..enter! .append \td .append \span
-		..select \span .text '-'
-
-	summary = 
-		Heads: (filter isHead, data).length
-		Tails: (filter isTail, data).length
-	
-	$summary = $jqtable.find '.summary > tr > td' 
-		.attr \colspan data.length+1
-		.find '[data-value]' .text '' 
-	setTimeout ->
-		$summary.each ->
-			$this = $ this
-			$this.text <| summary[$ this .data \value]
-	, duration*(data.length)
-
-	_ <- wait duration
-	$result.select \span .text bool-to-headtail
-			.style 'opacity', 0 .transition! .duration 10 .delay ((_,i) -> duration*i) .style \opacity, 1 
-
-table-coin-data-many = ($jqtable , data , {duration = 1000}) !->
-	duration = duration / (data.length+1) / data[0].length
-
-	$table = d3.select $jqtable.get 0
-	$tbody = $table.select \tbody
-	$toss = $tbody.select \tr.toss 
-		..selectAll \th.toss .data [1 to data[0].length+1]
-			..enter! .append \th  .attr \class, \toss
-			..text (-> if it > data[0].length then 'Count of Heads' else it)
-
-	# wait a lil bit more before rendering the next record
-	delayt = -> c = 0; -> (++c)*duration
-	delay = delayt!
-
-	$result = $tbody.selectAll \tr.result .data data
-		..enter! .append \tr .attr \class, \result .append \th .text (_,i) -> i+1
-		..selectAll \td .data (-> it ++ [it])
-			..enter! .append \td
-			..text ''
-			..transition! .delay delay .text( (d,i) -> if (isNaN d) then (filter isHead, d).length else (bool-to-headtail d))
 
 # summary table
 # data :: [{count :: Int, trials :: Int}]
-table-coin-data-many-sum = ($jqtable, data) !->
+table-coin-data-many-sum = ($jqtable, data, {textf = (.trials)}) !->
 
 	$table = d3.select $jqtable.get 0
 	$tbody = $table.select \tbody
@@ -72,8 +23,10 @@ table-coin-data-many-sum = ($jqtable, data) !->
 		..exit! .remove!
 	$tbody.select \tr.trials .selectAll \td.trials .data data
 		..enter! .append \td .attr \class, \trials
-		..text (.trials)
+		..text textf
 		..exit! .remove!
+
+
 
 
 math-sum = ($jqpre, data) ->
@@ -81,6 +34,12 @@ math-sum = ($jqpre, data) ->
 		sum . (map ({count, trials}) -> count * trials) <| data
 	$jqpre.html <| (join ' + ' <| map (({count, trials}) -> count + "*" + trials), data) + " = " + exp-val
 
+
+math-sum-chance = ($jqpre, data) ->
+	total = 
+		sum . (map ({_, trials}) -> trials) <| data
+	format = d3.format '%'
+	$jqpre.html <| (join ' + ' <| map (({_, trials}) -> format trials/total), data) + " = 100%"
 
 
 # data: [Int]
@@ -123,7 +82,7 @@ actions =
 		hisogram-data = experiment-data-to-histogram data
 		
 		# summary table
-		table-coin-data-many-sum ($ '#coin-10-times-20-trials-table-sum table.results' .show!), hisogram-data
+		table-coin-data-many-sum ($ '#coin-10-times-20-trials-table-sum table.results' .show!), hisogram-data, {}
 
 		# sum is ~100
 		math-sum ($ '#coin-10-times-20-trials-table-sum .math-sum'), hisogram-data
@@ -147,7 +106,10 @@ actions =
 		hisogram-data = experiment-data-to-histogram data
 		
 		# summary table
-		table-coin-data-many-sum ($ '#coin-10-times-1000-trials .table-summary' .show!), hisogram-data
+		table-coin-data-many-sum ($ '#coin-10-times-1000-trials .table-summary' .show!), hisogram-data, {}
+		table-coin-data-many-sum ($ '#coin-10-times-1000-trials .table-summary-chance' .show!), hisogram-data, {textf : -> (it.trials / 1000) |> d3.format '%'}
+		math-sum-chance ($ '#coin-10-times-1000-trials .math-sum-chance'), hisogram-data
+
 		graph-coin-data-many ($ '#coin-10-times-1000-trials svg'), {data: (map sum, data), number-of-bins: number-of-bins, duration: 500}
 
 
@@ -184,7 +146,7 @@ actions =
 
 
 $ '#coin-10-times-1000-trials input[name=number-of-bins]' .change ->
-	$ '#coin-10-times-1000-trials label[data-value-for=number-of-bins]' .text <| $ this .val!
+	$ '#coin-10-times-1000-trials label[data-value-for=number-of-bins]' .text <| $ this .val! |> parseInt |> (1+)
 
 # $ '#coin-10-times-1000-trials input[name=number-of-trials]' .change ->
 # 	$ '#coin-10-times-1000-trials label[data-value-for=number-of-trials]' .text <| $ this .val!
@@ -204,5 +166,7 @@ $ 'button[data-action]' .each ->
 actions['coin-2-times']!
 actions['coin-10-times']!
 actions['coin-10-times-20-trials-all']!
+table-coin-data-many-sum ($ '#binomial-10-chance' .show!), (binomial-coefficient 10 |> zip [0 to 10] |> map ([i,v]) -> {count:i, trials: v}), {textf : -> (it.trials / 1024) |> d3.format '%'}
+
 
 exports.actions = actions

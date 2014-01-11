@@ -466,7 +466,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             </p>
         </section>
 
-        <section>
+        <section class='binomial-n-p-chance'>
             <h2>Unfair Coins</h2>
             <p>
                 So far we've been dealing with a fair coin. How is it related to A/B tests?
@@ -482,36 +482,38 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 Each time that we toss a coin we get either a Head or a Tail. And the number of Heads or Tails after 150
                 tosses is between 0 and 150. Similarly the number of Successes or Failures in 150 trials is 
                 between 0 and 150. And knowing the numebr of Successes or Failures is sufficient. For example if we
-                have 60 Successes, then we have 90 Failures <code>(150 - 60 = 90)</code>.
+                have 60 Successes, then we have 90 Failures \( 150 - 60 = 90 \).
+            </p>
+            <p>
+                The histogram below shows the binomial distribution of 60 subjects with a 50% Success rate. 
+                Play with the Chance slider to see how the diagram changes when the Success rate is not
+                50%.
             </p>
             <svg class='results' id='binomial-n-p-chance-graph'></svg>
+            <div>
+                Number of Bins:
+                <input type="range" min="10" max="150" value="60" name='number-of-bins' onchange="actions['binomial-n-p-chance']()">
+                <label data-value-for='number-of-bins' data-transform='x+1'>61</label>,
 
-            Binomial distribution and bell curve, data table for an unfir coins.
-            Notice the bell curve is shifted, its shape has not changed, but it's center of mass is not in the middle anymore
-            <!-- use correct binomial numbers
-             for binomial coefficient use Multiplicative form: http://en.wikipedia.org/wiki/Binomial_coefficient 
-             -->
+                Chance of Success (Head):
+                <input type="range" min="0" max="1" step="0.01" value="0.5" name='chance' onchange="actions['binomial-n-p-chance']()">
+                <label data-value-for='chance' data-transform='d3.format("%")(x)'>50%</label>
+            </div>
+            <p>
+                At the extremeses, 
+                <button data-action='binomial-n-p-chance100'>when the chance of Success is 100%</button>, we only have one bar at the right-most side
+                of the diagram (at 60 in this example) 
+                and 
+                <button data-action='binomial-n-p-chance0'>when the chance of Success is 0%</button>,
+                we have one bar at the left (at 0).
+                Remember that the height of the bars (at each X) indicate our chances of getting that number of Successes.
+                When the chance of Success is 0%, then we will always get 0 Successes. It's not a random trial anymore,
+                we have a definite answer. Same for 100% chance of Success.
+            </p>
+
         </section>
 
-        <section>
-            <h2>Chance</h2>
-            <p>
-                When we toss a coin for 10 times, we might have any number of Heads (between 0 and 10).
-                Some number of Heads are more likely than others. For instance you consider youself very
-                lucky if you get a Head only 2 times after tossing a coin for 10 times.
-            </p>
-            <p>
-                A very interesting question is that what's the chance of getting 2 Heads or 5 Heads or 7 Heads
-                by tossing a coin for 10 times?
-            </p>
-            <p>
-                Our intuition says the number of Heads after tossing a coin for 10 times should be close to 5.
-                And the chance of getting extreme values of 0 and 1 or 9 and 10 Heads are very shallow.
-                Again this is exactly what our histogram is showing.
-                In fact there's a direct relationship between the height of the bars and the likelyhood of 
-                getting that number of Heads.
-            </p>
-        </section>
+ 
             <!-- 
 
                 then show the plot of binomial distribution for 30 trials. (if instead of repeating the experiment 
@@ -534,17 +536,23 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             <h2>Interpretation of Statistics</h2>
 
             <p>
-                The whole idea of statistics is that we can't or we don't want to do an experiment with all the members of
+                The whole idea of statistics is that we can't or we don't want to do the experiment with all the members of
                 our population. In our landing page scenario, the population is anybody
                 that will ever visit our landing page.
-                As long as our page is getting more visits everyday, we're not going to know our whole population. Simply 
-                because tomorrow we have more people visited our landing page.
+                As long as our page is getting more visits everyday, we're not going to 
+                know every member of our population. Simply 
+                because tomorrow we willl have more people visited our landing page.
             </p>
             <p>
                 We're almost always dealing with a sample (subset) of our population.
-                Because we're always studying a part of the population, we cannot be sure that our
-                statistics are 100% accurate. For example if we measure that the conversion rate of our landing page
-                is 30%,
+                Because we're always studying a part of the population, we cannot be absolutely confident that our
+                statistics are 100% accurate. For example if we find out that 60 out of 200 visitors of our landing page
+                has converted, then we can say that the conversion rate of the landing page is \( \frac{60}{200} = 30 \% \).
+                But this 30% might change as we get more visitors. It's a product of chance, we just might have
+                been lucky with the first 200 visitors and have registered a higher conversion rate (or the opposite).
+                We can only find the actual conversion rate of a landing page, when we retire the page and
+                stop its traffic. But that's not what we usually want, we're interested to find how a page or
+                how the A and B cases of our test are performing before it's too late.
             </p>
             <p>
                 One way of thinking about the statistics of tossing a coin is that, we have an infinitely large
@@ -561,26 +569,53 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
               ...
             </pre>
             <p>
-                This interpretation is very useful in our landing page problem.
-                Each cell is a visitor.
-                The size of population is huge, we assume it's infinite (everyday we get more visitors).
-
-                We are interested to know how likely it is that we get the actual conversion rate of a landing page
-                if our sample made of only 200 visitors.
-
+                Here we're using frequentism interpretation of statistics.
+                This interpretation is very useful in our landing page problem;
+                In the above table, assume each cell is a visitor.
+                The size of the population (everyone that will eventually see our landing page) is huge,
+                we assume it's infinite.
+            </p>
+            <p>
+                We are interested to know how likely it is that the conversion rate that we've recorded
+                after jusg 200 visits to the landing page is equal to (or close to) the actual conversion
+                rate of a landing page (that can only be calculated when the page is expired).
+            </p>
+            <p>
                 It's like picking 200 subjects from the infinite list of visitors.
 
                 Hence uncertainty
             </p>
-
-
-
-
+        </section>
+        <section>
+            <h2>Expected Value</h2>
             <p>
-                Now, when we're testing a landing page, we're usually dealing with a number of subjects that is 
-                very larger than 15.
+                If we do a trial over and over agian, and then find the average of the results of each trial,
+                that average is the expected value.
+                For example: if we toss a coin 10 times and count the number of Heads,
+                and repeat this trial 1000 times, our expected value is the average number of Heads at each trial.
             </p>
-
+            <p>
+                Officially,
+            </p>
+            <pre>
+Expected value = chance of getting 0  Successes &times; 0  +
+                 chance of getting 1  Success   &times; 1  + 
+                 ... + 
+                 chance of getting n  Successes &times; n
+            </pre>
+            <p>
+                We can call it the weighted average.
+                \[
+                    Expected \ value = \sum_{i = 0}^n p(i) \times i
+                \]
+                Or simply for us it is equal to 
+                \[
+                    Exptected \ value = Number \ of \ Subjects \times Probability \ of \ Succcess
+                \]
+                For a fair coin that we toss for 10 times, expected value is \( 10 \times 0.5 = 5 \).
+            </p>
+            </p>
+            <!-- expected value -->
 
             <p>
                 For now, let's assume we have 100 subjects.
@@ -596,6 +631,17 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
 
         <section>
             <h2>Confidence Intervals</h2>
+            <!--
+
+            95%
+
+            A/B confidence binomial
+
+            Computation problem with binomial
+
+            Normal approximation
+
+            -->
             <p>
                 We usually perform A/B tests with a number of subjects that is way larger than 15.
                 In fact, a little bit later, we're going to calculate the minimum number of subjects that are

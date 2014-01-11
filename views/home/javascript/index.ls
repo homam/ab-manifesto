@@ -57,12 +57,11 @@ _ <- $!
 
 
 
-binomial-n-bins = ($svg, $table, bins = 10, options = {}) !->
-	data = binomial-coefficient bins |> zip [0 to bins] |> map ([i,v]) -> {count:i, trials: v}
+binomial-n-bins = ($svg, $table, bins = 10, chance = 0.5, options = {}) !->
+	data = binomial-distribution bins, chance |> zip [0 to bins] |> map ([i,v]) -> {count:i, prob: v}
 	if !!$table
-		table-coin-data-many-sum ($table.show!), data, {textf : -> (it.trials / Math.pow(2,bins)) |> d3.format '%'}
-	total = sum map (.trials), data
-	draw-histogram (d3.select $svg.get 0), (map (({count,trials})-> {x:count, y: trials/total}), data), {
+		table-coin-data-many-sum $table.show!, data, textf : (.prob) >> d3.format '%'
+	draw-histogram (d3.select $svg.get 0), (map (({count,prob})-> {x:count, y: prob}), data), {
 		format: d3.format '%'
 	} <<< options
 
@@ -156,12 +155,23 @@ actions =
 		actions['coin-n-times-t-trials'] ($ '#coin-10-times-1000-trials'), 10, 1000, 20000
 
 	'coin-n-times-binomial': !-> 
-		binomial-n-bins ($ '#binomial-n-chance-graph'), null, ($ '.coin-n-times-binomial input[name=number-of-bins]' .val! |> parseInt), {
+		binomial-n-bins ($ '#binomial-n-chance-graph'), null, ($ '.coin-n-times-binomial input[name=number-of-bins]' .val! |> parseInt), 0.5 ,{
 			xdomainf: (-> [0 to 65])
 			ydomainf: (-> [0, 0.25])
 			duration: 100
 		}
 
+	'binomial-n-p-chance': !->
+		binomial-n-bins ($ '.binomial-n-p-chance svg'), null, ($ '.binomial-n-p-chance input[name=number-of-bins]' .val! |> parseNum), ($ '.binomial-n-p-chance input[name=chance]' .val! |> parseNum), {
+			duration: 150
+			width: 800
+		}
+
+	'binomial-n-p-chance100': !->
+		$ '.binomial-n-p-chance input[name=chance]' .val 1 .change!
+
+	'binomial-n-p-chance0': !->
+		$ '.binomial-n-p-chance input[name=chance]' .val 0 .change!
 
 
 
@@ -172,7 +182,7 @@ $ 'input[type=range]' .change ->
 	$parent.find "label[data-value-for=#{$this.attr 'name'}]" .each ->
 		$label = $ this
 		eval "var f = function(x) { return #{($label.attr 'data-transform') ? 'x'}; }"
-		$label.text <| $this.val! |> parseInt |> f
+		$label.text <| $this.val! |> parseNum |> f
 
 
 
@@ -193,6 +203,8 @@ actions['coin-10-times']!
 actions['coin-10-times-20-trials-all']!
 binomial-n-bins ($ '#binomial-10-chance-graph'), ($ '#binomial-10-chance-table')
 actions['coin-n-times-binomial']!
+actions['binomial-n-p-chance']!
+
 
 
 

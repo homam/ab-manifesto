@@ -3,7 +3,7 @@ exports = exports ? this
 
 # binomial trial histogram
 # data :: [array of ints] -- to preserve the order of our experiment
-draw-binomial-n-tries = ($svg, data, {duration = 1000, width = 600, height = 260, xExtents = null, on-transition-started = noop, on-transition-ended = noop}) ->
+draw-experiment-n-tries = ($svg, data, {duration = 1000, width = 600, height = 260, xExtents = null, on-transition-started = noop, on-transition-ended = noop}) ->
 	
 
 	dlength = data.length
@@ -84,4 +84,60 @@ draw-binomial-n-tries = ($svg, data, {duration = 1000, width = 600, height = 260
 
 
 
-exports.draw-binomial-n-tries = draw-binomial-n-tries
+
+
+# data :: [{x, y}]
+draw-histogram = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x), it), ydomainf = (-> [0, d3.max map (.y), it]),  duration = 1000, width = 600, height = 260}) ->
+
+	margin =
+		top: 5
+		right: 10
+		bottom: 30
+		left: 40
+	width = width - margin.left - margin.right
+	height = height - margin.top - margin.bottom
+
+	 
+	$svg.attr \width, (width+margin.left+margin.right) .attr \height, (height+margin.bottom+margin.top)
+
+	
+	x = d3.scale.ordinal!
+		..domain(xdomainf data).rangeRoundBands([0,width], 0.1)
+	y = d3.scale.linear! .domain (ydomainf data) .range [height,0]
+	
+
+	$vp = $svg.selectAll 'g.vp' .data [data]
+	$vpEnter = $vp.enter! .append 'g' .attr 'class', 'vp'
+	$vp.attr 'transform', "translate(#{margin.left},#{margin.top} )"
+
+
+	$block = $vp.selectAll 'rect.block' .data id
+		..enter! .append \rect .attr \class, \block 
+			..attr \height, 0
+			..attr \x, x . (.x) .attr \y, -> y(0)
+		..exit! .transition! .duration duration
+			..attr \height, 0
+			..attr \x, x . (.x) .attr \y, -> y(0)
+			..remove!
+		..transition! .duration duration
+			..attr \width, x.rangeBand! .attr \height, (height -) . y . (.y)
+			..attr \x, x . (.x) .attr \y, -> y(it.y)
+
+
+	$vpEnter.append 'g' .attr 'class', 'y axis'
+	yAxis = d3.svg.axis! .scale y .orient 'left' .tickFormat format .tickSize(-width,0,0) .ticks(5)
+	$yAxis = $vp.select '.y.axis'
+		..transition! .duration 200 .call yAxis
+
+	bins = x.domain! .length
+	$vpEnter.append 'g' .attr 'class', 'x axis'
+	xAxis = d3.svg.axis! .scale x .orient 'bottom'
+	$xAxis = $svg.select '.x.axis' .attr "transform", "translate(0,#{height})"
+		..transition! .duration 200 .call xAxis
+		..selectAll 'text' .text (-> if it % ceil(bins/20) == 0 then it else '' )
+
+
+	
+
+exports.draw-histogram = draw-histogram
+exports.draw-experiment-n-tries = draw-experiment-n-tries

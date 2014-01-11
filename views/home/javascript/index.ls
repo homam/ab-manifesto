@@ -48,12 +48,26 @@ graph-coin-data-many =($svg, {data = null, number-of-bins = null, duration = 500
 	number-of-bins = number-of-bins ? $svg.data \number-of-bins
 	$svg.data \data, data .data \number-of-bins, number-of-bins
 
-	draw-binomial-n-tries (d3.select <| $svg.show! .get 0), data,
+	draw-experiment-n-tries (d3.select <| $svg.show! .get 0), data,
 		duration: duration
 		xExtents: [0, number-of-bins]
 
 
 _ <- $!
+
+
+binomial10-bins = !->
+	bins = 10 # $ '.coin-n-times-binomial input[name=number-of-bins]' .val! |> parseInt
+	data = binomial-coefficient bins |> zip [0 to bins] |> map ([i,v]) -> {count:i, trials: v}
+	table-coin-data-many-sum ($ '#binomial-10-chance-table' .show!), data, {textf : -> (it.trials / Math.pow(2,bins)) |> d3.format '%'}
+	total = sum map (.trials), data
+	draw-histogram (d3.select '#binomial-10-chance-graph'), (map (({count,trials})-> {x:count, y: trials/total}), data), {
+		format: d3.format '%'
+		#xdomainf: (-> [0 to 100])
+		#ydomainf: (-> [0, 0.2])
+	}
+
+
 
 
 fake = (bins, heads) --> 
@@ -122,7 +136,7 @@ actions =
 		number-of-bins = number-of-bins ? $svg.data \number-of-bins
 		$svg.data \data, data .data \number-of-bins, number-of-bins
 
-		draw-binomial-n-tries (d3.select <| $svg.show! .get 0), data,
+		draw-experiment-n-tries (d3.select <| $svg.show! .get 0), data,
 			duration: duration
 			xExtents: [0, number-of-bins]
 
@@ -131,7 +145,7 @@ actions =
 	'coin-n-times-t-trials-animate': ($container, bins, trials, duration) ->
 		$container.find \.experiment .show!
 		$results = $container.find \table.results .css \opacity, 1
-		draw-binomial-n-tries (d3.select <| $container.find \svg .get 0), (many-random-bins bins, trials),
+		draw-experiment-n-tries (d3.select <| $container.find \svg .get 0), (many-random-bins bins, trials),
 			on-transition-started: ({key})->
 				table-coin-data $results, (fake key), {duration: 0.2*duration/trials}
 			on-transition-ended: (_,i) ->
@@ -142,14 +156,20 @@ actions =
 	'coin-10-times-1000-trials': ->
 		actions['coin-n-times-t-trials'] ($ '#coin-10-times-1000-trials'), 10, 1000, 20000
 
+	'coin-n-times-binomial': !-> throw 'not implemented'
 
 
 
-$ '#coin-10-times-1000-trials input[name=number-of-bins]' .change ->
-	$ '#coin-10-times-1000-trials label[data-value-for=number-of-bins]' .text <| $ this .val! |> parseInt |> (1+)
 
-# $ '#coin-10-times-1000-trials input[name=number-of-trials]' .change ->
-# 	$ '#coin-10-times-1000-trials label[data-value-for=number-of-trials]' .text <| $ this .val!
+
+$ 'input[type=range]' .change ->
+	$this = $ this 
+	$parent = $this.parent!
+	$label = $parent.find "label[data-value-for=#{$this.attr 'name'}]"
+	eval "var f = function(x) { return #{($label.attr 'data-transform') ? 'x'}; }"
+	$label.text <| $this.val! |> parseInt |> f
+
+
 
 
 
@@ -166,7 +186,7 @@ $ 'button[data-action]' .each ->
 actions['coin-2-times']!
 actions['coin-10-times']!
 actions['coin-10-times-20-trials-all']!
-table-coin-data-many-sum ($ '#binomial-10-chance' .show!), (binomial-coefficient 10 |> zip [0 to 10] |> map ([i,v]) -> {count:i, trials: v}), {textf : -> (it.trials / 1024) |> d3.format '%'}
+binomial10-bins!
 
 
 exports.actions = actions

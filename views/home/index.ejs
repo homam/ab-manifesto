@@ -352,7 +352,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             </p>
             <div>
                 <input type="range" min="1" max="15" value="10" name='number-of-bins'>
-                <button data-action='coin-10-times-1000-trials-all'>Redo with <label data-value-for='number-of-bins'>11</label> bins</button>
+                <button data-action='coin-10-times-1000-trials-all'>Redo with <label data-value-for='number-of-bins' data-transform='x+1'>11</label> bins</button>
             </div>
 
           
@@ -370,7 +370,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             -->
         </section>
 
-        <section>
+        <section class='coin-n-times-binomial'>
             <h2>Binomial Trial</h2>
             <p>
                 The dumb thing about our way so far has been that, we tried to solve our problem
@@ -415,7 +415,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             <p>
                 Let's calculate this chance for \( 0 \le k \le 10 \):
             </p>
-            <table class='results table-summary-chance' cellpadding="0" cellspacing="0" border="1" id="binomial-10-chance">
+            <table class='results table-summary-chance' cellpadding="0" cellspacing="0" border="1" id="binomial-10-chance-table">
                 <tbody>
                     <tr class='count'>
                         <th>Count of Heads</th>
@@ -425,6 +425,36 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                     </tr>
                 </tbody>
             </table>
+            <p>
+                And here's the histogram for the above data:
+            </p>
+            <svg class='results' id='binomial-10-chance-graph'></svg>
+            <p>
+                In this example the height of bars
+                at each number indicates the probability of getting that number of Heads
+                (or Tails) in a trial of 10 times throwing a coin.
+            </p>
+            <p>
+                Back to original question, I think it's clear now that there's no definite
+                answer to 'how many Heads we get by throwing a coin for 10 times'. But 
+                there's a definite probability distribution that answers our question.
+                Some number of Heads are more probable than the others. This graph shows that
+                the most probable outcomes are 4, 5 and 6 and we have to be really lucky
+                to get 0, 1, 9 or 10 Heads.
+            </p>
+        </section>
+        <section>
+            <p>
+                Let's see how the shape of our histogram changes when we change the number of bins:
+            </p>
+            <svg class='results' id='binomial-n-chance-graph'></svg>
+            <div>
+                <input type="range" min="1" max="100" value="10" name='number-of-bins'>
+                <button data-action='coin-n-times-binomial'>Redo with <label data-value-for='number-of-bins' data-transform='x+1'>11</label> bins</button>
+            </div>
+            <p>
+
+            </p>
             <p>
 
             Sum of area covered by bars = number of trials (1000)
@@ -448,6 +478,16 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 Original quesiton, how many Heads... it's a random experiment. We cannot come up with a definitive
                 number, but we can talk about probability.
             </p>
+        </section>
+
+        <section>
+            <h2>Unfair Coins</h2>
+            How it's all related to UX
+            Binomial distribution and bell curve, data table for an unfir coins.
+            Notice the bell curve is shifted, its shape has not changed, but it's center of mass is not in the middle anymore
+            <!-- use correct binomial numbers
+             for binomial coefficient use Multiplicative form: http://en.wikipedia.org/wiki/Binomial_coefficient 
+             -->
         </section>
 
         <section>
@@ -563,15 +603,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 Why we repeat?
             </p>
         </section>
-        <section>
-            <h2>Unfair Coins</h2>
-            How it's all related to UX
-            Binomial distribution and bell curve, data table for an unfir coins.
-            Notice the bell curve is shifted, its shape has not changed, but it's center of mass is not in the middle anymore
-            <!-- use correct binomial numbers
-             for binomial coefficient use Multiplicative form: http://en.wikipedia.org/wiki/Binomial_coefficient 
-             -->
-        </section>
+
         <section>
             <h2>Confidence Intervals</h2>
             <p>

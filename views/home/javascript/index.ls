@@ -56,16 +56,15 @@ graph-coin-data-many =($svg, {data = null, number-of-bins = null, duration = 500
 _ <- $!
 
 
-binomial10-bins = !->
-	bins = 10 # $ '.coin-n-times-binomial input[name=number-of-bins]' .val! |> parseInt
+
+binomial-n-bins = ($svg, $table, bins = 10, options = {}) !->
 	data = binomial-coefficient bins |> zip [0 to bins] |> map ([i,v]) -> {count:i, trials: v}
-	table-coin-data-many-sum ($ '#binomial-10-chance-table' .show!), data, {textf : -> (it.trials / Math.pow(2,bins)) |> d3.format '%'}
+	if !!$table
+		table-coin-data-many-sum ($table.show!), data, {textf : -> (it.trials / Math.pow(2,bins)) |> d3.format '%'}
 	total = sum map (.trials), data
-	draw-histogram (d3.select '#binomial-10-chance-graph'), (map (({count,trials})-> {x:count, y: trials/total}), data), {
+	draw-histogram (d3.select $svg.get 0), (map (({count,trials})-> {x:count, y: trials/total}), data), {
 		format: d3.format '%'
-		#xdomainf: (-> [0 to 100])
-		#ydomainf: (-> [0, 0.2])
-	}
+	} <<< options
 
 
 
@@ -156,7 +155,12 @@ actions =
 	'coin-10-times-1000-trials': ->
 		actions['coin-n-times-t-trials'] ($ '#coin-10-times-1000-trials'), 10, 1000, 20000
 
-	'coin-n-times-binomial': !-> throw 'not implemented'
+	'coin-n-times-binomial': !-> 
+		binomial-n-bins ($ '#binomial-n-chance-graph'), null, ($ '.coin-n-times-binomial input[name=number-of-bins]' .val! |> parseInt), {
+			xdomainf: (-> [0 to 65])
+			ydomainf: (-> [0, 0.25])
+			duration: 100
+		}
 
 
 
@@ -165,9 +169,10 @@ actions =
 $ 'input[type=range]' .change ->
 	$this = $ this 
 	$parent = $this.parent!
-	$label = $parent.find "label[data-value-for=#{$this.attr 'name'}]"
-	eval "var f = function(x) { return #{($label.attr 'data-transform') ? 'x'}; }"
-	$label.text <| $this.val! |> parseInt |> f
+	$parent.find "label[data-value-for=#{$this.attr 'name'}]" .each ->
+		$label = $ this
+		eval "var f = function(x) { return #{($label.attr 'data-transform') ? 'x'}; }"
+		$label.text <| $this.val! |> parseInt |> f
 
 
 
@@ -186,7 +191,10 @@ $ 'button[data-action]' .each ->
 actions['coin-2-times']!
 actions['coin-10-times']!
 actions['coin-10-times-20-trials-all']!
-binomial10-bins!
+binomial-n-bins ($ '#binomial-10-chance-graph'), ($ '#binomial-10-chance-table')
+actions['coin-n-times-binomial']!
+
+
 
 
 exports.actions = actions

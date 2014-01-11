@@ -6,6 +6,7 @@ random = Math.random
 floor = Math.floor
 ceil = Math.ceil
 round = Math.round
+pow = Math.pow
 
 # sequence  :: ([f], v) -> [f v]
 sequence = (fs, v) --> [f v for f in fs]
@@ -16,7 +17,6 @@ sequenceA = ([f, ...fs]:list, init, callback) !-->
 		d <- f!
 		sequenceA fs, ([d] ++ init), callback
 
-
 parseNum = (s) ->
 	n = +s
 	if isNaN n then 0 else n
@@ -24,7 +24,6 @@ parseNum = (s) ->
 shuffle = (arr) ->
 	alength = arr.length
 	arr `zip-all` (map (-> Math.random!), [0 to alength]) |> sort-by (([v,r]) -> r) |> map ([v,r]) -> v
-
 
 wait = (time, f) -> setTimeout f, time
 
@@ -59,12 +58,19 @@ choose = (n, k) -->
 binomial-coefficient = (n) ->
 	map (choose n), [0 to n]
 
+binomial-distribution-function = (n, p, k) -->
+	(choose n, k) * (pow p, k) * (pow (1 - p), (n - k))
+
+binomial-distribution = (n, p) ->
+	map (binomial-distribution-function n, p), [0 to n]
+
 
 
 exports.random = random
 exports.floor = floor
 exports.ceil = ceil
 exports.round = round
+exports.pow = pow
 
 exports.sequence = sequence
 exports.sequenceA = sequenceA
@@ -84,3 +90,5 @@ exports.isTail = isTail
 
 exports.choose = choose
 exports.binomial-coefficient = binomial-coefficient
+
+exports.binomial-distribution = binomial-distribution

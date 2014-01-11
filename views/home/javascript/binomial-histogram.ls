@@ -111,6 +111,19 @@ draw-histogram = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x)
 	$vp.attr 'transform', "translate(#{margin.left},#{margin.top} )"
 
 
+	$vpEnter.append 'g' .attr 'class', 'y axis'
+	yAxis = d3.svg.axis! .scale y .orient 'left' .tickFormat format .tickSize(-width,0,0) .ticks(5)
+	$yAxis = $vp.select '.y.axis'
+		..transition! .duration 200 .call yAxis
+
+	bins = x.domain! .length
+	$vpEnter.append 'g' .attr 'class', 'x axis'
+	xAxis = d3.svg.axis! .scale x .orient 'bottom'
+	$xAxis = $svg.select '.x.axis' .attr "transform", "translate(0,#{height})"
+		..transition! .duration 200 .call xAxis
+		..selectAll 'text' .text (-> if it % ceil(bins/20) == 0 then it else '' )
+
+
 	$block = $vp.selectAll 'rect.block' .data id
 		..enter! .append \rect .attr \class, \block 
 			..attr \height, 0
@@ -124,17 +137,7 @@ draw-histogram = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x)
 			..attr \x, x . (.x) .attr \y, -> y(it.y)
 
 
-	$vpEnter.append 'g' .attr 'class', 'y axis'
-	yAxis = d3.svg.axis! .scale y .orient 'left' .tickFormat format .tickSize(-width,0,0) .ticks(5)
-	$yAxis = $vp.select '.y.axis'
-		..transition! .duration 200 .call yAxis
 
-	bins = x.domain! .length
-	$vpEnter.append 'g' .attr 'class', 'x axis'
-	xAxis = d3.svg.axis! .scale x .orient 'bottom'
-	$xAxis = $svg.select '.x.axis' .attr "transform", "translate(0,#{height})"
-		..transition! .duration 200 .call xAxis
-		..selectAll 'text' .text (-> if it % ceil(bins/20) == 0 then it else '' )
 
 
 	

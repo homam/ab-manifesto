@@ -16,7 +16,7 @@
     </header>
     <article id="graphs">
         <section id='coin-2-times'>
-            <h2>Binomial Experiment</h2>
+            <h2>Let's Toss a Coin</h2>
             <p>
                 Let's
                 <button data-action='coin-2-times'>toss a coint for a couple of times</button>
@@ -45,17 +45,16 @@
                 </tfoot>
             </table>
             <p>
-                Click on the <button data-action='coin-2-times'>Repeat</button> button to repeat the experiment.
+                Click on the <button data-action='coin-2-times'>Repeat</button> button to repeat this trial.
             </p>
             <p>
-                As you're repeating this trial, you might notice that we get the result of 1 Head and 1 Tail 
+                It's a random experiment, sometimes we get 1 Head and 1 Tail, sometimes 2 Heads and 0 Tails and
+                sometimes 0 Heads and 2 Tails.
+                But s you're repeating the trial, you might notice that we get the result of 1 Head and 1 Tail 
                 more frequently.
-                This is because when we toss a coin the first time and then pick it up and toss
-                it again for a second time, we're actually doing two independent trials. Whether we get a Head
-                or a Tail at the first toss, does not affect the result of our second toss.
             </p>
             <p>
-                To fully understand this trial, we should treat first and second tosses as separate
+                To fully understand this trial, we should treat first and second tosses as separate, indipendent
                 events. There are four possible outcomes to this trial: 
             </p>
             <pre>
@@ -64,7 +63,7 @@ First Toss Head, Second Toss Tail
 First Toss Tail, Second Toss Tail
 First Toss Tail, Second Toss Head</pre>
             <p>
-                We can summerize this result by this notation:
+                We can summerize it by this notation:
             </p>
             <pre>
 (H, H)
@@ -75,9 +74,10 @@ First Toss Tail, Second Toss Head</pre>
             We see that in two out of four outcomes, 
             we have 1 Head and 1 Tail: <code>(H, T)</code> and <code>(T, H)</code>.
 
-            Back to our original experiment, now it's clear why we had a sense that
-            we're more likely to have 1 Head and 1 Tail result. It's because in 2/4 times or 50% of the time
-            the result of our experiment is <code>1 Head and 1 Tail</code>:
+            Now it's clear why we had a sense that
+            we're more likely to have 1 Head and 1 Tail result. It's because in \( \frac{2}{4} \) instances
+            or 50% of the time
+            the result of our experiment is 1 Head and 1 Tail:
         </p>
         <pre>
 (H, H) -> 25%
@@ -92,8 +92,16 @@ First Toss Tail, Second Toss Head</pre>
             When we toss a coin for two times, we're twice as much likely to get <code>1 Head and 1 Tail</code> than
             <code>2 Heads and 0 Tails</code> or <code>0 Heads and 2 Tails</code>.
         </p>
+        <aside class="tip">
+            <h3>Indipendent Events</h3>
+            <p>
+                When we toss a coin and then pick it up and toss
+                it again for a second time, we're actually doing two independent events. Whether we get a Head
+                or a Tail at the first toss, does not affect the result of the second toss.
+            </p>
+        </aside>    
         <p>
-            Before we go forward note that knowing the number of Heads in each experiment is sufficient.
+            Before we go forward note that knowing the number of Heads is sufficient.
             If we know how many times we got a Head, then we know the number of Tails.
                 <pre>
 Number of Heads + Number of Tails =  Number of throws (10 times in this example)
@@ -102,6 +110,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
         </p>
         </section>
         <section id='coin-10-times'>
+            <h2>Toss a Coin for 10 times</h2>
             <p>
                 Now let's <button data-action='coin-10-times'>toss a coin for 10 times</button>:
             </p>
@@ -129,27 +138,26 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 </tfoot>
             </table>
             <p>
-                We are interested to find out how many Heads we will get if we throw a coin 10 times.
-                It's a no brainer,
-                the chance of getting a Head at each toss of a coin is 50%, and after tossing for 10 times we probably will have 10 Heads.
+                We are interested in finding out <em>how many Heads we will get if we throw a coin 10 times</em>.
             </p>
             <p>
                 Keep repeating the experiment. 
 
-                You might thought that when we throw a coin for 10 times, the most expected outcome is that we end up with
-                <code>5 Heads and 5 Tails</code>. That's true, but now after a few repeat we will consider ourselves
+                You might have thought that when we throw a coin for 10 times,
+                the most expected outcome is that we end up with
+                5 Heads and 5 Tails. That's true, but now after a few repeats we will consider ourselves
                 lucky if you end up with exactly
-                <code>5 Heads and 5 Tails</code>. 
-
-                But almost never end up in a situation that we get 
-                <code>10 Heads and 0 Tails</code> or <code>0 Heads and 10 Tails</code> either.
-                You have to be very lucky that if trow a coin for 10 times and each time you get a Head.
-                Don't get me wrong, it might happen, but it's very unlikely.
-
+                5 Heads and 5 Tails. 
+            </p>
+            <p>
+                On the other hand we almost never end up in a situation that we get 
+                10 Heads and 0 Tails or 0 Heads and 10 Tails either.
+                You have to be very lucky that if trow a coin for 10 times and every time you get a Head.
+                Don't get me wrong, it might happen, but it's extremely unlikely.
             </p>
             <p>
                 In fact by repeating this experiment, we see that
-                thou we call outselves lucky if we have exactly <code>5 Heads and 5 Tails</code> but
+                though we call outselves lucky if we have exactly 5 Heads and 5 Tails but
                 we're almost always close to that magic middle.
             </p>
             <p>
@@ -170,11 +178,12 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
 
         </section>
         <section id="coin-10-times-20-trials-table">
+            <h2>Let's Keep Repeating Our Trial</h2>
             <p>
                 Instead of keep clicking on the repeat button, let's repeat our experiment (thorwing a coin 10 times and counting the number of Heads), for 20 trials. It's like clicking on the repeat button for 20 times.
             </p>
             <p>
-                <button data-action='coin-10-times-20-trials-all'>Count the number of heads after tossing a coin 10 times, for 20 trials</button>
+                We will count the number of Heads after at the end of trial.
             </p>
             <table class='results experiment' cellpadding="0" cellspacing="0" border="1">
                 <tbody>
@@ -186,21 +195,21 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             <p>
                 The table above contains the full dataset of our experiment. Each cell indiacates a toss of coin.
                 Each row is a trial (10 times tossing a coin).
-                The result of the trial (the number of times we got a Head in each 10 tosses) is shown in the last column.
+                The result of each trial (the number of times we got a Head in each 10 tosses) is shown in the last column.
             </p>
             <p>
-                Note that in 20 trials, we might get some of the less likely results of <code>2 Heads</code> or
-                <code>8 Heads</code>.
+                Note in 20 trials, we might get some of the more unlikelier results of 2 Heads or
+                8 Heads as well. <button data-action='coin-10-times-20-trials-all'>Repeat the whole experiment</button>
             </p>
         </section>
         <section id="coin-10-times-20-trials-table-sum">
             <p>
                 This table can be overwhelming. Especially you might have guessed that soon we will be doing
-                this experiment not just for 20 trials but for houndrads or thousands of trials.
+                this experiment for not just 20 trials but for houndrads or thousands of trials.
             </p>
             <p> 
-                We can summerize the table by counting how many times we ended up with <code>0 Heads</code>, 
-                <code>1 Head</code>, <code>2 Heads</code> and so on.
+                We can summerize the table by counting how many times we ended up with 0 Heads, 
+                1 Head, 2 Heads and so on:
             </p>
             <table class='results experiment' cellpadding="0" cellspacing="0" border="1">
                 <tbody>
@@ -220,7 +229,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             <p>
                 Take a look the summary table above, I think it proves our suspicion that we're most likely
                 to be somewhere in the middle. Meaning that if we toss a coin for 10 times, we're most likely to
-                have a 4, 5 or 6 number of Heads. And it's very unlikely to get 0, 1, 9 or 10 Heads.
+                have 4, 5 or 6 number of Heads. And it's very unlikely to get 0, 1, 9 or 10 Heads.
             </p>
             <div class="interesting" style="display:none">
                 <p>
@@ -270,7 +279,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
 
         <section id="coin-10-times-1000-trials">
             <p>
-                Just a reminder, our original question was: when we toss a coin for 10 times, how many times we expect it to land on its Head?
+                Just a reminder, our original question was: when we toss a coin for 10 times, in how many times we expect it to land on its Head?
                 We're trying to answer this question by actually doing the experiment.
                 After repeating the experiment for a few times we realized that it's a question of chance;
                 we've seen that at each trial we end with a different number of Heads.

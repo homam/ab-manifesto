@@ -37,7 +37,7 @@ table-coin-data-many = ($jqtable , data , {duration = 1000}) !->
 
 	$table = d3.select $jqtable.get 0
 	$tbody = $table.select \tbody
-	$toss = $tbody.select \tr.toss 
+	$toss = $table.select \thead .select \tr.toss 
 		..selectAll \th.toss .data [1 to data[0].length+1]
 			..enter! .append \th  .attr \class, \toss
 			..text (-> if it > data[0].length then 'Count of Heads' else it)

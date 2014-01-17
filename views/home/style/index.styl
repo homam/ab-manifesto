@@ -14,33 +14,42 @@ section
 		clear: both
 	.experiment
 		display: none
-	table.results
-		border-color: white
-		td, th
-			text-align: center
-		> tbody td, > thead th
-			padding: 0.2em
-			width: 45px
-			height: 25px
-		.summary
-			> tr > td
-				text-align: left
-				padding: 6px 10px
-			table
-				float: left
-				td
-					min-width: 30px
-			button
-				float: right
+
+table.results
+	border-color: white
+	tr td:nth-child(1), tr th:nth-child(1)
+		width: 140px
+	td, th
+		text-align: center
+		padding: 0.2em 0
+		width: 50px
+		height: 32px
+		vertical-align: middle
+	.summary
+		> tr > td
+			text-align: left
+			padding: 6px 10px
+		table
+			float: left
+			td
+				min-width: 30px
+		button
+			float: right
+
+svg.bins-10
+	margin-left: 100px
 
 code
 	display: inline-block
 
 .tip 
-	margin: 1em 0
+	margin: 1em 0em
 	border: solid 1px rgb(201, 201, 201)
-	padding: 1em 1em 0 1em
+	padding: 1em
 	box-shadow: rgb(133, 133, 133) 1px 1px
+	p:last-child
+		margin-bottom: 0
+		padding-bottom: 0
 
 #coin-10-times-20-trials-table		
 	thead, tbody
@@ -48,22 +57,17 @@ code
 	tbody
 		height: 200px
 		overflow: auto
-	td 
-		padding: 3px 10px
+	// td 
+	// 	padding: 3px 10px
 	td, th
 		overflow: hidden
-		padding: 0
-	td:nth-child(1), th:nth-child(1)
-		width: 43px
-	td:last-child, th:last-child
-		width: 50px
+	
 
 
 
 svg 
 	display: block
-		text
-		font: normal 12px Arial
+	font: normal 12px Arial
 	.axis
 		path
 			fill: none

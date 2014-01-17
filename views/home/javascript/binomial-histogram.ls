@@ -3,7 +3,7 @@ exports = exports ? this
 
 # binomial trial histogram
 # data :: [array of ints] -- to preserve the order of our experiment
-draw-experiment-n-tries = ($svg, data, {duration = 1000, width = 600, height = 260, xExtents = null, on-transition-started = noop, on-transition-ended = noop}) ->
+draw-experiment-n-tries = ($svg, data, {duration = 1000, width = 620, height = 260, xExtents = null, on-transition-started = noop, on-transition-ended = noop}) ->
 	
 
 	dlength = data.length
@@ -102,7 +102,7 @@ draw-histogram = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x)
 
 	
 	x = d3.scale.ordinal!
-		..domain(xdomainf data).rangeRoundBands([0,width], 0.1)
+		..domain(xdomainf data).rangeBands([0,width], 0.1, 0) # .rangeRoundBands([0,width], 0.1)
 	y = d3.scale.linear! .domain (ydomainf data) .range [height,0]
 	
 

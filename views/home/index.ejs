@@ -262,7 +262,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             <p>
                 Technically we say that the number of Heads is the independant variable.
             </p>
-            <svg class='experiment results'></svg>
+            <svg class='experiment results bins-10'></svg>
             <p>
                 We call this graph a histogram. The height of each bar
                 shows how many times we had that X number of Heads in our experiment.
@@ -307,7 +307,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                     </tr>
                 </tbody>
             </table>
-            <svg class='experiment results'></svg>
+            <svg class='experiment results bins-10'></svg>
 
             <p>
                 This time our histogram has a very distinctive shape. And the shape doesn't seems to be changing
@@ -418,11 +418,11 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                     \frac{Choose (10, k)}{2^{10}} = \frac{Choose (10, k)}{1024}
                 \]
             </p>
-            <p class="tip">
+            <aside class="tip">
                 Chance is the ratio of how many different ways we can get a particular outcome 
                 (here for example in how many different ways we can get 5 Heads) over the total
                 number of possible outcomes.
-            </p>
+            </aside>
             <p>
                 Let's calculate this chance for \( 0 \le k \le 10 \):
             </p>
@@ -439,7 +439,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             <p>
                 And here's the histogram for the above data:
             </p>
-            <svg class='results' id='binomial-10-chance-graph'></svg>
+            <svg class='results bins-10' id='binomial-10-chance-graph'></svg>
             <p>
                 In this example the height of bars
                 at each number indicates the probability of getting that number of Heads
@@ -460,7 +460,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             </p>
             <svg class='results' id='binomial-n-chance-graph'></svg>
             <div>
-                <input type="range" min="10" max="100" value="10" name='number-of-bins' onchange="actions['coin-n-times-binomial']()">
+                <input type="range" min="10" max="350" value="10" name='number-of-bins' onchange="actions['coin-n-times-binomial']()">
                 <button data-action='coin-n-times-binomial'>Redo with <label data-value-for='number-of-bins' data-transform='x'>10</label> tosses (<label data-value-for='number-of-bins' data-transform='x+1'>11</label> bins)</button>
             </div>
             <p>
@@ -523,6 +523,12 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             </p>
 
         </section>
+        <section>
+            <p>
+                In the next post we talk about frequentism interpretation of probability and statistics,
+                expected value and confidence.
+            </p>
+        </section>
 
  
             <!-- 
@@ -547,28 +553,30 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             <h2>Interpretation of Statistics</h2>
 
             <p>
-                The whole idea of statistics is that we can't or we don't want to do the experiment with all the members of
+                The whole idea of statistics is that we can't or we don't want to do the experiment with every member of
                 our population. In our landing page scenario, the population is anybody
                 that will ever visit our landing page.
-                As long as our page is getting more visits everyday, we're not going to 
+                Everyday, ss long as our page is getting more visits, we're not going to 
                 know every member of our population. Simply 
-                because tomorrow we willl have more people visited our landing page.
+                because tomorrow we will have more people who have visited our landing page.
             </p>
             <p>
-                We're almost always dealing with a sample (subset) of our population.
+                We're almost always dealing with a sample (subset) of the population.
+            </p>
+            <p>
                 Because we're always studying a part of the population, we cannot be absolutely confident that our
                 statistics are 100% accurate. For example if we find out that 60 out of 200 visitors of our landing page
-                has converted, then we can say that the conversion rate of the landing page is \( \frac{60}{200} = 30 \% \).
+                had converted, then we can say that the conversion rate of the landing page is \( \frac{60}{200} = 30 \% \).
                 But this 30% might change as we get more visitors. It's a product of chance, we just might have
                 been lucky with the first 200 visitors and have registered a higher conversion rate (or the opposite).
-                We can only find the actual conversion rate of a landing page, when we retire the page and
-                stop its traffic. But that's not what we usually want, we're interested to find how a page or
+                We can only determine the actual conversion rate of a landing page, when we retire the page and
+                stop its traffic. But that's not what we usually want; we're interested to find how a page or
                 how the A and B cases of our test are performing before it's too late.
             </p>
             <p>
                 One way of thinking about the statistics of tossing a coin is that, we have an infinitely large
-                dataset of tosses (our population is an infinite list of toss results: Heads or Tails). Tossing
-                a coin for 200 times is equivalent to randomly pickining 200 items from this infinite list.
+                dataset of tosses (our population is an infinite list of toss results: Head or Tail). Tossing
+                a coin for 10 times is equivalent to randomly pickining 10 items from this infinite list.
             </p>
             <pre>
               ...
@@ -581,18 +589,32 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             </pre>
             <p>
                 Here we're using frequentism interpretation of statistics.
+                If we are dealing with a fair coin, we expect to have picked around 5 Heads and 5 Tails.
+                If the chance of getting a Head at each toss is 30%, then we expect to have around
+                3 Heads and 6 Tails.
+            </p>
+            <div class='tip'>
+                Randomly picking 10 items from this infinite list of toss results is equivalent to tossing a coin for 10 times.
+                So everything that we know about binomial distribution applies here: when we pick 10 items
+                by random from this infitie list, we can get any number of Heads between 0 and 10. But the chances of getting
+                different number of Heads are different and can be calculated by:
+                \[
+                    \frac{Choose(k, 10)}{2^{10}}
+                \]
+            </div>
+            <p>
                 This interpretation is very useful in our landing page problem;
-                In the above table, assume each cell is a visitor.
+                In the above example, assume each toss of coin represent a visitor (visitor either concerts or not).
                 The size of the population (everyone that will eventually see our landing page) is huge,
-                we assume it's infinite.
+                we will assume it's infinite.
             </p>
             <p>
-                We are interested to know how likely it is that the conversion rate that we've recorded
-                after jusg 200 visits to the landing page is equal to (or close to) the actual conversion
-                rate of a landing page (that can only be calculated when the page is expired).
+                We are interested to know how close is the conversion rate that we've recorded
+                after just 200 visits to the landing page to the actual conversion
+                rate of a landing page (that can only be calculated when the page is expired)?
             </p>
             <p>
-                It's like picking 200 subjects from the infinite list of visitors.
+                It's similar to randomly picking 200 subjects from the infinite list of visitors.
 
                 Hence uncertainty
             </p>
@@ -618,11 +640,14 @@ Expected value = chance of getting 0  Successes &times; 0  +
             <p>
                 We can call it the weighted average.
                 \[
-                    Expected \ value = \sum_{i = 0}^n p(i) \times i
+                    Expected \ value = \sum_{i = 0}^n p(i) \ . \ i
                 \]
-                Or simply for us it is equal to 
+                Or if the probability of instances are equal, for us it is equal to 
                 \[
+                    \forall i, j; \ p(i) = p(j): \\ \quad \\
                     Exptected \ value = Number \ of \ Subjects \times Probability \ of \ Succcess
+                    \\ \quad \\
+                    Exptected \ value = n \ . \ p
                 \]
                 For a fair coin that we toss for 10 times, expected value is \( 10 \times 0.5 = 5 \).
             </p>

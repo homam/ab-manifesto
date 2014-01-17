@@ -156,9 +156,10 @@ actions =
 
 	'coin-n-times-binomial': !-> 
 		binomial-n-bins ($ '#binomial-n-chance-graph'), null, ($ '.coin-n-times-binomial input[name=number-of-bins]' .val! |> parseInt), 0.5 ,{
-			xdomainf: (-> [0 to 65])
+			xdomainf: (-> [0 to 200])
 			ydomainf: (-> [0, 0.25])
 			duration: 100
+			width: 800
 		}
 
 	'binomial-n-p-chance': !->
@@ -201,6 +202,7 @@ $ 'button[data-action]' .each ->
 actions['coin-2-times']!
 actions['coin-10-times']!
 actions['coin-10-times-20-trials-all']!
+actions['coin-10-times-1000-trials-all']!
 binomial-n-bins ($ '#binomial-10-chance-graph'), ($ '#binomial-10-chance-table')
 actions['coin-n-times-binomial']!
 actions['binomial-n-p-chance']!

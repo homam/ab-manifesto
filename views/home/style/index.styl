@@ -47,9 +47,25 @@ code
 	border: solid 1px rgb(201, 201, 201)
 	padding: 1em
 	box-shadow: rgb(133, 133, 133) 1px 1px
+	background-color: rgb(236, 236, 236)
 	p:last-child
 		margin-bottom: 0
 		padding-bottom: 0
+
+aside
+	border: solid 1px rgb(135, 135, 135)
+	padding: 1em
+	position: relative
+	color: rgb(117, 117, 117)
+
+	&:before
+		content: 'Aside'
+		display: block
+		position: absolute
+		top: 0
+		right: 0
+		background: rgb(233, 233, 233)
+		padding: 0.5em 1em
 
 #coin-10-times-20-trials-table		
 	thead, tbody

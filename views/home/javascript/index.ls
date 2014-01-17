@@ -175,6 +175,26 @@ actions =
 		$ '.binomial-n-p-chance input[name=chance]' .val 0 .change!
 
 
+	'try-choose-n-k': !->
+		n = $ '#try-choose-n-k input[name=n]' .val! |> parseNum
+		_ = $ '#try-choose-n-k input[name=k]'
+			..attr \max n
+			k = ..val! |> parseNum
+			if k > n
+				..val n
+				k := n
+		$ '#try-choose-n-k label[data-value-for=k]' .text k
+
+		$ '#try-choose-n-k .result' .html <| choose n, k |> round |> (x) ->
+			v = x.toString().split \e+
+			if 2 == v.length
+				' &asymp; ' + v[0] + '&times;' + '10<sup>' + v[1] + '</sup>'
+			else
+				' = ' + (d3.format ',') x
+
+
+
+
 
 
 $ 'input[type=range]' .change ->
@@ -204,6 +224,7 @@ actions['coin-10-times']!
 actions['coin-10-times-20-trials-all']!
 actions['coin-10-times-1000-trials-all']!
 binomial-n-bins ($ '#binomial-10-chance-graph'), ($ '#binomial-10-chance-table')
+actions['try-choose-n-k']!
 actions['coin-n-times-binomial']!
 actions['binomial-n-p-chance']!
 

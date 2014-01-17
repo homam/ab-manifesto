@@ -418,10 +418,45 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                     \frac{Choose (10, k)}{2^{10}} = \frac{Choose (10, k)}{1024}
                 \]
             </p>
-            <aside class="tip">
+            <p class="tip">
                 Chance is the ratio of how many different ways we can get a particular outcome 
                 (here for example in how many different ways we can get 5 Heads) over the total
                 number of possible outcomes.
+            </p>
+            <aside>
+                \( Choose(n, \ k) \) function itself is defined by:
+                \[
+                    Choose(n, \ k) = \frac{n!}{k! \ (n-k)!} = \prod_{i=1}^{k} \frac{n - (k-i)}{i}
+                \]
+                Needless to say that the values of Choose function can be huge and 
+                \( Choose(n, \ k) \) is maximum when \( k = \frac{1}{2} n \). Play with it:
+                <table id="try-choose-n-k">
+                    <tr>
+                        <td rowspan="2">
+                            \( Choose(n, \ k) \) =
+                        </td>  
+                        <td rowspan="2">(</td>
+                        <td>
+                            n = <input type="range" min="1" max="350" value="10" name='n' onchange="actions['try-choose-n-k']()">
+                            <label data-value-for='n' data-transform='x'>10</label>
+                        </td>
+                        <td rowspan="2">)</td>
+                        <td rowspan="2"><label class='result'>= ....</label></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            k = <input type="range" min="0" max="350" value="5" name='k' onchange="actions['try-choose-n-k']()">
+                            <label data-value-for='k' data-transform='x'>5</label>
+                        </td>
+                    </tr>
+                </table>
+                <p>
+                    But \( 2^n \) is also huge and \( Choose(n, \ k) \) for any \( 0 \le k \le n \) is less than \( 2^n \).
+                    In fact
+                    \[
+                        \sum_{i=0}^{n} Choose(n, \ k) = 2^n
+                    \]
+                </p>
             </aside>
             <p>
                 Let's calculate this chance for \( 0 \le k \le 10 \):
@@ -521,6 +556,18 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 When the chance of Success is 0%, then we will always get 0 Successes. It's not a random trial anymore,
                 we have a definite answer. Same for 100% chance of Success.
             </p>
+            <p>
+                Generally, if the chance of getting a Head at each toss of a coin is <code>p</code> then the chance of getting 
+                <code>k</code> Heads in <code>n</code> tosses is equal to:
+                \[
+                    Choose(n, k) \ p^k \ (1-p)^{n-k}
+                \]
+
+                In case of a fair coin \( p = (1-p) = 0.5 = \frac{1}{2} \) so
+                \[ 
+                    Choose(n, k) \ p^k \ (1-p)^{n-k} = Choose(n, k) \ (\frac{1}{2})^k \ (\frac{1}{2})^{n-k} = Choose(n, k) \ (\frac{1}{2})^n = \frac{Choose(n, k)}{2^n}
+                \]
+            </p>
 
         </section>
         <section>
@@ -598,9 +645,13 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 So everything that we know about binomial distribution applies here: when we pick 10 items
                 by random from this infitie list, we can get any number of Heads between 0 and 10. But the chances of getting
                 different number of Heads are different and can be calculated by:
-                \[
+                \(
                     \frac{Choose(k, 10)}{2^{10}}
-                \]
+                \)
+                or in case of an unfair coin:
+                \(
+                    Choose(k, 10) \ p^k \ (1-p)^{10-k}
+                \)
             </div>
             <p>
                 This interpretation is very useful in our landing page problem;
@@ -623,46 +674,61 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
         <section>
             <h2>Expected Value</h2>
             <p>
-                If we do a trial over and over agian, and then find the average of the results of each trial,
+                If we do a trial over and over agian, and then find the average of the result of each trial,
                 that average is the expected value.
                 For example: if we toss a coin 10 times and count the number of Heads,
                 and repeat this trial 1000 times, our expected value is the average number of Heads at each trial.
             </p>
+            <pre>
+Trial 1    => 4 Heads
+Trial 2    => 6 Heads
+Trial 3    => 3 Heads
+...
+Trial 1000 => 5 Heads
+
+Expected Values = (4 + 6 + 3 + ... + 5) / 1000
+            </pre>
             <p>
-                Officially,
+                That is equal to
             </p>
             <pre>
-Expected value = chance of getting 0  Successes &times; 0  +
-                 chance of getting 1  Success   &times; 1  + 
-                 ... + 
-                 chance of getting n  Successes &times; n
+Expected Values = ( 
+                    (0  &times; Numbe of times we got 0  Heads) + 
+                    (1  &times; Numbe of times we got 1  Heads) + 
+                    (2  &times; Numbe of times we got 2  Heads) +
+                    ...                                   + 
+                    (10 &times; Numbe of times we got 10 Heads)
+                  ) / 1000
+            </pre>
+            <p>
+                If we call \( \frac{Number \ of \ times \ we \ got \ k \ Heads}{n} \) the chance of getting k Heads, then in a 
+                binonial trial:
+            </p>
+            <pre>
+Expected value = (0 &times; Chance of getting 0 Heads) +
+                 (1 &times; Chance of getting 1 Head ) +
+                 (2 &times; Chance of getting 2 Heads) +
+                 ...                             + 
+                 (n &times; Chance of getting n Heads)
             </pre>
             <p>
                 We can call it the weighted average.
                 \[
-                    Expected \ value = \sum_{i = 0}^n p(i) \ . \ i
+                    Expected \ value = \sum_{i = 0}^n i \ . \ p(i)
                 \]
-                Or if the probability of instances are equal, for us it is equal to 
+                Or if the probability of instances are equal ( \( \forall i, j; \ p(i) = p(j) = P \) ) then \( p(i) = P \) can
+                go out of the sum:
                 \[
-                    \forall i, j; \ p(i) = p(j): \\ \quad \\
-                    Exptected \ value = Number \ of \ Subjects \times Probability \ of \ Succcess
+                    Exptected \ value = (\sum_{i = 0}^n i) \ . \ P
                     \\ \quad \\
-                    Exptected \ value = n \ . \ p
+                    \\
+                    Exptected \ value = n \ . \ P
                 \]
                 For a fair coin that we toss for 10 times, expected value is \( 10 \times 0.5 = 5 \).
             </p>
             </p>
-            <!-- expected value -->
-
             <p>
-                For now, let's assume we have 100 subjects.
-                The result of the test for each subject is either Success or Failure.
-                Let's assume that we have a luxary to perform
-            </p>
-            <p>
-                This graph has a very distinctive shape.
-                Bell curve
-                Why we repeat?
+                Thinking in terms of expected value
             </p>
         </section>
 

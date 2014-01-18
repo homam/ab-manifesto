@@ -1,4 +1,4 @@
-{mean, sum, id, map, fold, filter, group-by, obj-to-pairs, head, tail, split-at} = require 'prelude-ls'
+{mean, sum, id, map, fold, filter, group-by, obj-to-pairs, head, tail, split-at, zip} = require 'prelude-ls'
 exports = exports ? this
 
 # binomial trial histogram
@@ -138,6 +138,7 @@ draw-histogram = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x)
 
 
 
+	{$vp, $block, x, y}
 
 
 	

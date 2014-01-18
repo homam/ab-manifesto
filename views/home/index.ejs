@@ -731,9 +731,26 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
                 Thinking in terms of expected value
             </p>
         </section>
-
         <section>
             <h2>Confidence Intervals</h2>
+            <svg id="ci-bins30" class="histogram with-ci-bins"></svg>
+            <div>
+                <input id="ci-bins30-ci" type="range" min="0" max="3" step="0.25" value="1" name='ci' onchange="actions['binomail-ci']()">
+                <label data-value-for="ci" data-transform="d3.format('0.1f')(x*2) + ' &sigma;'">2.0 &sigma;</label>
+                a = <label data-value="a"></label>, b = <label data-value="b"></label>
+                Area: <label for="ci"></label>
+            </div>
+            <div id="ci-bins30-sum">
+                \[
+                    \sum_{i=a}^b Binomial(n, i) = p(a, b)
+                \]
+            </div>
+            <div>
+                 Number of Bins:
+                <input id="ci-bins30-number-of-bins" type="range" min="10" max="500" value="60" name='number-of-bins' onchange="actions['binomail-ci']()">
+                <label data-value-for='number-of-bins' data-transform='x+1'>61</label>,
+            </div>
+
             <!--
 
             95%

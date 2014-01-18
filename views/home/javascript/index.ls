@@ -192,8 +192,38 @@ actions =
 			else
 				' = ' + (d3.format ',') x
 
+	'binomail-ci': !->
+		chance = 0.5
+		bins = $ '#ci-bins30-number-of-bins' .val! |> parseNum
+
+		$ci-range = $ '#ci-bins30-ci'
+		how-many-sigmas = $ci-range .val! |> parseNum
+
+		mu = chance * bins
+		sigma = Math.sqrt(bins * chance * (1- chance))
+
+		delta = sigma * how-many-sigmas
+		left =  mu - delta |> round
+		right = mu + delta |> round
+
+		data = binomial-distribution bins, chance |> zip [0 to bins] |> map ([i,v]) -> {x:i, y: v, className: if left<=i<=right then 'in' else 'out'}
+
+		area = 
+			sum . (map (.y)) . (filter ({x,y}) -> left<=x<=right) <| data
 
 
+		$ci-range.parent! 
+			..find 'label[for=ci]' .text <| (d3.format '%') area
+			..find 'label[data-value=a]' .text left
+			..find 'label[data-value=b]' .text right
+
+		math = MathJax.Hub.getAllJax('ci-bins30-sum')[0]
+		if !!math
+			MathJax.Hub.Queue(["Text",math,"\\sum_{i=#{left}}^{#{right}} Binomial(#{bins}, i) = #{d3.format("0.2f") (area*100)}\\%"])
+
+		{$vp, $block, x, y} = draw-histogram (d3.select '#ci-bins30'), data, {duration: 300, format: d3.format '%'}
+
+		$block.attr \class, -> 'block ' + it.className
 
 
 
@@ -227,8 +257,7 @@ binomial-n-bins ($ '#binomial-10-chance-graph'), ($ '#binomial-10-chance-table')
 actions['try-choose-n-k']!
 actions['coin-n-times-binomial']!
 actions['binomial-n-p-chance']!
-
-
+actions['binomail-ci']!
 
 
 

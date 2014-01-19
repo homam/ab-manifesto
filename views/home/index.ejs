@@ -513,6 +513,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
         </section>
 
         <section class='binomial-n-p-chance'>
+            <a name="Unfair-Coins"></a>
             <h2>Unfair Coins</h2>
             <p>
                 So far we've been dealing with a fair coin. How is it related to A/B tests?
@@ -563,6 +564,19 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                     Choose(n, k) \ p^k \ (1-p)^{n-k}
                 \]
 
+                This is the binomial distribution function. Binomal Distribution is a function of size of sample (= number of bins = n) 
+                and the probability of Success at each trial (= chance of getting a Head = p):
+
+                \[
+                    Binomial (n, \ k) = Choose(n, \ k) \ p^k \ (1-p)^{n-k}
+                \]
+
+                <code>Binomal(n, k)</code> gives us the chance of getting <code>k</code> number of Successes in a sample of size 
+                <code>n</code> when the chance of Success for each
+                indiviual member of the populaiton is <code>p</code>.
+
+            </p>
+            <p>
                 In case of a fair coin \( p = (1-p) = 0.5 = \frac{1}{2} \) so
                 \[ 
                     Choose(n, k) \ p^k \ (1-p)^{n-k} = Choose(n, k) \ (\frac{1}{2})^k \ (\frac{1}{2})^{n-k} = Choose(n, k) \ (\frac{1}{2})^n = \frac{Choose(n, k)}{2^n}
@@ -670,7 +684,6 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 Hence uncertainty
             </p>
         </section>
-        <!-- next post -->
         <section>
             <h2>Expected Value</h2>
             <p>
@@ -732,6 +745,10 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
             </p>
         </section>
         <section>
+            <h2>Standard Deviation</h2>
+        </section>
+        <section>
+            <a name="Confidence-Intervals"></a>
             <h2>Confidence Intervals</h2>
             <svg id="ci-bins30" class="histogram with-ci-bins"></svg>
             <div>
@@ -750,10 +767,17 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
                 <input id="ci-bins30-number-of-bins" type="range" min="10" max="500" value="60" name='number-of-bins' onchange="actions['binomail-ci']()">
                 <label data-value-for='number-of-bins' data-transform='x+1'>61</label>,
             </div>
+            <p>
+
+            </p>
+            <!-- 
+                Poll
+                Margin of Error
+                2.5% margin of error from each side = 95% confidence interval
+                Formula
+            -->
 
             <!--
-
-            95%
 
             A/B confidence binomial
 
@@ -769,15 +793,16 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
             </p>
         </section>
         <section>
-            <h2>Formula</h2>
+            <h2>Normal Approximation</h2>
+            <!-- 
 
-            Haskell code
-        </section>
-        <section>
-            <h2>Normal approximation</h2>
+            -->
         </section>
         <section>
             <h2>A/B Test</h2>
+            <!-- 
+                A and B Normal Distributions
+            -->
 
             So far we've been interpreting satistics as doing a random experiment over and over again.
             Another interpretation of statistics is that we're drawing randomly selected subsets (samples)
@@ -796,6 +821,10 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
                 Holy grail of A/B: case assignment
 
         </section>
+        <!--
+            Partitioning
+            Comparability
+        -->
 
         
     </article>

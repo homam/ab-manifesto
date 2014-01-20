@@ -137,6 +137,12 @@ draw-histogram = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x)
 			..attr \x, x . (.x) .attr \y, -> y(it.y)
 
 
+	# xl = d3.scale.linear! .domain d3.extent xdomainf data .range [0, width]
+	# line = d3.svg.line! .x xl . (.x) .y y . (.y) .interpolate \basis
+	# $vp.selectAll \path.line .data [data]
+	# 	..enter! .append \path .attr \class, \line 
+	# 	..attr \d, line .style \fill, \none .style \stroke, \black .style \stroke-width, 2
+
 
 	{$vp, $block, x, y}
 

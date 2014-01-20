@@ -7,6 +7,9 @@ floor = Math.floor
 ceil = Math.ceil
 round = Math.round
 pow = Math.pow
+sqrt = Math.sqrt
+pi = Math.PI
+exp = Math.exp
 
 # sequence  :: ([f], v) -> [f v]
 sequence = (fs, v) --> [f v for f in fs]
@@ -66,6 +69,18 @@ binomial-distribution = (n, p) ->
 
 
 
+normal-distribution-function = (mu, sigma, x) -->
+	exp( (x - mu)*(x - mu) / ( -2*sigma*sigma) ) / (sigma*sqrt(2*pi))
+
+normal-distribution = (mu, sigma) ->
+	map (normal-distribution-function mu, sigma), [0 to mu*2]
+
+
+binomial-normal-approximation = (n, p) -->
+	normal-distribution n*p, sqrt(n*p*(1 - p))
+
+
+
 exports.random = random
 exports.floor = floor
 exports.ceil = ceil
@@ -92,3 +107,6 @@ exports.choose = choose
 exports.binomial-coefficient = binomial-coefficient
 
 exports.binomial-distribution = binomial-distribution
+
+exports.normal-distribution = normal-distribution
+exports.binomial-normal-approximation = binomial-normal-approximation

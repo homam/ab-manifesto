@@ -746,6 +746,11 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
         </section>
         <section>
             <h2>Standard Deviation</h2>
+            <p>
+                <!-- 
+                    When p = 0 or 1 sigma = 0
+                -->
+            </p>
         </section>
         <section>
             <a name="Confidence-Intervals"></a>
@@ -776,7 +781,9 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
                 2.5% margin of error from each side = 95% confidence interval
                 Formula
             -->
-
+        </section>
+        <section>
+            <svg id="binomial-double-histogram"></svg>
             <!--
 
             A/B confidence binomial
@@ -802,6 +809,7 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
             <h2>A/B Test</h2>
             <!-- 
                 A and B Normal Distributions
+                (/ n) to bring the domain between [0, 1] to talk in terms of percentages
             -->
 
             So far we've been interpreting satistics as doing a random experiment over and over again.

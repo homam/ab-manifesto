@@ -1,4 +1,4 @@
-{mean, sum, id, map, fold, filter, group-by, obj-to-pairs, head, tail, split-at, zip} = require 'prelude-ls'
+{mean, sum, id, map, fold, filter, group-by, obj-to-pairs, head, tail, split-at, zip, maximum, minimum} = require 'prelude-ls'
 exports = exports ? this
 
 # binomial trial histogram
@@ -85,9 +85,7 @@ draw-experiment-n-tries = ($svg, data, {duration = 1000, width = 620, height = 2
 
 
 
-
-# data :: [{x, y}]
-draw-histogram = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x), it), ydomainf = (-> [0, d3.max map (.y), it]),  duration = 1000, width = 600, height = 260}) ->
+draw-histogram-axes = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x), it), ydomainf = (-> [0, d3.max map (.y), it]),  duration = 1000, width = 600, height = 260}) ->
 
 	margin =
 		top: 5
@@ -107,22 +105,28 @@ draw-histogram = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x)
 	
 
 	$vp = $svg.selectAll 'g.vp' .data [data]
-	$vpEnter = $vp.enter! .append 'g' .attr 'class', 'vp'
-	$vp.attr 'transform', "translate(#{margin.left},#{margin.top} )"
+		..enter! .append 'g' .attr 'class', 'vp'
+			..append 'g' .attr 'class', 'y axis'
+			..append 'g' .attr 'class', 'x axis'
+		..attr 'transform', "translate(#{margin.left},#{margin.top} )"
 
 
-	$vpEnter.append 'g' .attr 'class', 'y axis'
 	yAxis = d3.svg.axis! .scale y .orient 'left' .tickFormat format .tickSize(-width,0,0) .ticks(5)
 	$yAxis = $vp.select '.y.axis'
 		..transition! .duration 200 .call yAxis
 
 	bins = x.domain! .length
-	$vpEnter.append 'g' .attr 'class', 'x axis'
 	xAxis = d3.svg.axis! .scale x .orient 'bottom'
 	$xAxis = $svg.select '.x.axis' .attr "transform", "translate(0,#{height})"
 		..transition! .duration 200 .call xAxis
 		..selectAll 'text' .text (-> if it % ceil(bins/20) == 0 then it else '' )
 
+	{$vp, x, y, width, height}
+
+# data :: [{x, y}]
+draw-histogram = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x), it), ydomainf = (-> [0, d3.max map (.y), it]),  duration = 1000, width = 600, height = 260}) ->
+
+	{$vp, x, y, width, height} = draw-histogram-axes($svg, data, {format, xdomainf, ydomainf,duration,width,height})
 
 	$block = $vp.selectAll 'rect.block' .data id
 		..enter! .append \rect .attr \class, \block 
@@ -147,7 +151,38 @@ draw-histogram = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x)
 	{$vp, $block, x, y}
 
 
+# data :: [{x, y}]
+draw-double-histogram = ($svg, [data1, data2], {format = (d3.format ","), xdomainf = (-> map (.x), it), ydomainf = (-> [0, d3.max map (.y), it]),  duration = 1000, width = 600, height = 260}) ->
+
+	range = ([s, f]) -> [s to f]
+
+	# console.log <| d3.extent map (.x), (data1 ++ data2) |> range |> map (x) -> {x, y: maximum . (map (.y)) . (filter (-> it.x == x)) <| (data1 ++ data2) }
+	
+
+	data =
+		d3.extent map (.x), (data1 ++ data2) |> range |> map (x) -> {x, y: maximum . (map (.y)) . (filter (-> it.x == x)) <| (data1 ++ data2) }
+
+	data-dff =
+		d3.extent map (.x), (data1 ++ data2) |> range |> map (x) -> {x, y: minimum . (map (.y)) . (filter (-> it.x == x)) <| (data1 ++ data2) }
+
+	{$vp, x, y, width, height} = draw-histogram-axes($svg, data, {format, xdomainf, ydomainf,duration,width,height})
+
+	$block = $vp.selectAll \g.data .data [data1, data2, data-dff]
+		..enter! .append \g .attr \class, (_,i) -> 'data data-' + i
+		..selectAll 'rect.block' .data id
+			..enter! .append \rect .attr \class, \block 
+				..attr \height, 0
+				..attr \x, x . (.x) .attr \y, -> y(0)
+			..exit! .transition! .duration duration
+				..attr \height, 0
+				..attr \x, x . (.x) .attr \y, -> y(0)
+				..remove!
+			..transition! .duration duration
+				..attr \width, x.rangeBand! .attr \height, (height -) . y . (.y)
+				..attr \x, x . (.x) .attr \y, -> y(it.y)
+
 	
 
 exports.draw-histogram = draw-histogram
 exports.draw-experiment-n-tries = draw-experiment-n-tries
+exports.draw-double-histogram = draw-double-histogram

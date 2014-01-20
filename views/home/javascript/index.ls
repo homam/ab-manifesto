@@ -56,7 +56,7 @@ graph-coin-data-many =($svg, {data = null, number-of-bins = null, duration = 500
 _ <- $!
 
 
-
+# table and histogram
 binomial-n-bins = ($svg, $table, bins = 10, chance = 0.5, options = {}) !->
 	data = binomial-distribution bins, chance |> zip [0 to bins] |> map ([i,v]) -> {count:i, prob: v}
 	if !!$table
@@ -259,6 +259,19 @@ actions['coin-n-times-binomial']!
 actions['binomial-n-p-chance']!
 actions['binomail-ci']!
 
+
+# double histogram
+binomial-double-n-bins = ($svg, [{bins1, chance1}, {bins2, chance2}], options = {}) !->
+
+	data = (chance, bins) -> 
+		binomial-distribution bins, chance |> zip [0 to bins] |> map ([i,v]) -> {x:i, y: v}
+
+
+	draw-double-histogram (d3.select $svg.get 0), [(data chance1, bins1), (data chance2, bins2)], {
+		format: d3.format '%'
+	} <<< options
+
+binomial-double-n-bins ($ '#binomial-double-histogram'), [{bins1: 625, chance1: 0.3}, {bins2: 637, chance2: 0.25}], {}
 
 
 exports.actions = actions

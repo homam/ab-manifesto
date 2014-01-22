@@ -1,4 +1,4 @@
-{mean, sum, id, map, fold, filter, group-by, obj-to-pairs, head, tail, split-at, zip, maximum, minimum} = require 'prelude-ls'
+{mean, sum, id, map, fold, filter, group-by, obj-to-pairs, head, tail, split-at, zip-all, maximum, minimum} = require 'prelude-ls'
 exports = exports ? this
 
 # binomial trial histogram
@@ -141,14 +141,32 @@ draw-histogram = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x)
 			..attr \x, x . (.x) .attr \y, -> y(it.y)
 
 
-	# xl = d3.scale.linear! .domain d3.extent xdomainf data .range [0, width]
-	# line = d3.svg.line! .x xl . (.x) .y y . (.y) .interpolate \basis
-	# $vp.selectAll \path.line .data [data]
-	# 	..enter! .append \path .attr \class, \line 
-	# 	..attr \d, line .style \fill, \none .style \stroke, \black .style \stroke-width, 2
+	expected-value = data |> sum . (map ({x,y}) -> x*y)
+	n = data |> maximum . (map ({x,_}) -> x)
+	ldata = [0 to n] `zip-all` (binomial-normal-approximation n, expected-value/n) |> map ([x,y]) -> {x,y}
+	
+	xl = d3.scale.linear! .domain d3.extent xdomainf data .range [0, width]
+	line = d3.svg.line! .x xl . (.x) .y y . (.y) .interpolate \basis
+	$vp.selectAll \path.line .data [ldata]
+		..enter! .append \path .attr \class, \line 
+		..attr \d, line .style \fill, \none .style \stroke, \black .style \stroke-width, 2
 
 
 	{$vp, $block, x, y}
+
+
+draw-path-diagram = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x), it), ydomainf = (-> [0, d3.max map (.y), it]),  duration = 1000, width = 600, height = 260}) ->
+
+	{$vp, x, y, width, height} = draw-histogram-axes($svg, data, {format, xdomainf, ydomainf,duration,width,height})
+
+	xl = d3.scale.linear! .domain d3.extent xdomainf data .range [0, width]
+	line = d3.svg.line! .x xl . (.x) .y y . (.y) .interpolate \basis
+	$vp.selectAll \path.line .data [data]
+		..enter! .append \path .attr \class, \line 
+		..attr \d, line .style \fill, \none .style \stroke, \black .style \stroke-width, 2
+
+
+	{$vp, x, y}
 
 
 # data :: [{x, y}]
@@ -186,3 +204,5 @@ draw-double-histogram = ($svg, [data1, data2], {format = (d3.format ","), xdomai
 exports.draw-histogram = draw-histogram
 exports.draw-experiment-n-tries = draw-experiment-n-tries
 exports.draw-double-histogram = draw-double-histogram
+
+exports.draw-path-diagram = draw-path-diagram

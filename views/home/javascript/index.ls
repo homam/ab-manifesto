@@ -1,4 +1,4 @@
-{mean, sum, id, map, fold, zip, filter, group-by, obj-to-pairs, head, tail, split-at, join} = require 'prelude-ls'
+{mean, sum, id, map, fold, zip, filter, group-by, obj-to-pairs, head, tail, split-at, join, zip-all} = require 'prelude-ls'
 exports = exports ? this
 
 
@@ -260,6 +260,7 @@ actions['binomial-n-p-chance']!
 actions['binomail-ci']!
 
 
+
 # double histogram
 binomial-double-n-bins = ($svg, [{bins1, chance1}, {bins2, chance2}], options = {}) !->
 
@@ -273,5 +274,15 @@ binomial-double-n-bins = ($svg, [{bins1, chance1}, {bins2, chance2}], options = 
 
 binomial-double-n-bins ($ '#binomial-double-histogram'), [{bins1: 625, chance1: 0.3}, {bins2: 637, chance2: 0.25}], {}
 
+
+zero-to-one-normal = ($svg, {size = 10.0, p = 0.5}, options = {}) ->
+	console.log size
+	data = [0 to size] `zip-all` (binomial-normal-approximation size, p) |> map ([x,y]) -> {x,y}
+	console.log (binomial-normal-approximation size, p), size, p
+	draw-path-diagram (d3.select $svg.get 0), data, {
+		format: d3.format '%'
+	} <<< options
+
+zero-to-one-normal ($ '#zero-to-one-normal'), []
 
 exports.actions = actions

@@ -15,6 +15,11 @@
     <header>
     </header>
     <article id="graphs">
+        <section>
+            <p>
+
+            </p>
+        </section>
         <section id='coin-2-times'>
             <h2>Let's Toss a Coin</h2>
             <p>
@@ -419,9 +424,9 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 \]
             </p>
             <p class="tip">
-                Chance is the ratio of how many different ways we can get a particular outcome 
-                (here for example in how many different ways we can get 5 Heads) over the total
-                number of possible outcomes.
+                Chance is the ratio of 'in how many different ways we can get a particular outcome' 
+                (here for example in how many different ways we can get 5 Heads) over 'the total
+                number of possible outcomes'.
             </p>
             <aside>
                 \( Choose(n, \ k) \) function itself is defined by:
@@ -568,7 +573,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 and the probability of Success at each trial (= chance of getting a Head = p):
 
                 \[
-                    Binomial (n, \ k) = Choose(n, \ k) \ p^k \ (1-p)^{n-k}
+                    Binomial (p, \ n, \ k) = Choose(n, \ k) \ p^k \ (1-p)^{n-k}
                 \]
 
                 <code>Binomal(n, k)</code> gives us the chance of getting <code>k</code> number of Successes in a sample of size 
@@ -745,16 +750,91 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
             </p>
         </section>
         <section>
-            <h2>Standard Deviation</h2>
+            <h2><a name="standard-deviation">Standard Deviation</a></h2>
             <p>
-                <!-- 
-                    When p = 0 or 1 sigma = 0
-                -->
+                Standard Deviation or \( \sigma \) is a meassure of dispersion. It is a number in the same unit of the distribution (for example 
+                if we are meassuring the number of visits to a landing page, the unit of the standard deviation is the number of
+                visits). Standard Deviation tells us that by average how far are our data points from the expected value.
+                A larger standard deviation means that the expected value is not a good representation of our distribution, 
+                becasue many members of our sample our far from that value.
+            </p>
+            <aside>
+                <p>
+                    Standard Deviation is the square root of Variance.
+                </p>
+                <p>
+                    Variance is the expected value of \( (X - Expected Value)^2 \) distribution:
+                </p>
+                \[
+                    Var(X) = \sigma^2  = E( \ [X - \mu]^2) \\
+                    \quad = \sum_{i = 1}^n (x_i - \mu)^2 p_i \\
+                    \quad ... \\
+                    \quad = E( \ X^2) - \mu^2 \\
+                    \ \\
+                    \sigma = \sqrt{\sigma^2}
+                \]
+            </aside>
+            <p>
+                In a binomial distribution (like throwing a coin), with <code>n</code> trials and when the chance of success at each trial is <code>P</code>: 
+                \[
+                    \sigma^2 = n \ P \ (1 - P) \\
+                    \sigma = \sqrt{n \ P \ (1 - P)}
+                \]
+            </p>
+            <p>
+                For example, with n = 1000 trials and P = 0.34:
+                \[
+                    \sigma = \sqrt{1000 \times 0.34 \times (1 - 0.34)} = \sqrt{1000 \times 0.34 \times 0.66} = 224.4
+                \]
+            </p>
+            <p>
+                Let's consider two extreme cases: for any n, when P = 0 or P = 1 (meaning when the chance of success is either 0 or 100%),
+                Standard Deviation is 0, because in these cases either <code>P</code> or <code>(1 - P)</code> is 0. And it makes sense, for example
+                when there's 0 chance of success, we're certain that our trial is always going to fail (we always get a Tail) and dispersion is 0.
+            </p>
+            <p>
+                In fact standard deviation is largest when  \( P = (1 - P) = 0.5 \)
+            </p>
+            <p>
+                Standard deviation may look like a made-up meassure of dispersion. In fact there are a number of other ways to meassure 
+                spread or dispersion. But we will soon see the importance of the standard deviation for calculating confidence intervals and
+                normal distribution.
             </p>
         </section>
         <section>
-            <a name="Confidence-Intervals"></a>
+            <a name="confidence-intervals"></a>
             <h2>Confidence Intervals</h2>
+            <p>
+                Let's assume we know that the probability of getting a Head is 50%. What's the chance of getting exactly 30 Heads in 60 tosses of a coin?
+                \[
+                    Binomial(0.5, 60, 30) = 10.3 \%
+                \]
+            </p>
+            <p>
+                It's a very low chance. But on the other hand the chance of getting any number of Heads between 
+                <code> 30 - 4 = 26 </code> and <code> 30 + 4 = 34 </code> is:
+                \[
+                    \sum_{i=26}^{34} Binomial(0.5, 60, i) = 75.5 \%
+                \]
+                The chance of getting between <code> 30 - 8 = 22 </code> and <code> 30 + 8 = 38 </code> Heads is:
+                \[
+                    \sum_{i=22}^{38} Binomial(0.5, 60, i) = 97.3 \%
+                \]
+                And of course the chance of getting any number between <code> 30 - 30 = 0 </code> and <code> 30 + 30 = 60 </code> Heads is 100%.
+            </p>
+            <p>
+                We can think like this: after 60 trials,
+                <ul>
+                    <li>We are 100% confident that we're going to get between <code>0 and 60</code> number of Heads.</li>
+                    <li>We are 97.3% confident that we're going to get between <code>22 and 38</code> number of Heads.</li>
+                    <li>We are 75.5% confident that we're going to get between <code>26 and 34</code> number of Heads.</li>
+                    <li>We are 10.3% confident that we're going to get between <code>30 and 30</code> (or exactly 30) number of Heads.</li>
+                </ul>
+                As you see, the larget the range, the more confident we are.
+            </p>
+            <p>
+            
+            </p>
             <svg id="ci-bins30" class="histogram with-ci-bins"></svg>
             <div>
                 <input id="ci-bins30-ci" type="range" min="0" max="3" step="0.25" value="1" name='ci' onchange="actions['binomail-ci']()">
@@ -764,7 +844,7 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
             </div>
             <div id="ci-bins30-sum">
                 \[
-                    \sum_{i=a}^b Binomial(n, i) = p(a, b)
+                    \sum_{i=a}^b Binomial(0.5, n, i) = p(a, b)
                 \]
             </div>
             <div>

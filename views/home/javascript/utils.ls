@@ -1,5 +1,5 @@
 prelude = require('prelude-ls')
-{id, Obj,map, concat, filter, each, find, fold, foldr, fold1, all, flatten, sum, product, zip-all, group-by, obj-to-pairs, partition, join, unique, sort-by, reverse, empty} = require 'prelude-ls'
+{id, Obj,map, concat, filter, each, find, fold, foldr, fold1, all, flatten, sum, product, zip-all, group-by, obj-to-pairs, partition, join, unique, sort-by, reverse, empty,zip} = require 'prelude-ls'
 exports = exports || this
 
 random = Math.random
@@ -67,6 +67,10 @@ binomial-distribution-function = (n, p, k) -->
 binomial-distribution = (n, p) ->
 	map (binomial-distribution-function n, p), [0 to n]
 
+binomial-distribution-confidence = (n, p, left, right) -->
+	(binomial-distribution n, p) |> zip [0 to n] |> (map ([i,v]) -> {x:i, y: v}) |> (filter ({x,y}) -> left<=x<=right) |> (map (.y)) >> sum
+	
+
 
 
 normal-distribution-function = (mu, sigma, x) -->
@@ -105,8 +109,9 @@ exports.isTail = isTail
 
 exports.choose = choose
 exports.binomial-coefficient = binomial-coefficient
-
+exports.binomial-distribution-function  = binomial-distribution-function
 exports.binomial-distribution = binomial-distribution
+exports.binomial-distribution-confidence = binomial-distribution-confidence
 
 exports.normal-distribution = normal-distribution
 exports.binomial-normal-approximation = binomial-normal-approximation

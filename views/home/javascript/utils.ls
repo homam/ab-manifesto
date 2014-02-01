@@ -1,5 +1,4 @@
-prelude = require('prelude-ls')
-{id, Obj,map, concat, filter, each, find, fold, foldr, fold1, all, flatten, sum, product, zip-all, group-by, obj-to-pairs, partition, join, unique, sort-by, reverse, empty,zip} = require 'prelude-ls'
+{id, Obj,map, concat, filter, each, find, fold, foldr, fold1, all, flatten, sum, product, zip-all, group-by, obj-to-pairs, partition, join, unique, sort-by, reverse, empty, zip, take-while, break-list, span, head, last} = require 'prelude-ls'
 exports = exports || this
 
 random = Math.random
@@ -10,6 +9,7 @@ pow = Math.pow
 sqrt = Math.sqrt
 pi = Math.PI
 exp = Math.exp
+abs = Math.abs
 
 # sequence  :: ([f], v) -> [f v]
 sequence = (fs, v) --> [f v for f in fs]
@@ -69,8 +69,27 @@ binomial-distribution = (n, p) ->
 
 binomial-distribution-confidence = (n, p, left, right) -->
 	(binomial-distribution n, p) |> zip [0 to n] |> (map ([i,v]) -> {x:i, y: v}) |> (filter ({x,y}) -> left<=x<=right) |> (map (.y)) >> sum
-	
 
+binomial-distribution-find-confidence-interval = (n, p, confidence) -->
+	distribution = (binomial-distribution n, p) |> zip [0 to n] |> (map ([i,v]) -> {x:i, y: v})
+
+	binomial-distribution-find-confidence-interval-of-distribution distribution, confidence
+	
+# distribution :: [{x,y}]
+# -> {left, right, c}
+binomial-distribution-find-confidence-interval-of-distribution = (distribution, confidence) -->
+	if confidence == 1
+		return {left: (head distribution).x, right: (last distribution).x, c: 1}
+
+	confidence-sum = (left, right) ->
+		distribution |> (filter ({x,y}) -> left<=x<=right) |> (map (.y)) >> sum
+
+	mu = distribution |> sum . (map ({x,y}) -> x*y)
+	rmu = mu |> round
+	map (-> [rmu - it, rmu + it]), [0 to rmu] |> (map ([left, right]) -> {left, right, c: (confidence-sum left, right)})
+	|> (span ({_, _, c}) -> c <= confidence) |> ([a,b]) -> [(last a), (head b)]
+	|> filter (-> !!it)
+	|> map (-> v: it, d: abs(confidence - it.c) ) |> (sort-by ({v,d}) -> d) |> (map ({v,d}) -> v) |> head
 
 
 normal-distribution-function = (mu, sigma, x) -->
@@ -84,7 +103,7 @@ binomial-normal-approximation = (n, p) -->
 	normal-distribution n*p, sqrt(n*p*(1 - p))
 
 
-
+exports.abs = abs
 exports.random = random
 exports.floor = floor
 exports.ceil = ceil
@@ -112,6 +131,8 @@ exports.binomial-coefficient = binomial-coefficient
 exports.binomial-distribution-function  = binomial-distribution-function
 exports.binomial-distribution = binomial-distribution
 exports.binomial-distribution-confidence = binomial-distribution-confidence
+exports.binomial-distribution-find-confidence-interval = binomial-distribution-find-confidence-interval
+exports.binomial-distribution-find-confidence-interval-of-distribution = binomial-distribution-find-confidence-interval-of-distribution
 
 exports.normal-distribution = normal-distribution
 exports.binomial-normal-approximation = binomial-normal-approximation

@@ -192,6 +192,64 @@ actions =
 			else
 				' = ' + (d3.format ',') x
 
+
+	binomial-confidence-range-abs: ($div, mathJaxId) ->
+		_f = (name) -> $div.find "input[name=#{name}]"
+		_fix = (name, xl, xr) ->
+			$e = _f name .attr \min, xl .attr \max, xr
+			val = $e.val! |> parseNum
+			if val > xr 
+				val = xr
+			if val < xl
+				val = xl
+			($e.val val) |> show-input-range-value 
+			val
+
+		bins = _f 'bins' .val! |> parseNum
+		left = _fix 'left', 0, bins
+		right = _fix 'right', left, bins
+		chance = _f 'p' .val! |> parseNum
+
+		data = binomial-distribution bins, chance |> zip [0 to bins] |> map ([i,v]) -> {x:i, y: v, className: if left<=i<=right then 'in' else 'out'}
+
+		area = 
+			sum . (map (.y)) . (filter ({x,y}) -> left<=x<=right) <| data
+
+		{$vp, $block, x, y} = draw-histogram (d3.select <| $div.find \svg .get 0), data, {duration: 300, format: d3.format '%'}
+
+		math = MathJax.Hub.getAllJax(mathJaxId)[0]
+		if !!math
+			MathJax.Hub.Queue(["Text",math,"\\sum_{i=#{left}}^{#{right}} Binomial(#{d3.format("0.2f") chance},#{bins}, i) = #{d3.format("0.2f") (area*100)}\\%"])
+
+		$block.attr \class, -> 'block ' + it.className
+
+		{bins, chance, data ,$block}
+
+	'binomial-confidence-range': !->
+		actions.binomial-confidence-range-abs ($ \#binomial-confidence-range-histogram), 'binomial-confidence-range-histogram-math'
+
+	'binomial-polls': !->
+		{bins, chance, data, $block} = actions.binomial-confidence-range-abs ($ \#binomial-polls-histogram), 'binomial-polls-histogram-math'
+
+		confidence-data = map ((confidence) -> {confidence, range: (binomial-distribution-find-confidence-interval-of-distribution data, confidence)}),[1,0.99,0.975,0.95,0.9,0.80,0.7,0.6,0.5]
+		format = d3.format("0.1%")
+
+		d3.select '#binomial-polls-histogram tbody' .selectAll \tr .data confidence-data
+			..enter! .append \tr
+				..append \td .attr \class, 'confidence'
+				..append \td .attr \class, 'left'
+				..append \td .attr \class, 'right'
+				..append \td .attr \class, \link .append \a .text \Show! .attr \href, 'javascript:void(0)'
+			..select \td.confidence .text format . (.confidence)
+			..select \td.left .text -> "#{it.range.left} (#{it.range.left / bins |> format})" 
+			..select \td.right .text -> "#{it.range.right} (#{it.range.right / bins |> format})" 
+			..select 'td.link a' .on \click, ->
+				$ '#binomial-polls-histogram input[name=right]' .val it.range.right
+				$ '#binomial-polls-histogram input[name=left]' .val it.range.left
+				actions['binomial-polls']!
+
+
+
 	'binomail-ci': !->
 		chance = 0.5
 		bins = $ '#ci-bins30-number-of-bins' .val! |> parseNum
@@ -226,14 +284,14 @@ actions =
 		$block.attr \class, -> 'block ' + it.className
 
 
-
-$ 'input[type=range]' .change ->
-	$this = $ this 
+show-input-range-value = ($this) ->
 	$parent = $this.parent!
 	$parent.find "label[data-value-for=#{$this.attr 'name'}]" .each ->
 		$label = $ this
 		eval "var f = function(x) { return #{($label.attr 'data-transform') ? 'x'}; }"
 		$label.text <| $this.val! |> parseNum |> f
+
+$ 'input[type=range]' .change -> show-input-range-value $ this
 
 
 
@@ -258,6 +316,8 @@ actions['try-choose-n-k']!
 actions['coin-n-times-binomial']!
 actions['binomial-n-p-chance']!
 actions['binomail-ci']!
+actions['binomial-confidence-range']!
+actions['binomial-polls']!
 
 
 

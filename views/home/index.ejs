@@ -802,8 +802,8 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
             </p>
         </section>
         <section>
-            <a name="confidence-intervals"></a>
-            <h2>Confidence Intervals</h2>
+            <a name="confidence"></a>
+            <h2>Confidence</h2>
             <p>
                 Let's assume we know that the probability of getting a Head is 50%. What's the chance of getting exactly 30 Heads in 60 tosses of a coin?
                 \[
@@ -833,7 +833,102 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
                 As you see, the larget the range, the more confident we are.
             </p>
             <p>
-            
+                Let's play with the numbers:
+            </p>
+            <div id="binomial-confidence-range-histogram">
+                <svg class="histogram with-ci-bins"></svg> 
+                <div>
+                    Left: <input type="range" min="0" max="60" name="left" value="26" step="1" onchange="actions['binomial-confidence-range']()"> <label data-value-for="left">26</label>,
+                    Right: <input type="range" min="0" max="60" name="right" value="34" step="1" onchange="actions['binomial-confidence-range']()"> <label data-value-for="right">34</label>
+                </div>
+                <div>
+                    Number of bins: <input type="range" min="0" max="200" name="bins" value="60" step="1" onchange="actions['binomial-confidence-range']()"> <label data-value-for="bins">60</label>,
+                </div>
+                <div>
+                    P: <input type="range" min="0" max="1" name="p" value="0.5" step="0.01" onchange="actions['binomial-confidence-range']()"> <label data-value-for="p">0.5</label>,
+                </div>
+                <div id="binomial-confidence-range-histogram-math">
+                    \[
+                        \sum_{i=26}^{34} Binomial(0.50,60, i) = 75.49\%
+                    \]
+                </div>
+            </div>
+        </section>
+        <section>
+            <h2><a name="polls">Polls</a></h2>
+            <p>
+                Let's assume we asked a boolean question (that has a Yes or No answer) from <code>1000</code> number of people. 
+                And here's our result:
+                <pre>
+Sample Size = 1000
+Yes         = 583
+No          = 417 (= 1000 - 583)
+                </pre>
+                Then the probablity of getting a Yes is \( \frac{583}{1000} = 58.3\% \)
+            </p>
+            <p>
+                But are we sure that this result is not just an accident. What if we ask a different group of people or
+                even a larger sample of 10000 people, or the whole population, will we still get the same result that 58.3% of our new sample
+                asnswer Yes? 
+            </p>
+            <p>
+                Probably no, but the result will be close to 58.3%. The question is how close? 
+            </p>
+            <p>
+                Whenever we poll a sample (that is a subset of the population) and come up with a result, a very interesting question is that
+                how likely is it that the result of our poll be close to the actual the result of the whole population?
+            </p>
+            <p>
+                For example if by 200 visits, we find that our landing page has a 38% conversion rate, how confident we are that this
+                result is close to the actual conversion rare of the page. Confidence intervals are a way of answering this kind of
+                questions.
+            </p>
+            <p>
+                We are 100% confident that the actual conversion rate of the page is between 0 and 100% and we're somewhere in between. 
+                On the other hand we're almost sure that the actual conversion rate is not going to be exactly 38% that we meassured in our sample,
+                but it' going to be close that number.
+            </p>
+            <p>
+                Let's assume that the actual conversion rate is 38%, here's the histogram:
+            </p>
+            <div id="binomial-polls-histogram">
+                <svg class="histogram with-ci-bins"></svg> 
+                <div>
+                    Left: <input type="range" min="0" max="1000" name="left" value="0" step="1" onchange="actions['binomial-polls']()"> 
+                    <label data-value-for="left" data-transform='x + " (" + d3.format("%")(x/parseNum($("#binomial-polls-histogram input[name=bins]").val())) + ")"'>0</label>,
+                    Right: <input type="range" min="0" max="1000" name="right" value="200" step="1" onchange="actions['binomial-polls']()"> 
+                    <label data-value-for="right" data-transform='x + " (" + d3.format("%")(x/parseNum($("#binomial-polls-histogram input[name=bins]").val())) + ")"'>200</label>
+                </div>
+                <div>
+                    Number of bins: <input type="range" min="0" max="1000" name="bins" value="200" step="1" onchange="actions['binomial-polls']()"> <label data-value-for="bins">200</label>,
+                </div>
+                <div>
+                    P: <input type="range" min="0" max="1" name="p" value="0.38" step="0.01" onchange="actions['binomial-polls']()"> <label data-value-for="p">0.38</label>,
+                </div>
+                <div id="binomial-polls-histogram-math">
+                    \[
+                        \sum_{i=26}^{34} Binomial(0.50,60, i) = 75.49\%
+                    \]
+                </div>
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <td></td>
+                                <th colspan="2">Confidence Interval</th>
+                            </tr>
+                            <tr>
+                                <th>Confidence</th><th>Left</th><th>Right</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <p>
+            Around the expected value:
             </p>
             <svg id="ci-bins30" class="histogram with-ci-bins"></svg>
             <div>
@@ -850,7 +945,7 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
             <div>
                  Number of Bins:
                 <input id="ci-bins30-number-of-bins" type="range" min="10" max="500" value="60" name='number-of-bins' onchange="actions['binomail-ci']()">
-                <label data-value-for='number-of-bins' data-transform='x+1'>61</label>,
+                <label data-value-for='number-of-bins' data-transform='x+1'>61</label>
             </div>
             <p>
 

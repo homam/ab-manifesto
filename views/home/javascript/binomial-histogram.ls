@@ -85,12 +85,14 @@ draw-experiment-n-tries = ($svg, data, {duration = 1000, width = 620, height = 2
 
 
 
-draw-histogram-axes = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x), it), ydomainf = (-> [0, d3.max map (.y), it]),  duration = 1000, width = 600, height = 260}) ->
+draw-histogram-axes = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x), it), ydomainf = (-> [0, d3.max map (.y), it]),  duration = 1000, width = 600, height = 260, drawPercentageAxis = false}) ->
+
+	console.log drawPercentageAxis
 
 	margin =
 		top: 5
 		right: 10
-		bottom: 30
+		bottom: if drawPercentageAxis then 60 else 30
 		left: 40
 	width = width - margin.left - margin.right
 	height = height - margin.top - margin.bottom
@@ -108,6 +110,7 @@ draw-histogram-axes = ($svg, data, {format = (d3.format ","), xdomainf = (-> map
 		..enter! .append 'g' .attr 'class', 'vp'
 			..append 'g' .attr 'class', 'y axis'
 			..append 'g' .attr 'class', 'x axis'
+			..append 'g' .attr 'class', 'xp axis'
 		..attr 'transform', "translate(#{margin.left},#{margin.top} )"
 
 
@@ -119,14 +122,21 @@ draw-histogram-axes = ($svg, data, {format = (d3.format ","), xdomainf = (-> map
 	xAxis = d3.svg.axis! .scale x .orient 'bottom'
 	$xAxis = $svg.select '.x.axis' .attr "transform", "translate(0,#{height})"
 		..transition! .duration 200 .call xAxis
-		..selectAll 'text' .text (-> if it % ceil(bins/20) == 0 then it else '' )
+		..selectAll 'text' .text ((v,i)->  if i % ceil(bins/20) == 0 then v else '' )
+		# ..selectAll 'text' .text ((v,i)->  if i % ceil(bins/20) == 0 then d3.format '0.2p' <| v/bins else '' )
+
+	if drawPercentageAxis
+		xpAxis = d3.svg.axis! .scale x .orient 'bottom'
+		$xpAxis = $svg.select '.xp.axis' .attr "transform", "translate(0,#{height + 25})"
+			..transition! .duration 200 .call xpAxis
+			..selectAll 'text' .text ((v,i)->  if i % ceil(bins/20) == 0 then d3.format '0.2p' <| v/bins else '' )
 
 	{$vp, x, y, width, height}
 
 # data :: [{x, y}]
-draw-histogram = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x), it), ydomainf = (-> [0, d3.max map (.y), it]),  duration = 1000, width = 600, height = 260}) ->
+draw-histogram = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x), it), ydomainf = (-> [0, d3.max map (.y), it]),  duration = 1000, width = 600, height = 260, drawPercentageAxis = false}) ->
 
-	{$vp, x, y, width, height} = draw-histogram-axes($svg, data, {format, xdomainf, ydomainf,duration,width,height})
+	{$vp, x, y, width, height} = draw-histogram-axes($svg, data, {format, xdomainf, ydomainf,duration,width,height,drawPercentageAxis})
 
 	$block = $vp.selectAll 'rect.block' .data id
 		..enter! .append \rect .attr \class, \block 

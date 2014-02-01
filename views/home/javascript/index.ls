@@ -215,7 +215,7 @@ actions =
 		area = 
 			sum . (map (.y)) . (filter ({x,y}) -> left<=x<=right) <| data
 
-		{$vp, $block, x, y} = draw-histogram (d3.select <| $div.find \svg .get 0), data, {duration: 300, format: d3.format '%'}
+		{$vp, $block, x, y} = draw-histogram (d3.select <| $div.find \svg .get 0), data, {duration: 300, format: (d3.format '%'), drawPercentageAxis: true}
 
 		math = MathJax.Hub.getAllJax(mathJaxId)[0]
 		if !!math

@@ -596,25 +596,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             </p>
         </section>
 
- 
-            <!-- 
-
-                then show the plot of binomial distribution for 30 trials. (if instead of repeating the experiment 
-                a million times, we use the correct precise mathematical formulas to calculate the chance
-                that we get X Heads by 10 toss of a coin)
-                
-                Change of Y axis from numbers to probability -> Normalization
-
-
-
-                forget the detailed explanation of 10000 times. Just say as #trials grow the shape looks
-                closer to normal bell curve. To get a better shape let's do 30 trials 10000 times. + sliders
-
-                law of large numebrs (10000).
-
-                
-                then Landing Page
-             -->
+<!-- -->
         <section>
             <h2>Interpretation of Statistics</h2>
 
@@ -665,11 +647,11 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 by random from this infitie list, we can get any number of Heads between 0 and 10. But the chances of getting
                 different number of Heads are different and can be calculated by:
                 \(
-                    \frac{Choose(k, 10)}{2^{10}}
+                    \frac{Choose(10, k)}{2^{10}}
                 \)
                 or in case of an unfair coin:
                 \(
-                    Choose(k, 10) \ p^k \ (1-p)^{10-k}
+                    Choose(10, k) \ p^k \ (1-p)^{10-k}
                 \)
             </div>
             <p>
@@ -704,13 +686,13 @@ Trial 3    => 3 Heads
 ...
 Trial 1000 => 5 Heads
 
-Expected Values = (4 + 6 + 3 + ... + 5) / 1000
+Expected Value = (4 + 6 + 3 + ... + 5) / 1000
             </pre>
             <p>
                 That is equal to
             </p>
             <pre>
-Expected Values = ( 
+Expected Value = ( 
                     (0  &times; Numbe of times we got 0  Heads) + 
                     (1  &times; Numbe of times we got 1  Heads) + 
                     (2  &times; Numbe of times we got 2  Heads) +
@@ -742,12 +724,11 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
                     \\
                     Exptected \ value = n \ . \ P
                 \]
-                For a fair coin that we toss for 10 times, expected value is \( 10 \times 0.5 = 5 \).
+                If we toss a fair coin for 10 times, the expected value would be \( 10 \times 0.5 = 5 \).
             </p>
-            </p>
-            <p>
+<!--             <p>
                 Thinking in terms of expected value
-            </p>
+            </p> -->
         </section>
         <section>
             <h2><a name="standard-deviation">Standard Deviation</a></h2>

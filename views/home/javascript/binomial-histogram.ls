@@ -9,7 +9,6 @@ draw-experiment-n-tries = ($svg, data, {duration = 1000, width = 620, height = 2
 	dlength = data.length
 	dgroups = group-by id, data |> obj-to-pairs |> map ([key, arr]) -> key: +key, count: arr.length, prob: arr.length / dlength
 
-
 	margin =
 		top: 5
 		right: 10
@@ -83,7 +82,7 @@ draw-experiment-n-tries = ($svg, data, {duration = 1000, width = 620, height = 2
 		..selectAll 'text' .text id
 
 
-
+	dgroups
 
 draw-histogram-axes = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x), it), ydomainf = (-> [0, d3.max map (.y), it]),  duration = 1000, width = 600, height = 260, drawPercentageAxis = false}) ->
 

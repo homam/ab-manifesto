@@ -21,11 +21,12 @@ section
 table.results
 	border-color: white
 	tr td:nth-child(1), tr th:nth-child(1)
-		width: 140px
+		min-width: 140px
 	td, th
 		text-align: center
 		padding: 0.2em 0
-		width: 50px
+		min-width: 50px
+		//max-width: 50px
 		height: 32px
 		vertical-align: middle
 	.summary
@@ -83,6 +84,18 @@ aside
 	td, th
 		overflow: hidden
 	
+	tr td:nth-child(1), tr th:nth-child(1)
+		min-width: 50px
+
+	tbody
+		tr th:nth-child(1)
+			font-weight: normal
+
+	th:last-child
+		width: 120px
+	td:last-child
+		width: 120px
+		font-weight: bold
 
 
 

@@ -94,14 +94,14 @@ First Toss Tail, Second Toss Head</pre>
 1 Head , 1 Tail   -> 25% + 25% = 50%
 2 Heads, 0 Tail   -> 25%</pre>
         <p>
-            When we toss a coin for two times, we're twice as much likely to get <code>1 Head and 1 Tail</code> than
+            When we toss a coin for two times, we're twice as likely to get <code>1 Head and 1 Tail</code> than
             <code>2 Heads and 0 Tails</code> or <code>0 Heads and 2 Tails</code>.
         </p>
         <aside class="tip">
             <h3>Indipendent Events</h3>
             <p>
                 When we toss a coin and then pick it up and toss
-                it again for a second time, we're actually doing two independent events. Whether we get a Head
+                it again for a second time, we're actually doing two independent experiements. Whether we get a Head
                 or a Tail at the first toss, does not affect the result of the second toss.
             </p>
         </aside>    
@@ -151,22 +151,22 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 You might have thought that when we throw a coin for 10 times,
                 the most expected outcome is that we end up with
                 5 Heads and 5 Tails. That's true, but now after a few repeats we will consider ourselves
-                lucky if you end up with exactly
+                lucky if we end up with exactly
                 5 Heads and 5 Tails. 
             </p>
             <p>
                 On the other hand we almost never end up in a situation that we get 
                 10 Heads and 0 Tails or 0 Heads and 10 Tails either.
-                You have to be very lucky that if trow a coin for 10 times and every time you get a Head.
-                Don't get me wrong, it might happen, but it's extremely unlikely.
+                You have to be extremely lucky to get a Head every time in 10 streaks.
+                Don't get me wrong, it might happen, but it's very unlikely.
             </p>
             <p>
                 In fact by repeating this experiment, we see that
-                though we call outselves lucky if we have exactly 5 Heads and 5 Tails but
+                though we call ourselves lucky if we end up with exactly 5 Heads and 5 Tails but
                 we're almost always close to that magic middle.
             </p>
             <p>
-                This time the set of all the possible outcomes is enormous:
+                This time the set of all the possible outcomes is big:
             </p>
             <pre>
 (T, T, T, T, T, T, T, T, T, T)
@@ -188,7 +188,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 Instead of keep clicking on the repeat button, let's repeat our experiment (thorwing a coin 10 times and counting the number of Heads), for 20 trials. It's like clicking on the repeat button for 20 times.
             </p>
             <p>
-                We will count the number of Heads after at the end of trial.
+                We will count the number of Heads at the end of the experiment.
             </p>
             <table class='results experiment' cellpadding="0" cellspacing="0" border="1">
                 <thead>
@@ -286,15 +286,15 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
 
         <section id="coin-10-times-1000-trials">
             <p>
-                Just a reminder, our original question was: when we toss a coin for 10 times, in how many times we expect it to land on its Head?
+                Just a reminder, our original question was: in how many times we expect a coin to land on its Head in 10 tosses.
                 We're trying to answer this question by actually doing the experiment.
                 After repeating the experiment for a few times we realized that it's a question of chance;
                 we've seen that at each trial we end with a different number of Heads.
             </p>
             <p>
-                The above histogram doesn't tell us much. But as we had expected, there seems to be some pattern here.
+                The above histogram doesn't tell us much. But as we had expected, there seems to be a pattern here.
                 The bars are longer near the middle of the graph (number 5), and our intuition was telling
-                that we should expect to get 5 Heads when we toss a coin for 10 times.
+                that we should expect to get 5 Heads anyway when we toss a coin for 10 times.
             </p>
             <p>
                 Let's repeat this experiment for 1000 times:
@@ -326,15 +326,15 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 and see we're adding 1000 tiny items to the bars.
             </p>
             <p>
-                In the above experiment, in <span>231</span> trials we got 5 Heads.
+                In the above experiment, in <span data-value='coin-10-times-1000-trials-5heads'>231</span> trials we got 5 Heads.
                 After repeating the trial for 1000 times
-                we can say that we're confident that the chance of getting 5 Heads is almost equals to 231/1000 or ~23%.
+                we can say that we're confident that the chance of getting 5 Heads is almost equals to <span data-value='coin-10-times-1000-trials-5heads'>231</span>/1000 or ~<span data-value='coin-10-times-1000-trials-5heads-chance'>23%</span>.
             </p>
             <p>
                 Genrally, there's some chance that we get 0 Heads, some chance for 1 Head ...
                 The chance of getting less than 0 Heads or more than 10 Heads is 0.
                 The chance of getting X Heads is directly related the height of the bars in the histogram;
-                higher bars mean greater chance:
+                higher bar means greater chance:
             </p>
             <table class='results experiment table-summary-chance' cellpadding="0" cellspacing="0" border="1">
                 <tbody>
@@ -347,8 +347,8 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 </tbody>
             </table>
             <p>
-                We can say that if the chance of getting 5 Heads is 23%, then after tossing a coin for 10 times
-                we expect to have by average 2.3 number of Heads \( 2.3 = 23\% \times 10 \).
+                We can say that if the chance of getting 5 Heads is <span data-value='coin-10-times-1000-trials-5heads-chance'>23%</span>, then after tossing a coin for 10 times
+                we expect to have by average <span data-value='coin-10-times-1000-trials-5heads-expval'>2.3</span> number of Heads <span data-value='coin-10-times-1000-trials-5heads-expval'>2.3</span> = <span data-value='coin-10-times-1000-trials-5heads-chance'>23%</span> &times; 10.
             </p>
             <p>
                 When we sum up the chance of getting 0 Heads + the chance of getting 1 Head + ... + the 
@@ -360,11 +360,11 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             </p>
             <p>
                 That means that when we throw a coin for 10 times, 
-                we're anyway going to get 0 or 1 or ... or 10 Heads.
+                we're anyway going to get 0 Heads or 1 Head or ... or 10 Heads.
             </p>
             <p>
-                We're of course not bound to 10 bins (10 tosses of coin per trial),
-                use this slider to chane the number of bins (tosses):
+                We're of course not bound to 10 tosses,
+                use this slider to chane the number of tosses:
             </p>
             <div>
                 <input type="range" min="1" max="15" value="10" name='number-of-bins'>
@@ -389,14 +389,12 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
         <section class='coin-10-times-binomial'>
             <h2>Binomial Trial</h2>
             <p>
-                The dumb thing about our way so far has been that, we tried to solve our problem
-                with a brute force approach. We tossed a coin 10 &times; 1000 times to find the
-                chance of getting 5 Heads. There's indeed a mathematically smarter way to calculate
-                this number.
+                So far we've used a brute force approach to solve the problem of "what is the chance of getting <em>k</em> many Heads after <em>10</em> tosses": We tossed a coin 10 &times; 1000 times to find the
+                chance of getting <em>k</em> Heads. There's indeed a mathematically smarter way to calculate this.
             </p>
             <p>
                 Remember that when we tossed a coin for 10 times, the set of all possible 
-                out comes has \( 2^{10} = 1024 \) members:
+                outcomes has \( 2^{10} = 1024 \) members:
             </p>
             <pre>
 1.    (T, T, T, T, T, T, T, T, T, T)
@@ -406,34 +404,38 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
 1023. (H, H, H, H, H, H, H, H, H, T)
 1024. (H, H, H, H, H, H, H, H, H, H)</pre>
             <p>
-                By looking at the above set of outcomes, we can count that in 1 out of 1024
-                ( \( \frac{1}{1024} \) ) ways our outcome has 0 Heads. In a same manner, if we list
-                all the members we can count the number of outcomes with exactly 1 Head, 2 Heads ...
+                By listing all the possible outcomes, we can see that there's 1 outcome with 0 Heads and 10 Tails. And there are 10 outcomes with exactly 1 Head and 9 Tails, ....
             </p>
             <p>
-                Instead of listing and counting the outcomes, there's a math funciton that gives us 
-                those numbers, it's called Choose (or Combinaiton):
-                \[
-                    Choose (10, k) = \begin{pmatrix} 10 \\ k \end{pmatrix}
-                \]
-                Choose(10, k) gives us the number of outcomes that have exactly k Heads.
-                Obviously \( 0 \le k \le 10 \). And since we have a total 1024 distinct outcomes,
-                the chance of getting k Heads is equal to
-                \[
-                    \frac{Choose (10, k)}{2^{10}} = \frac{Choose (10, k)}{1024}
-                \]
+                Knowing all the outcomes, it's rational to say that the chance of getting 0 Head and 10 Tails is: \( \frac{1}{1024} \).
+            </p>
+            <p>
+                And the chance of getting 1 Head and 9 Tails is: \( \frac{10}{1024} \).
             </p>
             <p class="tip">
                 Chance is the ratio of 'in how many different ways we can get a particular outcome' 
                 (here for example in how many different ways we can get 5 Heads) over 'the total
                 number of possible outcomes'.
             </p>
+            <p>
+                Instead of listing and counting all the outcomes, there's a math funciton that gives us 
+                those numbers, it's called <em>Choose</em> (or Combinaiton):
+                \[
+                    Choose (10, k) = \begin{pmatrix} 10 \\ k \end{pmatrix}
+                \]
+                <em>Choose(10, k)</em> gives us the number of outcomes that have exactly k Heads.
+                Obviously \( 0 \le k \le 10 \). And since we have a total 1024 distinct outcomes,
+                the chance of getting k Heads is equal to
+                \[
+                    \frac{Choose (10, k)}{2^{10}} = \frac{Choose (10, k)}{1024}
+                \]
+            </p>
             <aside>
-                \( Choose(n, \ k) \) function itself is defined by:
+                \( Choose(n, \ k) \) function is defined by:
                 \[
                     Choose(n, \ k) = \frac{n!}{k! \ (n-k)!} = \prod_{i=1}^{k} \frac{n - (k-i)}{i}
                 \]
-                Needless to say that the values of Choose function can be huge and 
+                The values of <em>Choose</em> function can be huge. 
                 \( Choose(n, \ k) \) is maximum when \( k = \frac{1}{2} n \). Play with it:
                 <table id="try-choose-n-k">
                     <tr>
@@ -457,10 +459,25 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
                 </table>
                 <p>
                     But \( 2^n \) is also huge and \( Choose(n, \ k) \) for any \( 0 \le k \le n \) is less than \( 2^n \).
-                    In fact
+                    In fact:
                     \[
-                        \sum_{i=0}^{n} Choose(n, \ k) = 2^n
+                        \sum_{k=0}^{n} Choose(n, \ k) = 2^n
                     \]
+                    In a binomial trial, the chance of getting <em>k</em> successes (Heads for example) in <em>n</em> trials is:
+                    \[
+                        \frac{Choose (n, k)}{2^{n}}
+                    \]
+                    And
+                    \[
+                        \frac{Choose (n, 0)}{2^{n}} + \frac{Choose (n, 1)}{2^{n}} + ... + \frac{Choose (n, n)}{2^{n}} = \frac{\sum_{k=0}^{n} Choose(n, \ k)}{2^n} 
+                        \\
+                        =
+                        \frac{2^n}{2^n} = 1 \ \ or \ (100 \%)
+                    \]
+                    We've seen this before; Sum of Chances = 100%
+                </p>
+                <p>
+                    We're anyway going to have 0 Successes or 1 Success or ... or <em>n</em> Successes.
                 </p>
             </aside>
             <p>
@@ -469,7 +486,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             <table class='results table-summary-chance' cellpadding="0" cellspacing="0" border="1" id="binomial-10-chance-table">
                 <tbody>
                     <tr class='count'>
-                        <th>Count of Heads</th>
+                        <th>Count of Heads (<em>k</em>)</th>
                     </tr>
                     <tr class='trials'>
                         <th>Chance</th>
@@ -483,7 +500,7 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             <p>
                 In this example the height of bars
                 at each number indicates the probability of getting that number of Heads
-                (or Tails) in a trial of 10 times throwing a coin.
+                (or Tails) after 10 times throwing a coin.
             </p>
             <p>
                 Back to original question, I think it's clear now that there's no definite

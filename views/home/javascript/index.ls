@@ -1,4 +1,4 @@
-{mean, sum, id, map, fold, zip, filter, group-by, obj-to-pairs, head, tail, split-at, join, zip-all} = require 'prelude-ls'
+{mean, sum, id, map, fold, zip, filter, find, group-by, obj-to-pairs, head, tail, split-at, join, zip-all} = require 'prelude-ls'
 exports = exports ? this
 
 
@@ -122,7 +122,12 @@ actions =
 		table-coin-data-many-sum ($ '#coin-10-times-1000-trials .table-summary-chance' .show!), hisogram-data, {textf : -> (it.trials / 1000) |> d3.format '%'}
 		math-sum-chance ($ '#coin-10-times-1000-trials .math-sum-chance'), hisogram-data
 
-		graph-coin-data-many ($ '#coin-10-times-1000-trials svg'), {data: (map sum, data), number-of-bins: number-of-bins, duration: 500}
+		data = graph-coin-data-many ($ '#coin-10-times-1000-trials svg'), {data: (map sum, data), number-of-bins: number-of-bins, duration: 500}
+
+		five-heads = data |> find (.key == 5) |> (.count)
+		$ "[data-value='coin-10-times-1000-trials-5heads']" .text five-heads
+		$ "[data-value='coin-10-times-1000-trials-5heads-chance']" .text <| d3.format \% <| five-heads/1000 
+		$ "[data-value='coin-10-times-1000-trials-5heads-expval']" .text <| d3.format \.1f <| five-heads/100
 
 
 

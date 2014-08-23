@@ -12,6 +12,7 @@
     "prelude-ls": "*",
     "requirejs": "*",
     "stylus": "*",
-    "nib": "*"
+    "nib": "*",
+    "cheerio": "^0.17.0"
   }
 }

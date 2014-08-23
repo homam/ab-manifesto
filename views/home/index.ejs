@@ -1,14 +1,19 @@
 <!doctype html>
 <html>
     <head>
-        <title><%= title %></title>
-        <script src="javascript/libs/jquery2.js"></script>
-        <script src="javascript/libs/d3.js"></script>
+        <title>A/B Tests</title>
+        <script 
+            data-external="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" 
+            src="javascript/libs/jquery2.js"></script>
+        <script 
+            data-external="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"
+            src="javascript/libs/d3.js"></script>
 
         <script type="text/x-mathjax-config">
           //MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
         </script>
-        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" 
+            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <link href="home/style/index.css" type="text/css" rel="Stylesheet" />
     </head>
 <body>
@@ -1011,7 +1016,9 @@ No          = 417 (= 1000 - 583)
 
         
     </article>
-    <script src="javascript/libs/prelude-browser.js"></script>
+    <script 
+        data-external="http://www.preludels.com/prelude-browser-min.js"
+        src="javascript/libs/prelude-browser.js"></script>
     <script src="home/javascript/utils.js"></script>
     <script src="home/javascript/coin-trial-table.js"></script>
     <script src="home/javascript/binomial-histogram.js"></script>

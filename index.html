@@ -1,0 +1,1023 @@
+<!doctype html>
+<html>
+    <head>
+        <title>A/B Tests</title>
+        <script data-external="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script data-external="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"></script>
+
+        <script type="text/x-mathjax-config">
+          //MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+        </script>
+        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <link href="home/style/index.css" type="text/css" rel="Stylesheet">
+    </head>
+<body>
+    <header>
+        This is a work in progress.
+    </header>
+    <article id="graphs">
+        <section>
+            <p>
+
+            </p>
+        </section>
+        <section id="coin-2-times">
+            <h2>Let&apos;s Toss a Coin</h2>
+            <p>
+                Let&apos;s
+                <button data-action="coin-2-times">toss a coint for a couple of times</button>
+            </p>
+            <table style="width:280px" class="results experiment" cellpadding="0" cellspacing="0" border="1">
+                <tbody>
+                    <tr class="toss">
+                        <th>Toss</th>
+                    </tr>
+                    <tr class="result">
+                        <th>Result</th>
+                    </tr>
+                </tbody>
+                <tfoot class="summary">
+                    <tr>
+                        <td colspan="2">
+                            <table>
+                                <tr>
+                                    <th>Heads:</th><td style="width:30px"><span data-value="Heads"></span></td>
+                                    <th>Tails:</th><td style="width:30px"><span data-value="Tails"></span></td>
+                                </tr>
+                            </table>
+                            <button data-action="coin-2-times">Repeat</button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            <p>
+                Click on the <button data-action="coin-2-times">Repeat</button> button to repeat this trial.
+            </p>
+            <p>
+                It&apos;s a random experiment, sometimes we get 1 Head and 1 Tail, sometimes 2 Heads and 0 Tails and
+                sometimes 0 Heads and 2 Tails.
+                But s you&apos;re repeating the trial, you might notice that we get the result of 1 Head and 1 Tail 
+                more frequently.
+            </p>
+            <p>
+                To fully understand this trial, we should treat first and second tosses as separate, indipendent
+                events. There are four possible outcomes to this trial: 
+            </p>
+            <pre>
+First Toss Head, Second Toss Head
+First Toss Head, Second Toss Tail
+First Toss Tail, Second Toss Tail
+First Toss Tail, Second Toss Head</pre>
+            <p>
+                We can summerize it by this notation:
+            </p>
+            <pre>
+(H, H)
+(H, T)
+(T, T)
+(T, H)</pre>
+        <p>
+            We see that in two out of four outcomes, 
+            we have 1 Head and 1 Tail: <code>(H, T)</code> and <code>(T, H)</code>.
+
+            Now it&apos;s clear why we had a sense that
+            we&apos;re more likely to have 1 Head and 1 Tail result. It&apos;s because in \( \frac{2}{4} \) instances
+            or 50% of the time
+            the result of our experiment is 1 Head and 1 Tail:
+        </p>
+        <pre>
+(H, H) -&gt; 25%
+(H, T) -&gt; 25%
+(T, T) -&gt; 25%
+(T, H) -&gt; 25%</pre>
+        <pre>
+0 Head , 2 Tails  -&gt; 25%
+1 Head , 1 Tail   -&gt; 25% + 25% = 50%
+2 Heads, 0 Tail   -&gt; 25%</pre>
+        <p>
+            When we toss a coin for two times, we&apos;re twice as likely to get <code>1 Head and 1 Tail</code> than
+            <code>2 Heads and 0 Tails</code> or <code>0 Heads and 2 Tails</code>.
+        </p>
+        <aside class="tip">
+            <h3>Indipendent Events</h3>
+            <p>
+                When we toss a coin and then pick it up and toss
+                it again for a second time, we&apos;re actually doing two independent experiements. Whether we get a Head
+                or a Tail at the first toss, does not affect the result of the second toss.
+            </p>
+        </aside>    
+        <p>
+            Before we go forward note that knowing the number of Heads is sufficient.
+            If we know how many times we got a Head, then we know the number of Tails.
+                <pre>
+Number of Heads + Number of Tails =  Number of throws (10 times in this example)
+                </pre>
+            For simplicity, from here on, we only count the number of Heads.
+        </p>
+        </section>
+        <section id="coin-10-times">
+            <h2>Toss a Coin for 10 times</h2>
+            <p>
+                Now let&apos;s <button data-action="coin-10-times">toss a coin for 10 times</button>:
+            </p>
+            <table class="results experiment" cellpadding="0" cellspacing="0" border="1">
+                <tbody>
+                    <tr class="toss">
+                        <th>Toss</th>
+                    </tr>
+                    <tr class="result">
+                        <th>Result</th>
+                    </tr>
+                </tbody>
+                <tfoot class="summary">
+                    <tr>
+                        <td colspan="2">
+                            <table>
+                                <tr>
+                                    <th>Heads:</th><td style="width:30px"><span data-value="Heads"></span></td>
+                                    <th>Tails:</th><td style="width:30px"><span data-value="Tails"></span></td>
+                                </tr>
+                            </table>
+                            <button data-action="coin-10-times">Repeat</button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            <p>
+                We are interested in finding out <em>how many Heads we will get if we throw a coin 10 times</em>.
+            </p>
+            <p>
+                Keep repeating the experiment. 
+
+                You might have thought that when we throw a coin for 10 times,
+                the most expected outcome is that we end up with
+                5 Heads and 5 Tails. That&apos;s true, but now after a few repeats we will consider ourselves
+                lucky if we end up with exactly
+                5 Heads and 5 Tails. 
+            </p>
+            <p>
+                On the other hand we almost never end up in a situation that we get 
+                10 Heads and 0 Tails or 0 Heads and 10 Tails either.
+                You have to be extremely lucky to get a Head every time in 10 streaks.
+                Don&apos;t get me wrong, it might happen, but it&apos;s very unlikely.
+            </p>
+            <p>
+                In fact by repeating this experiment, we see that
+                though we call ourselves lucky if we end up with exactly 5 Heads and 5 Tails but
+                we&apos;re almost always close to that magic middle.
+            </p>
+            <p>
+                This time the set of all the possible outcomes is big:
+            </p>
+            <pre>
+(T, T, T, T, T, T, T, T, T, T)
+(H, T, T, T, T, T, T, T, T, T)
+(T, H, T, T, T, T, T, T, T, T)
+...
+(H, H, T, H, T, T, T, T, H, T)
+...
+(H, H, H, H, H, H, H, H, H, H)</pre>
+            <p>
+                In fact we have \( 2^{10} = 1024 \) number of distinct outcomes.
+            </p>
+
+
+        </section>
+        <section id="coin-10-times-20-trials-table">
+            <h2>Let&apos;s Keep Repeating Our Trial</h2>
+            <p>
+                Instead of keep clicking on the repeat button, let&apos;s repeat our experiment (thorwing a coin 10 times and counting the number of Heads), for 20 trials. It&apos;s like clicking on the repeat button for 20 times.
+            </p>
+            <p>
+                We will count the number of Heads at the end of the experiment.
+            </p>
+            <table class="results experiment" cellpadding="0" cellspacing="0" border="1">
+                <thead>
+                    <tr class="toss">
+                        <th>Toss</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <p>
+                The table above contains the full dataset of our experiment. Each cell indiacates a toss of coin.
+                Each row is a trial (10 times tossing a coin).
+                The result of each trial (the number of times we got a Head in each 10 tosses) is shown in the last column.
+            </p>
+            <p>
+                Note in 20 trials, we might get some of the more unlikelier results of 2 Heads or
+                8 Heads as well. <button data-action="coin-10-times-20-trials-all">Repeat the whole experiment</button>
+            </p>
+        </section>
+        <section id="coin-10-times-20-trials-table-sum">
+            <p>
+                This table can be overwhelming. Especially you might have guessed that soon we will be doing
+                this experiment for not just 20 trials but for houndrads or thousands of trials.
+            </p>
+            <p> 
+                We can summerize the table by counting how many times we ended up with 0 Heads, 
+                1 Head, 2 Heads and so on:
+            </p>
+            <table class="results experiment" cellpadding="0" cellspacing="0" border="1">
+                <tbody>
+                    <tr class="count">
+                        <th>Count of Heads</th>
+                    </tr>
+                    <tr class="trials">
+                        <th>Number of Trials</th>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                At each trial, we&apos;re throwing a coin for 10 times. So at each trial,
+                the numeber of times that we get a Head is
+                between 0 and 10 (we cannot get 11 Heads by tossing a coin for 10 times!).
+            </p>
+            <p>
+                Take a look the summary table above, I think it proves our suspicion that we&apos;re most likely
+                to be somewhere in the middle. Meaning that if we toss a coin for 10 times, we&apos;re most likely to
+                have 4, 5 or 6 number of Heads. And it&apos;s very unlikely to get 0, 1, 9 or 10 Heads.
+            </p>
+            <div class="interesting" style="display:none">
+                <p>
+                    If we sum up
+                    <pre>
+  (0  * Number of trials that we got 0  Heads) 
++ (1  * Number of trials that we got 1  Head ) 
++ (2  * Number of trials that we got 2  Heads)
++  ...
++ (10 * Number of trials that we got 10 Heads)</pre>
+                    We end up with a number that is very close to 100:
+                </p>
+                <pre class="math-sum"></pre>
+                <p>
+                    100 is indeed (200/2) or (200 * 0.5). Where 200 is the total number of times that we tossed the coin
+                    and 0.5 is the probability of getting a Head at each toss.
+                    If our coin was not fair (meaning that the probability of getting Head was not 0.5, or 50%) 
+                    then this number would have been different. More about this later.
+                </p>
+            </div>
+        </section>
+        <section id="coin-10-times-20-trials">
+            <p>
+                We&apos;re going to love visualization and prefer graphs to data tables.
+                We can put the number of Heads on X axis and the the number of times that
+                we ended up with that number of Heads on Y.
+            </p>
+            <p>
+                Technically we say that the number of Heads is the independant variable.
+            </p>
+            <svg class="experiment results bins-10"></svg>
+            <p>
+                We call this graph a histogram. The height of each bar
+                shows how many times we had that X number of Heads in our experiment.
+            </p>
+            <p>
+                One way to think about this histogram, is that it is made of 11 bins (11 = 10 + 1).
+                At the end of each trial, when we count the number of Heads, we add one item to the correspoding bin.
+                For example if we have 3 Heads, we add one to the 3rd bin and so on.
+                Click on the <button data-action="coin-10-times-20-trials-graph-slow">animate</button> button to see how this happens slowly.
+            </p>
+            <p>
+                <button data-action="coin-10-times-20-trials-all">Repeat</button> the experiment a few of times and
+                check the shape of the histogram.
+            </p>
+        </section>
+
+        <section id="coin-10-times-1000-trials">
+            <p>
+                Just a reminder, our original question was: in how many times we expect a coin to land on its Head in 10 tosses.
+                We&apos;re trying to answer this question by actually doing the experiment.
+                After repeating the experiment for a few times we realized that it&apos;s a question of chance;
+                we&apos;ve seen that at each trial we end with a different number of Heads.
+            </p>
+            <p>
+                The above histogram doesn&apos;t tell us much. But as we had expected, there seems to be a pattern here.
+                The bars are longer near the middle of the graph (number 5), and our intuition was telling
+                that we should expect to get 5 Heads anyway when we toss a coin for 10 times.
+            </p>
+            <p>
+                Let&apos;s repeat this experiment for 1000 times:
+                throw a coin for 10 times, count the number of Heads and repeat it for 1000 times.
+                
+                <button data-action="coin-10-times-1000-trials-all">Do it!</button>
+            </p>
+            <table class="results experiment table-summary" cellpadding="0" cellspacing="0" border="1">
+                <tbody>
+                    <tr class="count">
+                        <th>Count of Heads</th>
+                    </tr>
+                    <tr class="trials">
+                        <th>Number of Trials</th>
+                    </tr>
+                </tbody>
+            </table>
+            <svg class="experiment results bins-10"></svg>
+
+            <p>
+                This time our histogram has a very distinctive shape. And the shape doesn&apos;t seems to be changing
+                when we <button data-action="coin-10-times-1000-trials-all">repeat</button> the experiment.
+            </p>
+            <p>
+                Think about our bins analogy: at the end of each trial we count the number of Heads and we add a 
+                an item to the corresponding bin; <button data-action="coin-10-times-1000-trials-graph-slow">See</button>
+                how it happens. At the end of experiment the total number of items that we have put into the bins
+                is equal to 1000. Run the experiment in <button data-action="coin-10-times-1000-trials-graph-slow">slow motion</button>,
+                and see we&apos;re adding 1000 tiny items to the bars.
+            </p>
+            <p>
+                In the above experiment, in <span data-value="coin-10-times-1000-trials-5heads">231</span> trials we got 5 Heads.
+                After repeating the trial for 1000 times
+                we can say that we&apos;re confident that the chance of getting 5 Heads is almost equals to <span data-value="coin-10-times-1000-trials-5heads">231</span>/1000 or ~<span data-value="coin-10-times-1000-trials-5heads-chance">23%</span>.
+            </p>
+            <p>
+                Genrally, there&apos;s some chance that we get 0 Heads, some chance for 1 Head ...
+                The chance of getting less than 0 Heads or more than 10 Heads is 0.
+                The chance of getting X Heads is directly related the height of the bars in the histogram;
+                higher bar means greater chance:
+            </p>
+            <table class="results experiment table-summary-chance" cellpadding="0" cellspacing="0" border="1">
+                <tbody>
+                    <tr class="count">
+                        <th>Count of Heads</th>
+                    </tr>
+                    <tr class="trials">
+                        <th>Chance</th>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                We can say that if the chance of getting 5 Heads is <span data-value="coin-10-times-1000-trials-5heads-chance">23%</span>, then after tossing a coin for 10 times
+                we expect to have by average <span data-value="coin-10-times-1000-trials-5heads-expval">2.3</span> number of Heads <span data-value="coin-10-times-1000-trials-5heads-expval">2.3</span> = <span data-value="coin-10-times-1000-trials-5heads-chance">23%</span> &#xD7; 10.
+            </p>
+            <p>
+                When we sum up the chance of getting 0 Heads + the chance of getting 1 Head + ... + the 
+                chance of getting 10 Heads we get 100%:
+            </p>
+                <pre class="math-sum-chance"></pre>
+            <p>                
+                Sum of Chances = 100%
+            </p>
+            <p>
+                That means that when we throw a coin for 10 times, 
+                we&apos;re anyway going to get 0 Heads or 1 Head or ... or 10 Heads.
+            </p>
+            <p>
+                We&apos;re of course not bound to 10 tosses,
+                use this slider to chane the number of tosses:
+            </p>
+            <div>
+                <input type="range" min="1" max="15" value="10" name="number-of-bins">
+                <button data-action="coin-10-times-1000-trials-all">Redo with <label data-value-for="number-of-bins" data-transform="x+1">11</label> bins</button>
+            </div>
+
+          
+            <!--
+            <p>
+                Change the number trials:
+            </p>
+            <div>
+                <input type="range" min="1" max="500" value="500" name='number-of-trials'>
+                <button data-action='coin-10-times-1000-trials-all'>Repeat the trial <label data-value-for='number-of-trials'>500</label> times</button>
+            </div>
+            <p>
+                Note that the shape of the histogram becomes less predictable with smaller number of trials.
+            </p>
+            -->
+        </section>
+
+        <section class="coin-10-times-binomial">
+            <h2>Binomial Trial</h2>
+            <p>
+                So far we&apos;ve used a brute force approach to solve the problem of &quot;what is the chance of getting <em>k</em> many Heads after <em>10</em> tosses&quot;: We tossed a coin 10 &#xD7; 1000 times to find the
+                chance of getting <em>k</em> Heads. There&apos;s indeed a mathematically smarter way to calculate this.
+            </p>
+            <p>
+                Remember that when we tossed a coin for 10 times, the set of all possible 
+                outcomes has \( 2^{10} = 1024 \) members:
+            </p>
+            <pre>
+1.    (T, T, T, T, T, T, T, T, T, T)
+2.    (H, T, T, T, T, T, T, T, T, T)
+3.    (T, H, T, T, T, T, T, T, T, T)
+      ...
+1023. (H, H, H, H, H, H, H, H, H, T)
+1024. (H, H, H, H, H, H, H, H, H, H)</pre>
+            <p>
+                By listing all the possible outcomes, we can see that there&apos;s 1 outcome with 0 Heads and 10 Tails. And there are 10 outcomes with exactly 1 Head and 9 Tails, ....
+            </p>
+            <p>
+                Knowing all the outcomes, it&apos;s rational to say that the chance of getting 0 Head and 10 Tails is: \( \frac{1}{1024} \).
+            </p>
+            <p>
+                And the chance of getting 1 Head and 9 Tails is: \( \frac{10}{1024} \).
+            </p>
+            <p class="tip">
+                Chance is the ratio of &apos;in how many different ways we can get a particular outcome&apos; 
+                (here for example in how many different ways we can get 5 Heads) over &apos;the total
+                number of possible outcomes&apos;.
+            </p>
+            <p>
+                Instead of listing and counting all the outcomes, there&apos;s a math funciton that gives us 
+                those numbers, it&apos;s called <em>Choose</em> (or Combinaiton):
+                \[
+                    Choose (10, k) = \begin{pmatrix} 10 \\ k \end{pmatrix}
+                \]
+                <em>Choose(10, k)</em> gives us the number of outcomes that have exactly k Heads.
+                Obviously \( 0 \le k \le 10 \). And since we have a total 1024 distinct outcomes,
+                the chance of getting k Heads is equal to
+                \[
+                    \frac{Choose (10, k)}{2^{10}} = \frac{Choose (10, k)}{1024}
+                \]
+            </p>
+            <aside>
+                \( Choose(n, \ k) \) function is defined by:
+                \[
+                    Choose(n, \ k) = \frac{n!}{k! \ (n-k)!} = \prod_{i=1}^{k} \frac{n - (k-i)}{i}
+                \]
+                The values of <em>Choose</em> function can be huge. 
+                \( Choose(n, \ k) \) is maximum when \( k = \frac{1}{2} n \). Play with it:
+                <table id="try-choose-n-k">
+                    <tr>
+                        <td rowspan="2">
+                            \( Choose(n, \ k) \) =
+                        </td>  
+                        <td rowspan="2">(</td>
+                        <td>
+                            n = <input type="range" min="1" max="350" value="10" name="n" onchange="actions[&apos;try-choose-n-k&apos;]()">
+                            <label data-value-for="n" data-transform="x">10</label>
+                        </td>
+                        <td rowspan="2">)</td>
+                        <td rowspan="2"><label class="result">= ....</label></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            k = <input type="range" min="0" max="350" value="5" name="k" onchange="actions[&apos;try-choose-n-k&apos;]()">
+                            <label data-value-for="k" data-transform="x">5</label>
+                        </td>
+                    </tr>
+                </table>
+                <p>
+                    But \( 2^n \) is also huge and \( Choose(n, \ k) \) for any \( 0 \le k \le n \) is less than \( 2^n \).
+                    In fact:
+                    \[
+                        \sum_{k=0}^{n} Choose(n, \ k) = 2^n
+                    \]
+                    In a binomial trial, the chance of getting <em>k</em> successes (Heads for example) in <em>n</em> trials is:
+                    \[
+                        \frac{Choose (n, k)}{2^{n}}
+                    \]
+                    And
+                    \[
+                        \frac{Choose (n, 0)}{2^{n}} + \frac{Choose (n, 1)}{2^{n}} + ... + \frac{Choose (n, n)}{2^{n}} = \frac{\sum_{k=0}^{n} Choose(n, \ k)}{2^n} 
+                        \\
+                        =
+                        \frac{2^n}{2^n} = 1 \ \ or \ (100 \%)
+                    \]
+                    We&apos;ve seen this before; Sum of Chances = 100%
+                </p>
+                <p>
+                    We&apos;re anyway going to have 0 Successes or 1 Success or ... or <em>n</em> Successes.
+                </p>
+            </aside>
+            <p>
+                Let&apos;s calculate this chance for \( 0 \le k \le 10 \):
+            </p>
+            <table class="results table-summary-chance" cellpadding="0" cellspacing="0" border="1" id="binomial-10-chance-table">
+                <tbody>
+                    <tr class="count">
+                        <th>Count of Heads (<em>k</em>)</th>
+                    </tr>
+                    <tr class="trials">
+                        <th>Chance</th>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                And here&apos;s the histogram for the above data:
+            </p>
+            <svg class="results bins-10" id="binomial-10-chance-graph"></svg>
+            <p>
+                In this example the height of bars
+                at each number indicates the probability of getting that number of Heads
+                (or Tails) after 10 times throwing a coin.
+            </p>
+            <p>
+                Back to original question, I think it&apos;s clear now that there&apos;s no definite
+                answer to &apos;how many Heads we get by throwing a coin for 10 times&apos;. But 
+                there&apos;s a definite probability distribution that answers our question.
+                Some number of Heads are more probable than the others. This graph shows that
+                the most probable outcomes are 4, 5 and 6 and we have to be really lucky
+                to get 0, 1, 9 or 10 Heads.
+            </p>
+        </section>
+        <section class="coin-n-times-binomial">
+            <p>
+                Let&apos;s see how the shape of our histogram changes when we change the number of bins:
+            </p>
+            <svg class="results" id="binomial-n-chance-graph"></svg>
+            <div>
+                <input type="range" min="10" max="350" value="10" name="number-of-bins" onchange="actions[&apos;coin-n-times-binomial&apos;]()">
+                <button data-action="coin-n-times-binomial">Redo with <label data-value-for="number-of-bins" data-transform="x">10</label> tosses (<label data-value-for="number-of-bins" data-transform="x+1">11</label> bins)</button>
+            </div>
+            <p>
+                Note how the graph becomes wider and the height of the bars
+                become shorter as we have more bins. The important fact is that the sum of the 
+                area that is covered by the bars is 1 (or 100%).
+            </p>
+            <p>
+
+                The graph is symmetric around
+                \( \frac{Number \ of \ Tosses}{2} = Number \ of \ Tosses \times 0.5 \). Here 
+                \( \frac{1}{2} \) or 0.5 or 50% is the probability of getting a Head in a single toss of
+                a coin. It&apos;s 50% because we&apos;re dealing with a fair coin.
+            </p>
+        </section>
+
+        <section class="binomial-n-p-chance">
+            <a name="Unfair-Coins"></a>
+            <h2>Unfair Coins</h2>
+            <p>
+                So far we&apos;ve been dealing with a fair coin. How is it related to A/B tests?
+            </p>
+            <p>
+                Let&apos;s say we want to study the conversion rate of a landing page.
+            </p>
+                First, note that conversion of a landing page, very much like tossing a coin
+                has two outcomes: Success and Failure (we say it&apos;s binomial).
+            <p></p>
+            <p>
+                Second, when we  let&apos;s say have 150 visitors, it&apos;s very much like throwing a coin for 150 times.
+                Each time that we toss a coin we get either a Head or a Tail. And the number of Heads or Tails after 150
+                tosses is between 0 and 150. Similarly the number of Successes or Failures in 150 trials is 
+                between 0 and 150. And knowing the numebr of Successes or Failures is sufficient. For example if we
+                have 60 Successes, then we have 90 Failures \( 150 - 60 = 90 \).
+            </p>
+            <p>
+                The histogram below shows the binomial distribution of 60 subjects with a 50% Success rate. 
+                Play with the Chance slider to see how the diagram changes when the Success rate is not
+                50%.
+            </p>
+            <svg class="results" id="binomial-n-p-chance-graph"></svg>
+            <div>
+                Number of Bins:
+                <input type="range" min="10" max="150" value="60" name="number-of-bins" onchange="actions[&apos;binomial-n-p-chance&apos;]()">
+                <label data-value-for="number-of-bins" data-transform="x+1">61</label>,
+
+                Chance of Success (Head):
+                <input type="range" min="0" max="1" step="0.01" value="0.5" name="chance" onchange="actions[&apos;binomial-n-p-chance&apos;]()">
+                <label data-value-for="chance" data-transform="d3.format(&quot;%&quot;)(x)">50%</label>
+            </div>
+            <p>
+                At the extremeses, 
+                <button data-action="binomial-n-p-chance100">when the chance of Success is 100%</button>, we only have one bar at the right-most side
+                of the diagram (at 60 in this example) 
+                and 
+                <button data-action="binomial-n-p-chance0">when the chance of Success is 0%</button>,
+                we have one bar at the left (at 0).
+                Remember that the height of the bars (at each X) indicate our chances of getting that number of Successes.
+                When the chance of Success is 0%, then we will always get 0 Successes. It&apos;s not a random trial anymore,
+                we have a definite answer. Same for 100% chance of Success.
+            </p>
+            <p>
+                Generally, if the chance of getting a Head at each toss of a coin is <code>p</code> then the chance of getting 
+                <code>k</code> Heads in <code>n</code> tosses is equal to:
+                \[
+                    Choose(n, k) \ p^k \ (1-p)^{n-k}
+                \]
+
+                This is the binomial distribution function. Binomal Distribution is a function of size of sample (= number of bins = n) 
+                and the probability of Success at each trial (= chance of getting a Head = p):
+
+                \[
+                    Binomial (p, \ n, \ k) = Choose(n, \ k) \ p^k \ (1-p)^{n-k}
+                \]
+
+                <code>Binomal(n, k)</code> gives us the chance of getting <code>k</code> number of Successes in a sample of size 
+                <code>n</code> when the chance of Success for each
+                indiviual member of the populaiton is <code>p</code>.
+
+            </p>
+            <p>
+                In case of a fair coin \( p = (1-p) = 0.5 = \frac{1}{2} \) so
+                \[ 
+                    Choose(n, k) \ p^k \ (1-p)^{n-k} = Choose(n, k) \ (\frac{1}{2})^k \ (\frac{1}{2})^{n-k} = Choose(n, k) \ (\frac{1}{2})^n = \frac{Choose(n, k)}{2^n}
+                \]
+            </p>
+
+        </section>
+        <section>
+            <p>
+                In the next post we talk about frequentism interpretation of probability and statistics,
+                expected value and confidence.
+            </p>
+        </section>
+
+<!-- -->
+        <section>
+            <h2>Interpretation of Statistics</h2>
+
+            <p>
+                The whole idea of statistics is that we can&apos;t or we don&apos;t want to do the experiment with every member of
+                our population. In our landing page scenario, the population is anybody
+                that will ever visit our landing page.
+                Everyday, ss long as our page is getting more visits, we&apos;re not going to 
+                know every member of our population. Simply 
+                because tomorrow we will have more people who have visited our landing page.
+            </p>
+            <p>
+                We&apos;re almost always dealing with a sample (subset) of the population.
+            </p>
+            <p>
+                Because we&apos;re always studying a part of the population, we cannot be absolutely confident that our
+                statistics are 100% accurate. For example if we find out that 60 out of 200 visitors of our landing page
+                had converted, then we can say that the conversion rate of the landing page is \( \frac{60}{200} = 30 \% \).
+                But this 30% might change as we get more visitors. It&apos;s a product of chance, we just might have
+                been lucky with the first 200 visitors and have registered a higher conversion rate (or the opposite).
+                We can only determine the actual conversion rate of a landing page, when we retire the page and
+                stop its traffic. But that&apos;s not what we usually want; we&apos;re interested to find how a page or
+                how the A and B cases of our test are performing before it&apos;s too late.
+            </p>
+            <p>
+                One way of thinking about the statistics of tossing a coin is that, we have an infinitely large
+                dataset of tosses (our population is an infinite list of toss results: Head or Tail). Tossing
+                a coin for 10 times is equivalent to randomly pickining 10 items from this infinite list.
+            </p>
+            <pre>
+              ...
+              T  ,  H  ,  T  ,  H  ,  H  ,  T  , [H] ,  H  ,  T  ,  H 
+              H  ,  T  ,  H  ,  H  ,  T  ,  H  ,  H  ,  T  ,  H  ,  T
+              T  , [H] ,  T  ,  T  ,  H  , [T] ,  H  ,  H  ,  T  ,  H 
+              H  ,  T  , [H] ,  H  ,  T  ,  H  ,  T  ,  T  ,  H  , [T] 
+              T  ,  H  ,  T  ,  T  ,  H  ,  T  ,  H  ,  H  ,  T  ,  H 
+              ...
+            </pre>
+            <p>
+                Here we&apos;re using frequentism interpretation of statistics.
+                If we are dealing with a fair coin, we expect to have picked around 5 Heads and 5 Tails.
+                If the chance of getting a Head at each toss is 30%, then we expect to have around
+                3 Heads and 6 Tails.
+            </p>
+            <div class="tip">
+                Randomly picking 10 items from this infinite list of toss results is equivalent to tossing a coin for 10 times.
+                So everything that we know about binomial distribution applies here: when we pick 10 items
+                by random from this infitie list, we can get any number of Heads between 0 and 10. But the chances of getting
+                different number of Heads are different and can be calculated by:
+                \(
+                    \frac{Choose(10, k)}{2^{10}}
+                \)
+                or in case of an unfair coin:
+                \(
+                    Choose(10, k) \ p^k \ (1-p)^{10-k}
+                \)
+            </div>
+            <p>
+                This interpretation is very useful in our landing page problem;
+                In the above example, assume each toss of coin represent a visitor (visitor either concerts or not).
+                The size of the population (everyone that will eventually see our landing page) is huge,
+                we will assume it&apos;s infinite.
+            </p>
+            <p>
+                We are interested to know how close is the conversion rate that we&apos;ve recorded
+                after just 200 visits to the landing page to the actual conversion
+                rate of a landing page (that can only be calculated when the page is expired)?
+            </p>
+            <p>
+                It&apos;s similar to randomly picking 200 subjects from the infinite list of visitors.
+
+                Hence uncertainty
+            </p>
+        </section>
+        <section>
+            <h2>Expected Value</h2>
+            <p>
+                If we do a trial over and over agian, and then find the average of the result of each trial,
+                that average is the expected value.
+                For example: if we toss a coin 10 times and count the number of Heads,
+                and repeat this trial 1000 times, our expected value is the average number of Heads at each trial.
+            </p>
+            <pre>
+Trial 1    =&gt; 4 Heads
+Trial 2    =&gt; 6 Heads
+Trial 3    =&gt; 3 Heads
+...
+Trial 1000 =&gt; 5 Heads
+
+Expected Value = (4 + 6 + 3 + ... + 5) / 1000
+            </pre>
+            <p>
+                That is equal to
+            </p>
+            <pre>
+Expected Value = ( 
+                    (0  &#xD7; Numbe of times we got 0  Heads) + 
+                    (1  &#xD7; Numbe of times we got 1  Heads) + 
+                    (2  &#xD7; Numbe of times we got 2  Heads) +
+                    ...                                   + 
+                    (10 &#xD7; Numbe of times we got 10 Heads)
+                  ) / 1000
+            </pre>
+            <p>
+                If we call \( \frac{Number \ of \ times \ we \ got \ k \ Heads}{n} \) the chance of getting k Heads, then in a 
+                binonial trial:
+            </p>
+            <pre>
+Expected value = (0 &#xD7; Chance of getting 0 Heads) +
+                 (1 &#xD7; Chance of getting 1 Head ) +
+                 (2 &#xD7; Chance of getting 2 Heads) +
+                 ...                             + 
+                 (n &#xD7; Chance of getting n Heads)
+            </pre>
+            <p>
+                We can call it the weighted average.
+                \[
+                    Expected \ value = \sum_{i = 0}^n i \ . \ p(i)
+                \]
+                Or if the probability of instances are equal ( \( \forall i, j; \ p(i) = p(j) = P \) ) then \( p(i) = P \) can
+                go out of the sum:
+                \[
+                    Exptected \ value = (\sum_{i = 0}^n i) \ . \ P
+                    \\ \quad \\
+                    \\
+                    Exptected \ value = n \ . \ P
+                \]
+                If we toss a fair coin for 10 times, the expected value would be \( 10 \times 0.5 = 5 \).
+            </p>
+<!--             <p>
+                Thinking in terms of expected value
+            </p> -->
+        </section>
+        <section>
+            <h2><a name="standard-deviation">Standard Deviation</a></h2>
+            <p>
+                Standard Deviation or \( \sigma \) is a meassure of dispersion. It is a number in the same unit of the distribution (for example 
+                if we are meassuring the number of visits to a landing page, the unit of the standard deviation is the number of
+                visits). Standard Deviation tells us that by average how far are our data points from the expected value.
+                A larger standard deviation means that the expected value is not a good representation of our distribution, 
+                becasue many members of our sample our far from that value.
+            </p>
+            <aside>
+                <p>
+                    Standard Deviation is the square root of Variance.
+                </p>
+                <p>
+                    Variance is the expected value of \( (X - Expected Value)^2 \) distribution:
+                </p>
+                \[
+                    Var(X) = \sigma^2  = E( \ [X - \mu]^2) \\
+                    \quad = \sum_{i = 1}^n (x_i - \mu)^2 p_i \\
+                    \quad ... \\
+                    \quad = E( \ X^2) - \mu^2 \\
+                    \ \\
+                    \sigma = \sqrt{\sigma^2}
+                \]
+            </aside>
+            <p>
+                In a binomial distribution (like throwing a coin), with <code>n</code> trials and when the chance of success at each trial is <code>P</code>: 
+                \[
+                    \sigma^2 = n \ P \ (1 - P) \\
+                    \sigma = \sqrt{n \ P \ (1 - P)}
+                \]
+            </p>
+            <p>
+                For example, with n = 1000 trials and P = 0.34:
+                \[
+                    \sigma = \sqrt{1000 \times 0.34 \times (1 - 0.34)} = \sqrt{1000 \times 0.34 \times 0.66} = 224.4
+                \]
+            </p>
+            <p>
+                Let&apos;s consider two extreme cases: for any n, when P = 0 or P = 1 (meaning when the chance of success is either 0 or 100%),
+                Standard Deviation is 0, because in these cases either <code>P</code> or <code>(1 - P)</code> is 0. And it makes sense, for example
+                when there&apos;s 0 chance of success, we&apos;re certain that our trial is always going to fail (we always get a Tail) and dispersion is 0.
+            </p>
+            <p>
+                In fact standard deviation is largest when  \( P = (1 - P) = 0.5 \)
+            </p>
+            <p>
+                Standard deviation may look like a made-up meassure of dispersion. In fact there are a number of other ways to meassure 
+                spread or dispersion. But we will soon see the importance of the standard deviation for calculating confidence intervals and
+                normal distribution.
+            </p>
+        </section>
+        <section>
+            <a name="confidence"></a>
+            <h2>Confidence</h2>
+            <p>
+                Let&apos;s assume we know that the probability of getting a Head is 50%. What&apos;s the chance of getting exactly 30 Heads in 60 tosses of a coin?
+                \[
+                    Binomial(0.5, 60, 30) = 10.3 \%
+                \]
+            </p>
+            <p>
+                It&apos;s a very low chance. But on the other hand the chance of getting any number of Heads between 
+                <code> 30 - 4 = 26 </code> and <code> 30 + 4 = 34 </code> is:
+                \[
+                    \sum_{i=26}^{34} Binomial(0.5, 60, i) = 75.5 \%
+                \]
+                The chance of getting between <code> 30 - 8 = 22 </code> and <code> 30 + 8 = 38 </code> Heads is:
+                \[
+                    \sum_{i=22}^{38} Binomial(0.5, 60, i) = 97.3 \%
+                \]
+                And of course the chance of getting any number between <code> 30 - 30 = 0 </code> and <code> 30 + 30 = 60 </code> Heads is 100%.
+            </p>
+            <p>
+                We can think like this: after 60 trials,
+                <ul>
+                    <li>We are 100% confident that we&apos;re going to get between <code>0 and 60</code> number of Heads.</li>
+                    <li>We are 97.3% confident that we&apos;re going to get between <code>22 and 38</code> number of Heads.</li>
+                    <li>We are 75.5% confident that we&apos;re going to get between <code>26 and 34</code> number of Heads.</li>
+                    <li>We are 10.3% confident that we&apos;re going to get between <code>30 and 30</code> (or exactly 30) number of Heads.</li>
+                </ul>
+                As you see, the larget the range, the more confident we are.
+            </p>
+            <p>
+                Let&apos;s play with the numbers:
+            </p>
+            <div id="binomial-confidence-range-histogram">
+                <svg class="histogram with-ci-bins"></svg> 
+                <div>
+                    Left: <input type="range" min="0" max="60" name="left" value="26" step="1" onchange="actions[&apos;binomial-confidence-range&apos;]()"> <label data-value-for="left">26</label>,
+                    Right: <input type="range" min="0" max="60" name="right" value="34" step="1" onchange="actions[&apos;binomial-confidence-range&apos;]()"> <label data-value-for="right">34</label>
+                </div>
+                <div>
+                    Number of bins: <input type="range" min="0" max="200" name="bins" value="60" step="1" onchange="actions[&apos;binomial-confidence-range&apos;]()"> <label data-value-for="bins">60</label>,
+                </div>
+                <div>
+                    P: <input type="range" min="0" max="1" name="p" value="0.5" step="0.01" onchange="actions[&apos;binomial-confidence-range&apos;]()"> <label data-value-for="p">0.5</label>,
+                </div>
+                <div id="binomial-confidence-range-histogram-math">
+                    \[
+                        \sum_{i=26}^{34} Binomial(0.50,60, i) = 75.49\%
+                    \]
+                </div>
+            </div>
+        </section>
+        <section>
+            <h2><a name="polls">Polls</a></h2>
+            <p>
+                Let&apos;s assume we asked a boolean question (that has a Yes or No answer) from <code>1000</code> number of people. 
+                And here&apos;s our result:
+                <pre>
+Sample Size = 1000
+Yes         = 583
+No          = 417 (= 1000 - 583)
+                </pre>
+                Then the probablity of getting a Yes is \( \frac{583}{1000} = 58.3\% \)
+            </p>
+            <p>
+                But are we sure that this result is not just an accident. What if we ask a different group of people or
+                even a larger sample of 10000 people, or the whole population, will we still get the same result that 58.3% of our new sample
+                asnswer Yes? 
+            </p>
+            <p>
+                Probably no, but the result will be close to 58.3%. The question is how close? 
+            </p>
+            <p>
+                Whenever we poll a sample (that is a subset of the population) and come up with a result, a very interesting question is that
+                how likely is it that the result of our poll be close to the actual the result of the whole population?
+            </p>
+            <p>
+                For example if by 200 visits, we find that our landing page has a 38% conversion rate, how confident we are that this
+                result is close to the actual conversion rare of the page. Confidence intervals are a way of answering this kind of
+                questions.
+            </p>
+            <p>
+                We are 100% confident that the actual conversion rate of the page is between 0 and 100% and we&apos;re somewhere in between. 
+                On the other hand we&apos;re almost sure that the actual conversion rate is not going to be exactly 38% that we meassured in our sample,
+                but it&apos; going to be close that number.
+            </p>
+            <p>
+                Let&apos;s assume that the actual conversion rate is 38%, here&apos;s the histogram:
+            </p>
+            <div id="binomial-polls-histogram">
+                <svg class="histogram with-ci-bins"></svg> 
+                <div>
+                    Left: <input type="range" min="0" max="1000" name="left" value="0" step="1" onchange="actions[&apos;binomial-polls&apos;]()"> 
+                    <label data-value-for="left" data-transform="x + &quot; (&quot; + d3.format(&quot;%&quot;)(x/parseNum($(&quot;#binomial-polls-histogram input[name=bins]&quot;).val())) + &quot;)&quot;">0</label>,
+                    Right: <input type="range" min="0" max="1000" name="right" value="200" step="1" onchange="actions[&apos;binomial-polls&apos;]()"> 
+                    <label data-value-for="right" data-transform="x + &quot; (&quot; + d3.format(&quot;%&quot;)(x/parseNum($(&quot;#binomial-polls-histogram input[name=bins]&quot;).val())) + &quot;)&quot;">200</label>
+                </div>
+                <div>
+                    Number of bins: <input type="range" min="0" max="1000" name="bins" value="200" step="1" onchange="actions[&apos;binomial-polls&apos;]()"> <label data-value-for="bins">200</label>,
+                </div>
+                <div>
+                    P: <input type="range" min="0" max="1" name="p" value="0.38" step="0.01" onchange="actions[&apos;binomial-polls&apos;]()"> <label data-value-for="p">0.38</label>,
+                </div>
+                <div id="binomial-polls-histogram-math">
+                    \[
+                        \sum_{i=26}^{34} Binomial(0.50,60, i) = 75.49\%
+                    \]
+                </div>
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <td></td>
+                                <th colspan="2">Confidence Interval</th>
+                            </tr>
+                            <tr>
+                                <th>Confidence</th><th>Left</th><th>Right</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <p>
+            Around the expected value:
+            </p>
+            <svg id="ci-bins30" class="histogram with-ci-bins"></svg>
+            <div>
+                <input id="ci-bins30-ci" type="range" min="0" max="3" step="0.25" value="1" name="ci" onchange="actions[&apos;binomail-ci&apos;]()">
+                <label data-value-for="ci" data-transform="d3.format(&apos;0.1f&apos;)(x*2) + &apos; &#x3C3;&apos;">2.0 &#x3C3;</label>
+                a = <label data-value="a"></label>, b = <label data-value="b"></label>
+                Area: <label for="ci"></label>
+            </div>
+            <div id="ci-bins30-sum">
+                \[
+                    \sum_{i=a}^b Binomial(0.5, n, i) = p(a, b)
+                \]
+            </div>
+            <div>
+                 Number of Bins:
+                <input id="ci-bins30-number-of-bins" type="range" min="10" max="500" value="60" name="number-of-bins" onchange="actions[&apos;binomail-ci&apos;]()">
+                <label data-value-for="number-of-bins" data-transform="x+1">61</label>
+            </div>
+            <p>
+
+            </p>
+            <!-- 
+                Poll
+                Margin of Error
+                2.5% margin of error from each side = 95% confidence interval
+                Formula
+            -->
+        </section>
+        <section>
+            <svg id="binomial-double-histogram"></svg>
+            <!--
+
+            A/B confidence binomial
+
+            Computation problem with binomial
+
+            Normal approximation
+
+            -->
+            <p>
+                We usually perform A/B tests with a number of subjects that is way larger than 15.
+                In fact, a little bit later, we&apos;re going to calculate the minimum number of subjects that are
+                needed to confidently conclude a test.
+            </p>
+        </section>
+        <section>
+            <h2>Normal Approximation</h2>
+            <!-- 
+
+            -->
+        </section>
+        <section>
+            <h2>A/B Test</h2>
+            <!-- 
+                A and B Normal Distributions
+                (/ n) to bring the domain between [0, 1] to talk in terms of percentages
+            -->
+
+            <svg id="zero-to-one-normal"></svg>
+
+            So far we&apos;ve been interpreting satistics as doing a random experiment over and over again.
+            Another interpretation of statistics is that we&apos;re drawing randomly selected subsets (samples)
+            of a very large population: Frequentism
+            This interpretation is useful when dealing with popular polls.
+            (polls: sample is less than population)
+            draw over and over again
+
+
+            Two/or more binomial distributions
+
+            Next post:
+                A/B confidence intervals
+
+            Next post:
+                Holy grail of A/B: case assignment
+
+        </section>
+        <!--
+            Partitioning
+            Comparability
+        -->
+
+        
+    </article>
+    <script data-external="http://www.preludels.com/prelude-browser-min.js" src="http://www.preludels.com/prelude-browser-min.js"></script>
+    <script src="home/javascript/utils.js"></script>
+    <script src="home/javascript/coin-trial-table.js"></script>
+    <script src="home/javascript/binomial-histogram.js"></script>
+    <script src="home/javascript/index.js"></script>
+
+
+</body>
+</html>

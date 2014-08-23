@@ -7,4 +7,5 @@ lsc build-gh-pages.ls > temp/index.html
 cp views/home/javascript/*.js temp/home/javascript/
 cp views/home/style/*.css temp/home/style/
 git checkout gh-pages
+rm -rf home
 mv temp/* . 

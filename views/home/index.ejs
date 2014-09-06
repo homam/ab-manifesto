@@ -834,11 +834,31 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
                     <li>We are 75.5% confident that we're going to get between <code>26 and 34</code> number of Heads.</li>
                     <li>We are 10.3% confident that we're going to get between <code>30 and 30</code> (or exactly 30) number of Heads.</li>
                 </ul>
-                As you see, the larget the range, the more confident we are.
             </p>
             <p>
-                Let's play with the numbers:
+                Confidence Intervals have two components: the degree of confidence (that is a ratio) and the interval. 
+                In the example above 97.3% confidence interval of <code>22 and 38</code> means that if we were to repeat the experiment over and over again we were expecting to get a result that is between <code>22 and 38</code> in 97.3% of the time.
             </p>
+            <p>
+                Indeed we are always (100%) confident that result of the experiment would be between <code>0 and 60</code>, no matter how many times we redo the experiment.
+            </p>
+            <p>
+                In many polls we're intereted in 95% confidence intervals. Meaning that there would be 1/20 chance the the actual population's mean is not in poll's confidence interval.
+            </p>
+            <p>
+                Remember that at the time of experiment we don't know the actual mean of the population. Confidence intervals are calculated only based on sample's data.
+            </p>
+            <p>
+                Let's assume the sample size is 60.
+                Our trial resulted in \( P_{sample} \)
+                We want to calculate the confidence interval of 95% confidence:
+                \[
+                    \sum_{i = P_{sample} - \frac{\alpha}{2}}^{P_{sample} + \frac{\alpha}{2}} Binomial(P_{sample},60, i) = 95\%
+                \]
+                Solving this equation for \( \frac{\alpha}{2} \) is not easy; but we will learn some tricks later.
+                For now let's just play with the numbers to find the interval:
+            </p>
+            <!--TODO: make changes to the graph so left and right move together -->
             <div id="binomial-confidence-range-histogram">
                 <svg class="histogram with-ci-bins"></svg> 
                 <div>
@@ -861,7 +881,7 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
         <section>
             <h2><a name="polls">Polls</a></h2>
             <p>
-                Let's assume we asked a boolean question (that has a Yes or No answer) from <code>1000</code> number of people. 
+                Let's assume we asked a boolean question (that has a Yes or No answer) from <code>1000</code> people. 
                 And here's our result:
                 <pre>
 Sample Size = 1000
@@ -872,28 +892,26 @@ No          = 417 (= 1000 - 583)
             </p>
             <p>
                 But are we sure that this result is not just an accident. What if we ask a different group of people or
-                even a larger sample of 10000 people, or the whole population, will we still get the same result that 58.3% of our new sample
-                asnswer Yes? 
+                a larger sample of 10000 people, or what if we present the question to the whole population, will we be getting exactly the same 58.3% Yes answers?
             </p>
             <p>
-                Probably no, but the result will be close to 58.3%. The question is how close? 
+                Probably not; but the result will be close to 58.3%. The question is how close? 
             </p>
             <p>
                 Whenever we poll a sample (that is a subset of the population) and come up with a result, a very interesting question is that
-                how likely is it that the result of our poll be close to the actual the result of the whole population?
+                how likely is it that the result that we got by polling the sample be close to the actual result of the whole population?
             </p>
             <p>
-                For example if by 200 visits, we find that our landing page has a 38% conversion rate, how confident we are that this
-                result is close to the actual conversion rare of the page. Confidence intervals are a way of answering this kind of
+                For example if by 200 visits, we find that our landing page has 38% conversion rate, how confident are we that this
+                result is close to the actual conversion rare of the page? Confidence intervals are a way of answering this kind of
                 questions.
             </p>
             <p>
                 We are 100% confident that the actual conversion rate of the page is between 0 and 100% and we're somewhere in between. 
-                On the other hand we're almost sure that the actual conversion rate is not going to be exactly 38% that we meassured in our sample,
-                but it' going to be close that number.
+                On the other hand we're almost sure that the actual conversion rate is not going to be exactly 38% that we meassured.
             </p>
             <p>
-                Let's assume that the actual conversion rate is 38%, here's the histogram:
+                Let's assume that we repeat this poll (with a different sample of the same size same size) over and over again and 
             </p>
             <div id="binomial-polls-histogram">
                 <svg class="histogram with-ci-bins"></svg> 

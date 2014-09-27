@@ -1,4 +1,4 @@
-{mean, sum, id, map, fold, zip, filter, find, group-by, obj-to-pairs, head, tail, split-at, join, zip-all} = require 'prelude-ls'
+{mean, sum, id, map, each, fold, zip, filter, find, sort-by, group-by, obj-to-pairs, head, tail, split-at, join, zip-all, reverse} = require 'prelude-ls'
 exports = exports ? this
 
 
@@ -210,54 +210,96 @@ actions =
 			($e.val val) |> show-input-range-value 
 			val
 
-		bins = _f 'bins' .val! |> parseNum
-		left = _fix 'left', 0, bins
-		right = _fix 'right', left, bins
-		chance = _f 'p' .val! |> parseNum
 
-		data = binomial-distribution bins, chance |> zip [0 to bins] |> map ([i,v]) -> {x:i, y: v, className: if left<=i<=right then 'in' else 'out'}
+		bins = _f 'bins' .val! |> parseNum
+
+		if _f 'yeses' .get 0
+			yeses = parseNum (_f 'yeses' .val!)
+			chance =  yeses / bins
+
+			_f 'yeses' .attr \max, bins
+			_f 'p' .val chance
+		else 
+			chance = _f 'p' .val! |> parseNum
+
+		data = binomial-distribution bins, chance |> zip [0 to bins] |> map (([i,v]) -> {x:i, y: v}) 
+		cumulative-data = (data |> fold (([a, ...rest]:list, {x,y}) -> [x: x, y: y + (a?.y or 0)] ++ list ), []) |> reverse
+
+
+		if _f 'a_2' .get 0
+			a_2 = _fix 'a_2', 0, Math.round bins/2 # parseNum (_f 'a_2' .val!)
+			left = (chance * bins) - a_2
+			left = 0 if left < 0  
+			right = (chance * bins) + a_2
+			right = bins if right > bins
+			if Math.round a_2 == Math.round bins/2
+				left = 0
+				right = bins
+		else
+			left = _fix 'left', 0, bins
+			right = _fix 'right', left, bins
+
+
+
+		data = data |> map ({x,y}) -> {x:x, y: y, className: if left<=x<=right then 'in' else 'out'}
 
 		area = 
 			sum . (map (.y)) . (filter ({x,y}) -> left<=x<=right) <| data
 
 		{$vp, $block, x, y} = draw-histogram (d3.select <| $div.find \svg .get 0), data, {duration: 300, format: (d3.format '%'), drawPercentageAxis: true}
 
-		math = MathJax.Hub.getAllJax(mathJaxId)[0]
-		if !!math
-			MathJax.Hub.Queue(["Text",math,"\\sum_{i=#{left}}^{#{right}} Binomial(#{d3.format("0.2f") chance},#{bins}, i) = #{d3.format("0.2f") (area*100)}\\%"])
+		if !!mathJaxId
+			math = MathJax.Hub.getAllJax(mathJaxId)[0]
+			if !!math
+				MathJax.Hub.Queue(["Text",math,"\\sum_{i=#{Math.round left}}^{#{Math.round right}} Binomial(#{d3.format("0.2f") chance},#{bins}, i) = #{d3.format("0.2f") (area*100)}\\%"])
 
 		$block.attr \class, -> 'block ' + it.className
+		# $block.attr \style, -> 'stroke: rgb(255, 212, 5);'
 
-		{bins, chance, data ,$block}
+		[
+			[\chance, chance]
+			[\bins, bins]
+			[\left, left]
+			[\right, right]
+		] |> each ([name, val])->
+			$div.attr "data-#name", val
+		{bins, chance, data, $block}
 
 	'binomial-confidence-range': !->
 		actions.binomial-confidence-range-abs ($ \#binomial-confidence-range-histogram), 'binomial-confidence-range-histogram-math'
 
-	'binomial-polls': !->
-		{bins, chance, data, $block} = actions.binomial-confidence-range-abs ($ \#binomial-polls-histogram), 'binomial-polls-histogram-math'
+	'binomial-polls': (keep-range-ratios = true) !->
+		{bins, chance, data, $block} = actions.binomial-confidence-range-abs ($ \#binomial-polls-histogram), null #, 'binomial-polls-histogram-math'
+		mean = chance * bins
 
 		confidence-data = map ((confidence) -> {confidence, range: (binomial-distribution-find-confidence-interval-of-distribution data, confidence)}),[1,0.99,0.975,0.95,0.9,0.80,0.7,0.6,0.5]
-		format = d3.format("0.1%")
+		format = d3.format "0.1%"
+		format0 = d3.format "%"
 
 		d3.select '#binomial-polls-histogram tbody' .selectAll \tr .data confidence-data
 			..enter! .append \tr
+				..append \td .attr \class, 'mean'
 				..append \td .attr \class, 'confidence'
 				..append \td .attr \class, 'left'
 				..append \td .attr \class, 'right'
+				..append \td .attr \class, 'me'
 				..append \td .attr \class, \link .append \a .text \Show! .attr \href, 'javascript:void(0)'
+			..select \td.mean .text (format0 chance)
 			..select \td.confidence .text format . (.confidence)
 			..select \td.left .text -> "#{it.range.left} (#{it.range.left / bins |> format})" 
 			..select \td.right .text -> "#{it.range.right} (#{it.range.right / bins |> format})" 
-			..select 'td.link a' .on \click, ->
+			..select \td.me .text -> "#{((it.range.right - it.range.left) / bins)|> format}" 
+			..select 'td.link a' .on 'click', ->
+				$ '#binomial-polls-histogram input[name=a_2]' .val Math.round (it.range.right - it.range.left)/2
 				$ '#binomial-polls-histogram input[name=right]' .val it.range.right
 				$ '#binomial-polls-histogram input[name=left]' .val it.range.left
-				actions['binomial-polls']!
-
+				actions['binomial-polls'] false
 
 
 	'binomail-ci': !->
-		chance = 0.5
+		chance = $ '#ci-bins30-p' .val! |> parseNum
 		bins = $ '#ci-bins30-number-of-bins' .val! |> parseNum
+		zoom = $ '#ci-bin30-zoom' .get 0 .checked
 
 		$ci-range = $ '#ci-bins30-ci'
 		how-many-sigmas = $ci-range .val! |> parseNum
@@ -269,7 +311,9 @@ actions =
 		left =  mu - delta |> round
 		right = mu + delta |> round
 
-		data = binomial-distribution bins, chance |> zip [0 to bins] |> map ([i,v]) -> {x:i, y: v, className: if left<=i<=right then 'in' else 'out'}
+		data = binomial-distribution bins, chance |> zip [0 to bins] |> (map ([i,v]) -> {x:i, y: v, className: if left<=i<=right then 'in' else 'out'})
+		if zoom
+			data = data |> filter ({x}) -> x >= (mu - 6 * sigma) and x <= (mu + 6 * sigma)
 
 		area = 
 			sum . (map (.y)) . (filter ({x,y}) -> left<=x<=right) <| data
@@ -282,9 +326,9 @@ actions =
 
 		math = MathJax.Hub.getAllJax('ci-bins30-sum')[0]
 		if !!math
-			MathJax.Hub.Queue(["Text",math,"\\sum_{i=#{left}}^{#{right}} Binomial(#{bins}, i) = #{d3.format("0.2f") (area*100)}\\%"])
+			MathJax.Hub.Queue(["Text",math,"\\sum_{i=#{left}}^{#{right}} Binomial(#{d3.format('0.2f') chance},#{bins}, i) = #{d3.format("0.2f") (area*100)}\\%"])
 
-		{$vp, $block, x, y} = draw-histogram (d3.select '#ci-bins30'), data, {duration: 300, format: d3.format '%'}
+		{$vp, $block, x, y} = draw-histogram (d3.select '#ci-bins30'), (data |> sort-by ({x}) -> Math.abs(mu - x)), {mean: mu, standard-deviation: sigma, duration: 300, format: (d3.format '%'), zoomable: true}
 
 		$block.attr \class, -> 'block ' + it.className
 

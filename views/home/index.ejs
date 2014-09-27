@@ -815,19 +815,25 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
                 \]
             </p>
             <p>
-                It's a very low chance. But on the other hand the chance of getting any number of Heads between 
-                <code> 30 - 4 = 26 </code> and <code> 30 + 4 = 34 </code> is:
+                It's a very low chance. It means if we toss a fair coin 60 times over and over again, only in 10% of our trialswe get exactly 30 Heads. 
+            </p>
+            <p>
+                But let's see what's the chance of getting any number of Heads between
+                <code> 30 - 4 = 26 </code> and <code> 30 + 4 = 34 </code> that is a small interval around 30:
                 \[
+                    Binomial(0.5, 60, 26) \ + \ Binomial(0.5, 60, 27) \ + \ 
+                    ... \ + \ 
+                    Binomial(0.5, 60, 34) = \\
                     \sum_{i=26}^{34} Binomial(0.5, 60, i) = 75.5 \%
                 \]
-                The chance of getting between <code> 30 - 8 = 22 </code> and <code> 30 + 8 = 38 </code> Heads is:
+                Similarly the chance of getting between <code> 30 - 8 = 22 </code> and <code> 30 + 8 = 38 </code> Heads is:
                 \[
                     \sum_{i=22}^{38} Binomial(0.5, 60, i) = 97.3 \%
                 \]
-                And of course the chance of getting any number between <code> 30 - 30 = 0 </code> and <code> 30 + 30 = 60 </code> Heads is 100%.
+                And of course the chance of getting any number of Heads between <code> 30 - 30 = 0 </code> and <code> 30 + 30 = 60 </code> Heads is 100%.
             </p>
             <p>
-                We can think like this: after 60 trials,
+                We might think like this: after 60 trials,
                 <ul>
                     <li>We are 100% confident that we're going to get between <code>0 and 60</code> number of Heads.</li>
                     <li>We are 97.3% confident that we're going to get between <code>22 and 38</code> number of Heads.</li>
@@ -843,17 +849,14 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
                 Indeed we are always (100%) confident that result of the experiment would be between <code>0 and 60</code>, no matter how many times we redo the experiment.
             </p>
             <p>
-                In many polls we're intereted in 95% confidence intervals. Meaning that there would be 1/20 chance the the actual population's mean is not in poll's confidence interval.
+                Remember that at the time of experiment we don't know the actual mean of the population. Confidence intervals are calculated based on sample's data.
             </p>
             <p>
-                Remember that at the time of experiment we don't know the actual mean of the population. Confidence intervals are calculated only based on sample's data.
-            </p>
-            <p>
-                Let's assume the sample size is 60.
-                Our trial resulted in \( P_{sample} \)
-                We want to calculate the confidence interval of 95% confidence:
+                Generally, for a sample of size <code>n</code>, if
+                our trial resulted in \( P_{sample} \)
+                the confidence interval of CI% is calculated by:
                 \[
-                    \sum_{i = P_{sample} - \frac{\alpha}{2}}^{P_{sample} + \frac{\alpha}{2}} Binomial(P_{sample},60, i) = 95\%
+                    \sum_{i = P_{sample} - \frac{\alpha}{2}}^{P_{sample} + \frac{\alpha}{2}} Binomial(P_{sample}, n, i) = CI\%
                 \]
                 Solving this equation for \( \frac{\alpha}{2} \) is not easy; but we will learn some tricks later.
                 For now let's just play with the numbers to find the interval:
@@ -862,14 +865,18 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
             <div id="binomial-confidence-range-histogram">
                 <svg class="histogram with-ci-bins"></svg> 
                 <div>
+                    a/2: <input type="range" min="0" max="30" name="a_2" value="4" onchange="actions['binomial-confidence-range']()">
+                    <label data-value-for="a_2">4</label>
+                </div>
+               <!--  <div>
                     Left: <input type="range" min="0" max="60" name="left" value="26" step="1" onchange="actions['binomial-confidence-range']()"> <label data-value-for="left">26</label>,
                     Right: <input type="range" min="0" max="60" name="right" value="34" step="1" onchange="actions['binomial-confidence-range']()"> <label data-value-for="right">34</label>
+                </div> -->
+                <div>
+                    Number of bins (n): <input type="range" min="0" max="200" name="bins" value="60" step="1" onchange="actions['binomial-confidence-range']()"> <label data-value-for="bins">60</label>,
                 </div>
                 <div>
-                    Number of bins: <input type="range" min="0" max="200" name="bins" value="60" step="1" onchange="actions['binomial-confidence-range']()"> <label data-value-for="bins">60</label>,
-                </div>
-                <div>
-                    P: <input type="range" min="0" max="1" name="p" value="0.5" step="0.01" onchange="actions['binomial-confidence-range']()"> <label data-value-for="p">0.5</label>,
+                    P of sample: <input type="range" min="0" max="1" name="p" value="0.5" step="0.01" onchange="actions['binomial-confidence-range']()"> <label data-value-for="p">0.5</label>
                 </div>
                 <div id="binomial-confidence-range-histogram-math">
                     \[
@@ -877,80 +884,137 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
                     \]
                 </div>
             </div>
+            <p>
+
+            </p>
+        </section>
+        <section>
+            <h2><a name="margin-of-error">Margin of Error</a></h2>
+            <p>
+                In the above graph, let's set the sample size (n) = 200, Probablity = 0.5 and \( \frac{a}{2} \) = 14
+                <a href='javascript:$("#binomial-confidence-range-histogram input[name=bins]").val(200).change();$("#binomial-confidence-range-histogram input[name=p]").val(0.5).change();$("#binomial-confidence-range-histogram input[name=a_2]").val(14).change()'>Do it!</a>
+                We end up with 96% confidence. This means that if we were to repeat this experiment with samples of 200 in size, in 96% of the time we would've end up with a mean that is between 86 and 114.
+            </p>
+            <p>
+                A more natural of way expressing this fact is to say that the Margin of Error with 96% Confidence Interval for our experiment is \( \frac{\frac{(114 - 86)}{2}}{200} = \frac{14}{200} =  7 \% \)
+            </p>
         </section>
         <section>
             <h2><a name="polls">Polls</a></h2>
             <p>
-                Let's assume we asked a boolean question (that has a Yes or No answer) from <code>1000</code> people. 
+                Let's assume we asked a boolean question (that has a Yes or No answer) from <code>500</code> people. 
                 And here's our result:
                 <pre>
-Sample Size = 1000
-Yes         = 583
-No          = 417 (= 1000 - 583)
+Sample Size = 500
+Yes         = 235
+No          = 265 (= 500 - 235)
                 </pre>
-                Then the probablity of getting a Yes is \( \frac{583}{1000} = 58.3\% \)
+                Then the probablity of getting a Yes is \( \frac{235}{500} = 47.0\% \)
             </p>
             <p>
-                But are we sure that this result is not just an accident. What if we ask a different group of people or
-                a larger sample of 10000 people, or what if we present the question to the whole population, will we be getting exactly the same 58.3% Yes answers?
+                Whenver we poll a sample (that is smaller than the populaiton), we are interested in expressing the result with a mean (here 47%) and its Confidence and Margin of Error. 
             </p>
             <p>
-                Probably not; but the result will be close to 58.3%. The question is how close? 
+                Our degree of Confidence depends on the Margin of Error. 
             </p>
             <p>
-                Whenever we poll a sample (that is a subset of the population) and come up with a result, a very interesting question is that
-                how likely is it that the result that we got by polling the sample be close to the actual result of the whole population?
-            </p>
-            <p>
-                For example if by 200 visits, we find that our landing page has 38% conversion rate, how confident are we that this
-                result is close to the actual conversion rare of the page? Confidence intervals are a way of answering this kind of
-                questions.
-            </p>
-            <p>
-                We are 100% confident that the actual conversion rate of the page is between 0 and 100% and we're somewhere in between. 
-                On the other hand we're almost sure that the actual conversion rate is not going to be exactly 38% that we meassured.
-            </p>
-            <p>
-                Let's assume that we repeat this poll (with a different sample of the same size same size) over and over again and 
+                Indeed we don't know the actual Mean of the whole Population. But we can assume it would be fairly close to our 47%. Let's graph the histogram assuming the Population Mean is 47% and we're drawing random samples of 500 in size from the Population:
             </p>
             <div id="binomial-polls-histogram">
                 <svg class="histogram with-ci-bins"></svg> 
                 <div>
-                    Left: <input type="range" min="0" max="1000" name="left" value="0" step="1" onchange="actions['binomial-polls']()"> 
-                    <label data-value-for="left" data-transform='x + " (" + d3.format("%")(x/parseNum($("#binomial-polls-histogram input[name=bins]").val())) + ")"'>0</label>,
-                    Right: <input type="range" min="0" max="1000" name="right" value="200" step="1" onchange="actions['binomial-polls']()"> 
-                    <label data-value-for="right" data-transform='x + " (" + d3.format("%")(x/parseNum($("#binomial-polls-histogram input[name=bins]").val())) + ")"'>200</label>
+                    Sample Size (n): <input type="range" min="0" max="1000" name="bins" value="500" step="1" onchange="actions['binomial-polls'](true)"> <label data-value-for="bins">500</label>
                 </div>
                 <div>
-                    Number of bins: <input type="range" min="0" max="1000" name="bins" value="200" step="1" onchange="actions['binomial-polls']()"> <label data-value-for="bins">200</label>,
+                    Yes Votes: <input type="range" min="0" max="500" name="yeses" value="235" step="1" onchange="actions['binomial-polls'](true)"> <label data-value-for="yeses">235</label>
                 </div>
                 <div>
-                    P: <input type="range" min="0" max="1" name="p" value="0.38" step="0.01" onchange="actions['binomial-polls']()"> <label data-value-for="p">0.38</label>,
+                    a/2: <input type="range" min="0" max="30" name="a_2" value="21" onchange="actions['binomial-polls'](false)">
+                    <label data-value-for="a_2">21</label>
+                    <!-- TODO: add CI range to the value (eg: [mean - 4, mean + 4]) -->
                 </div>
-                <div id="binomial-polls-histogram-math">
+<!--                 <div>
+                    P: <input type="range" min="0" max="1" name="p" value="0.38" step="0.01" onchange="actions['binomial-polls'](true)"> <label data-value-for="p" data-transform='d3.format("%")(x)'>38%</label>
+                </div> -->
+<!--                 <div id="binomial-polls-histogram-math">
                     \[
                         \sum_{i=26}^{34} Binomial(0.50,60, i) = 75.49\%
                     \]
-                </div>
+                </div> -->
                 <div>
                     <table>
                         <thead>
                             <tr>
                                 <td></td>
+                                <td></td>
                                 <th colspan="2">Confidence Interval</th>
+                                <td></td>
                             </tr>
                             <tr>
-                                <th>Confidence</th><th>Left</th><th>Right</th>
+                                <th>Mean</th>
+                                <th>Confidence</th>
+                                <th>Left</th><th>Right</th>
+                                <th>Margin of Error</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
                 </div>
-
             </div>
-
             <p>
-            Around the expected value:
+                <ul>
+                <li>
+                We are 100% confident that the true Mean of our Population is 47% with a Margin of Error of 100% (between 0 and 100%).</li>
+                <li>
+                We are 99% confident that the True Mean of our Population is 47% with a Margin of Error of 11.2% (between 41.4% and 52.6%).</li>
+                <li>
+                We are 95% confident that the True Mean of our Population is 47% with a Margin of Error of 8.4% (between 42.8% and 51.2%).
+                </li>
+                <li>...</li>
+                </ul>
+            </p>
+            <p>
+                The smaller the Margin of Error is, the less confident we are.
+            </p>
+        </section>
+        <section>
+            <h2>Area Under the Curve</h2>
+            <p>
+                Binomial Distribution is a Function:
+                \[
+                    Binomial (p, \ n, \ x) = Choose(n, \ x) \ p^x \ (1-p)^{n-x}
+                \]
+                Where
+                \[
+                    Choose(n, \ k) = \frac{n!}{k! \ (n-k)!}
+                \]
+                <code>n</code> is the number of boolean trials (sample size). And <code>p</code> is the probability of success in each trial \( 0 \le p \le 1 \).
+            </p>
+            <p>
+                The curried form of <code>Binomial</code> function, for given <code>p</code> and <code>n</code> is:
+                \[
+                    f (x) = Choose(n, \ x) \ p^x \ (1-p)^{n-x} \\
+                    0 \le x \le n
+                \]
+            </p>
+            <p>
+                We can analyze the curried form of the binomial distribution and derive properties that are true for any Binomial Distribution Function with diffenrent <code>n</code> or <code>p</code>.
+            </p>
+            <p>
+                The value of <code>f(x)</code> indicates the chance of getting <code>x</code> in a random experiment. <code>f(x)</code> is maximum at <code>x = n p</code>, we call it the Expected Value.
+            </p>
+            <p>
+                The sum of values of <code>f(x)</code> for \( a \le x \le b \) is the probability of getting a result between <code>a</code> and <code>b</code> in a random experiment. Indeed \( \sum_{x = 0}^{n} f (x) = 1 \).
+            </p>
+            <p>
+                The Standard Deviation is:
+                \(
+                    \sigma = \sqrt{n \ p \ (1 - p)}
+                \)
+            </p>
+            <p>
+                Let's graph the distribution, highlighting one standard deviation to the left and right of the mean:
             </p>
             <svg id="ci-bins30" class="histogram with-ci-bins"></svg>
             <div>
@@ -965,12 +1029,36 @@ No          = 417 (= 1000 - 583)
                 \]
             </div>
             <div>
-                 Number of Bins:
-                <input id="ci-bins30-number-of-bins" type="range" min="10" max="500" value="60" name='number-of-bins' onchange="actions['binomail-ci']()">
-                <label data-value-for='number-of-bins' data-transform='x+1'>61</label>
+                 n:
+                <input id="ci-bins30-number-of-bins" type="range" min="10" max="1000" value="200" name='number-of-bins' onchange="actions['binomail-ci']()">
+                <label data-value-for='number-of-bins' data-transform='x'>61</label>
+            </div>
+            <div>
+                p: <input id="ci-bins30-p" type="range" min="0" max="1" name="p" value="0.5" step="0.01" onchange="actions['binomail-ci']()"> 
+                <label data-value-for='p' data-transform='d3.format("%")(x)'>50%</label>
+            </div>
+            <div>
+                <input type="checkbox" id="ci-bin30-zoom" onchange="actions['binomail-ci']()"><label for="ci-bin30-zoom">Zoom</label>
             </div>
             <p>
-
+                Let's calculate the probability of getting a result that's between <code>1 &sigma;</code> larger or smaller than the Mean, for <code>n = 150</code> and <code>p = 50%</code> <a href='javascript:$("#ci-bins30-p").val(0.5).change();$("#ci-bins30-number-of-bins").val(150).change();$("#ci-bins30-ci").val(1).change()'>Do it!</a>. Now let's play with <code>n</code> and <code>p</code>. Move the sliders and change these values and notice that the sum of chances almost does not change.
+            </p>
+            <p>
+                For big enough samples, the probability of getting a result that is <code>k &sigma;</code> (k Standard Deviation) around the Mean is independent of the sample size or its Chance of Success.
+            </p>
+            <aside>
+                Remember that the Mean of an experiment is its Sample Size multiplied by the Chance of Success:
+                \[
+                    Sample \ Mean = n \ p
+                \]
+            </aside>
+            <p>
+                For example for any <code>n</code> (Sample Eize) and <code>p</code> (Chance of Succeess)
+                <ul>
+                    <li>The probability of getting a result whithin 1 Standard Deviation of the Mean is 68.2% <a href='javascript:$("#ci-bins30-ci").val(1).change()'>Show me</a></li>
+                    <li>The probability of getting a result whithin 2 Standard Deviation of the Mean is 95.5% <a href='javascript:$("#ci-bins30-ci").val(2).change()'>Show me</a></li>
+                    <li>The probability of getting a result whithin 3 Standard Deviation of the Mean is 99.7% <a href='javascript:$("#ci-bins30-ci").val(3).change()'>Show me</a></li>
+                </ul>
             </p>
             <!-- 
                 Poll
@@ -998,6 +1086,9 @@ No          = 417 (= 1000 - 583)
         </section>
         <section>
             <h2>Normal Approximation</h2>
+            <p>
+                We have a practical problem with Binomial Distribution: calculating factorials is not efficient and factorials are are very large and we easily run out of integer limits of our programming language.
+            </p>
             <!-- 
 
             -->

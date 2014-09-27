@@ -1,4 +1,4 @@
-{id, Obj,map, concat, filter, each, find, fold, foldr, fold1, all, flatten, sum, product, zip-all, group-by, obj-to-pairs, partition, join, unique, sort-by, reverse, empty, zip, take-while, break-list, span, head, last} = require 'prelude-ls'
+{id, Obj,map, concat, filter, each, find, fold, foldr, fold1, all, flatten, sum, product, zip-all, group-by, obj-to-pairs, partition, join, unique, sort-by, reverse, empty, zip, take-while, break-list, span, head, last, tail} = require 'prelude-ls'
 exports = exports || this
 
 random = Math.random
@@ -30,8 +30,29 @@ shuffle = (arr) ->
 
 wait = (time, f) -> setTimeout f, time
 
+closest = (o, a, b) -->
+	if (abs o - a) > (abs o - b) then b else a
 
+closest-then = (o, a, ifa, b, ifb) -->
+	if (abs o - a) <= (abs o - b) then ifa else ifb	
 
+closest-in-list = (o, xs) -->
+	return null if empty xs
+	return xs.0 if xs.length == 1
+	find = (result, [x, ...rest]) ->
+		return (closest o, result, x) if empty rest
+		find (closest o, result, x), rest
+
+	find xs.0, tail xs
+
+closest-in-list-with-transform = (o, c-selector, v-selector, xs) ->
+	return null if empty xs
+	return [(c-selector xs.0), (v-selector xs.0)] if xs.length == 1
+	find = ([c, v], [x, ...rest]) ->
+		return (closest-then o, c, [c, v], (c-selector x), [(c-selector x), (v-selector x)]) if empty rest
+		find (closest-then o, c, [c, v], (c-selector x), [(c-selector x), (v-selector x)]), rest
+
+	find [(c-selector xs.0), (v-selector xs.0)], tail xs
 
 toss = -> round random!
 
@@ -116,6 +137,11 @@ exports.parseNum = parseNum
 exports.shuffle = shuffle
 exports.wait = wait
 exports.noop = $.noop
+
+exports.closest = closest
+exports.closest-then = closest-then
+exports.closest-in-list = closest-in-list
+exports.closest-in-list-with-transform = closest-in-list-with-transform
 
 exports.toss = toss
 exports.trial = trial

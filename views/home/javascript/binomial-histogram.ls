@@ -1,4 +1,4 @@
-{mean, sum, id, map, fold, filter, group-by, obj-to-pairs, head, tail, split-at, zip-all, maximum, minimum} = require 'prelude-ls'
+{mean, sum, id, map, fold, filter, group-by, obj-to-pairs, head, tail, split-at, zip-all, maximum, minimum, sort-by, sort} = require 'prelude-ls'
 exports = exports ? this
 
 # binomial trial histogram
@@ -84,9 +84,7 @@ draw-experiment-n-tries = ($svg, data, {duration = 1000, width = 620, height = 2
 
 	dgroups
 
-draw-histogram-axes = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x), it), ydomainf = (-> [0, d3.max map (.y), it]),  duration = 1000, width = 600, height = 260, drawPercentageAxis = false}) ->
-
-	console.log drawPercentageAxis
+draw-histogram-axes = ($svg, data, {format = (d3.format ","), xdomainf = (map (.x)), ydomainf = (-> [0, d3.max map (.y), it]),  duration = 1000, width = 600, height = 260, drawPercentageAxis = false, zoomable = false}) ->
 
 	margin =
 		top: 5
@@ -100,8 +98,23 @@ draw-histogram-axes = ($svg, data, {format = (d3.format ","), xdomainf = (-> map
 	$svg.attr \width, (width+margin.left+margin.right) .attr \height, (height+margin.bottom+margin.top)
 
 	
-	x = d3.scale.ordinal!
-		..domain(xdomainf data).rangeBands([0,width], 0.1, 0) # .rangeRoundBands([0,width], 0.1)
+	if zoomable
+		xs = xdomainf data
+		min-xs = minimum xs
+		max-xs = maximum xs
+		range-xs-f = (x) -> (width/(max-xs - min-xs)) * (x - min-xs)
+		range-xs = map range-xs-f, xs
+		x = d3.scale.ordinal!.domain(xs).range range-xs
+		x.rangeBand = -> width/range-xs.length
+
+		x-xAxis = d3.scale.ordinal!
+			..domain(sort xs).rangeBands([0,width], 0.1, 0)
+	else
+		x = d3.scale.ordinal!
+			..domain(xdomainf data).rangeBands([0,width], 0.1, 0)
+		x-xAxis = x
+
+
 	y = d3.scale.linear! .domain (ydomainf data) .range [height,0]
 	
 
@@ -118,7 +131,7 @@ draw-histogram-axes = ($svg, data, {format = (d3.format ","), xdomainf = (-> map
 		..transition! .duration 200 .call yAxis
 
 	bins = x.domain! .length
-	xAxis = d3.svg.axis! .scale x .orient 'bottom'
+	xAxis = d3.svg.axis! .scale x-xAxis .orient 'bottom'
 	$xAxis = $svg.select '.x.axis' .attr "transform", "translate(0,#{height})"
 		..transition! .duration 200 .call xAxis
 		..selectAll 'text' .text ((v,i)->  if i % ceil(bins/20) == 0 then v else '' )
@@ -133,9 +146,10 @@ draw-histogram-axes = ($svg, data, {format = (d3.format ","), xdomainf = (-> map
 	{$vp, x, y, width, height}
 
 # data :: [{x, y}]
-draw-histogram = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x), it), ydomainf = (-> [0, d3.max map (.y), it]),  duration = 1000, width = 600, height = 260, drawPercentageAxis = false}) ->
+draw-histogram = ($svg, data, {format = (d3.format ","), xdomainf = (-> map (.x), it), ydomainf = (-> [0, d3.max map (.y), it]),  duration = 1000, width = 600, height = 260, drawPercentageAxis = false, mean = null, standard-deviation = null, zoomable = false}) ->
 
-	{$vp, x, y, width, height} = draw-histogram-axes($svg, data, {format, xdomainf, ydomainf,duration,width,height,drawPercentageAxis})
+
+	{$vp, x, y, width, height} = draw-histogram-axes($svg, data, {format, xdomainf, ydomainf,duration,width,height,drawPercentageAxis,zoomable})
 
 	$block = $vp.selectAll 'rect.block' .data id
 		..enter! .append \rect .attr \class, \block 

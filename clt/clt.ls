@@ -35,6 +35,22 @@ normal-cdf = (avg, sigma, x) -->
 
 standard-normal-cdf = normal-cdf 0, 1
 
+
+derivitive = (delta, f, x) -->
+	((f <| x + delta) - (f x)) / delta
+
+newton = (precision, f, x0) -->
+	delta = 0.0001
+	df = derivitive delta, f
+
+	x0 |>
+		fix (next) -> (x0) ->
+			dfx = df x0
+			return next Math.random!, if (abs dfx) < delta
+			x = x0 - ( (f x0) / dfx )
+			return x if (abs <| x - x0) <= precision
+			next x
+
 # population = [1 to 5000] |> map (-> random 0, 10)
 
 [_, population-mu, population-sigma] = statistics population
@@ -101,21 +117,30 @@ console.log <| find-confidence-interval-of-population-mean 60, 7.177, (sqrt 8.69
 console.log \---- 
 # ---- 
 
-find-propability-of-population-mean-in-a-range = (sample-mu, samples-means-sigma, [lower, upper]) -->
-	standard-upper = (upper - sample-mu)/samples-means-sigma
-	standard-lower = (lower - sample-mu)/samples-means-sigma
-	(standard-normal-cdf standard-upper) - (standard-normal-cdf standard-lower)
+# generic functions
 
+find-propability-of-population-mean-in-a-range = (sample-mu, samples-means-sigma, [lower, upper]) -->
+	standard-upper = (upper - sample-mu) / samples-means-sigma
+	standard-lower = (lower - sample-mu) / samples-means-sigma
+	(standard-normal-cdf standard-upper) - (standard-normal-cdf standard-lower)
 
 find-confidence-interval-of-population-mean = (sample-mu, samples-means-sigma, confidence) -->
 	calculate-confidence = find-propability-of-population-mean-in-a-range sample-mu, samples-means-sigma
 	delta = samples-means-sigma/1000
-	0 |> 
-		fix (next) -> (d) ->
-			interval = [sample-mu - d, sample-mu + d]
-			return interval if (calculate-confidence interval) >= confidence
-			next d + delta
+	interval = null
+	f = (d) -> 
+		interval := [sample-mu - d, sample-mu + d]
+		(calculate-confidence interval) - confidence
+	newton 0.001, f, 0
+	return interval
+	# 0 |> 
+	# 	fix (next) -> (d) ->
+	# 		interval = [sample-mu - d, sample-mu + d]
+	# 		return interval if (calculate-confidence interval) >= confidence
+	# 		next d + delta
 
+
+# continuous variable
 
 find-propability-of-population-mean-in-a-range-for-continuous-variable = (sample-size, sample-mu, sample-sigma, [lower, upper]) -->
 	find-propability-of-population-mean-in-a-range do 
@@ -130,18 +155,20 @@ find-confidence-interval-of-population-mean-for-continuous-variable = (sample-si
 		confidence
 
 
+# binomial variable
+
 find-propability-of-population-mean-in-a-range-for-binomial-variable = (sample-size, successes, [lower, upper]) -->
 	find-propability-of-population-mean-in-a-range do 
 		successes / sample-size
 		sqrt(sample-size * (successes/sample-size) * (1 - (successes/sample-size))) /sample-size
 		[lower, upper]
 
-
 find-confidence-interval-of-population-mean-for-binomial-variable = (sample-size, successes, confidence) -->
 	find-confidence-interval-of-population-mean do 
-		(successes/sample-size)
+		successes / sample-size
 		sqrt(sample-size * (successes/sample-size) * (1 - (successes/sample-size))) /sample-size
 		confidence
+
 
 
 console.log <| find-propability-of-population-mean-in-a-range-for-continuous-variable do
@@ -171,6 +198,7 @@ console.log <| find-confidence-interval-of-population-mean-for-continuous-variab
 	7.177 # sample mu
 	sqrt 8.691 # sample sigma
 	0.95 # confidence
+
 
 
 # -----

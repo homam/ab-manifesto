@@ -1,0 +1,27 @@
+body {
+  background-color: #fff;
+  font-family: sans-serif;
+}
+svg {
+  display: block;
+  font: normal 12px Arial;
+}
+svg .axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+svg .axis line {
+  stroke: #c0c0c0;
+  stoke-width: 0.3;
+}
+line {
+  stroke: #000;
+  fill: none;
+}
+.tick {
+  fill: #00f;
+}
+svg .in {
+  fill: #008000;
+}

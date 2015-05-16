@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+    <head>
+        <title>A/B Tests</title>
+        <script 
+            data-external="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" 
+            src="javascript/libs/jquery2.js"></script>
+        <script 
+            data-external="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"
+            src="javascript/libs/d3.js"></script>
+        <link href="sigma-mean/style/index.css" type="text/css" rel="Stylesheet" />
+    </head>
+<body>
+	<svg width="600" height="400"></svg>
+    <div>
+        n: <input type="range" min="50" max="1000" step="1" name="n" 
+        onchange="actions['draw-binomial-distribution-with-sigmas']($('body'))">
+    </div>
+    <div>
+        p: <input type="range" min="0" max="1" name="p" value="0.5" step="0.01" 
+        onchange="actions['draw-binomial-distribution-with-sigmas']($('body'))">
+    </div>
+    <div>
+        <input type="checkbox" id="sigma-zoom" name="zoom" 
+        onchange="actions['draw-binomial-distribution-with-sigmas']($('body'))"><label for="sigma-zoom">Zoom</label>
+    </div>
+    <script 
+        data-external="http://www.preludels.com/prelude-browser-min.js"
+        src="javascript/libs/prelude-browser.js"></script>
+    <script src="home/javascript/utils.js"></script>
+    <script src="sigma-mean/javascript/index.js"></script>
+</body>
+</html>

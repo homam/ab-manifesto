@@ -108,7 +108,7 @@ draw-histogram-axes = ($svg, data, {format = (d3.format ","), xdomainf = (map (.
 		x.rangeBand = -> width/range-xs.length
 
 		x-xAxis = d3.scale.ordinal!
-			..domain(sort xs).rangeBands([0,width], 0.1, 0)
+			..domain(sort xs).rangeBands([0,width], 0.0, 0)
 	else
 		x = d3.scale.ordinal!
 			..domain(xdomainf data).rangeBands([0,width], 0.1, 0)

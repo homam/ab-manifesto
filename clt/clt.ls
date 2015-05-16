@@ -4,7 +4,7 @@ population = require \./population.json
 statistics = (arr, sample = false) ->
 	length = arr.length
 	average = mean arr
-	sigma = arr |> map (-> (it - average) * (it - average)) |> mean |> sqrt # sum |> (/ (length - if sample then 1 else 0)) |> sqrt
+	sigma = arr |> map (-> (it - average) * (it - average)) |> sum |> (/ (length - if sample then 1 else 0)) |> sqrt
 	[length, average, sigma]
 
 
@@ -40,16 +40,19 @@ derivitive = (delta, f, x) -->
 	((f <| x + delta) - (f x)) / delta
 
 newton = (precision, f, x0) -->
-	delta = 0.0001
-	df = derivitive delta, f
+	df = derivitive precision/10, f
 
 	x0 |>
 		fix (next) -> (x0) ->
 			dfx = df x0
-			return next Math.random!, if (abs dfx) < delta
+			return next Math.random!, if (abs dfx) < precision
 			x = x0 - ( (f x0) / dfx )
 			return x if (abs <| x - x0) <= precision
 			next x
+
+
+
+
 
 # population = [1 to 5000] |> map (-> random 0, 10)
 
@@ -127,17 +130,11 @@ find-propability-of-population-mean-in-a-range = (sample-mu, samples-means-sigma
 find-confidence-interval-of-population-mean = (sample-mu, samples-means-sigma, confidence) -->
 	calculate-confidence = find-propability-of-population-mean-in-a-range sample-mu, samples-means-sigma
 	delta = samples-means-sigma/1000
-	interval = null
 	f = (d) -> 
-		interval := [sample-mu - d, sample-mu + d]
+		interval = [sample-mu - d, sample-mu + d]
 		(calculate-confidence interval) - confidence
-	newton 0.001, f, 0
-	return interval
-	# 0 |> 
-	# 	fix (next) -> (d) ->
-	# 		interval = [sample-mu - d, sample-mu + d]
-	# 		return interval if (calculate-confidence interval) >= confidence
-	# 		next d + delta
+	d = newton 0.0001, f, 0
+	return [sample-mu - d, sample-mu + d]
 
 
 # continuous variable

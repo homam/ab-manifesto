@@ -636,11 +636,11 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             </p>
             <p>
                 Because we're always studying a part of the population, we cannot be absolutely confident that our
-                statistics are 100% accurate. For example if we find out that 60 out of 200 visitors of our landing page
+                statistics are 100% accurate. For example if we find that 60 out of 200 visitors of our landing page
                 had converted, then we can say that the conversion rate of the landing page is \( \frac{60}{200} = 30 \% \).
                 But this 30% might change as we get more visitors. It's a product of chance, we just might have
                 been lucky with the first 200 visitors and have registered a higher conversion rate (or the opposite).
-                We can only determine the actual conversion rate of a landing page, when we retire the page and
+                We can only determine the true conversion rate of a landing page, when we retire the page and
                 stop its traffic. But that's not what we usually want; we're interested to find how a page or
                 how the A and B cases of our test are performing before it's too late.
             </p>
@@ -660,9 +660,6 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             </pre>
             <p>
                 Here we're using frequentism interpretation of statistics.
-                If we are dealing with a fair coin, we expect to have picked around 5 Heads and 5 Tails.
-                If the chance of getting a Head at each toss is 30%, then we expect to have around
-                3 Heads and 6 Tails.
             </p>
             <div class='tip'>
                 Randomly picking 10 items from this infinite list of toss results is equivalent to tossing a coin for 10 times.
@@ -679,13 +676,13 @@ Number of Heads + Number of Tails =  Number of throws (10 times in this example)
             </div>
             <p>
                 This interpretation is very useful in our landing page problem;
-                In the above example, assume each toss of coin represent a visitor (visitor either concerts or not).
+                Let's assume each toss of coin represent a visitor (visitor either concerts or not).
                 The size of the population (everyone that will eventually see our landing page) is huge,
-                we will assume it's infinite.
+                we assume it's infinite.
             </p>
             <p>
                 We are interested to know how close is the conversion rate that we've recorded
-                after just 200 visits to the landing page to the actual conversion
+                after just 200 visits to the landing page to the true conversion
                 rate of a landing page (that can only be calculated when the page is expired)?
             </p>
             <p>
@@ -788,7 +785,7 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
             <p>
                 For example, with n = 1000 trials and P = 0.34:
                 \[
-                    \sigma = \sqrt{1000 \times 0.34 \times (1 - 0.34)} = \sqrt{1000 \times 0.34 \times 0.66} = 224.4
+                    \sigma = \sqrt{1000 \times 0.34 \times (1 - 0.34)} = \sqrt{1000 \times 0.34 \times 0.66} = \sqrt{224.4} = 14.98
                 \]
             </p>
             <p>
@@ -815,10 +812,10 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
                 \]
             </p>
             <p>
-                It's a very low chance. It means if we toss a fair coin 60 times over and over again, only in 10% of our trialswe get exactly 30 Heads. 
+                It's a very low chance. It means if we toss a fair coin 60 times over and over again, only in 10% of our trials we get exactly 30 Heads. 
             </p>
             <p>
-                But let's see what's the chance of getting any number of Heads between
+                But let's see what would be the chance of getting any number of Heads between
                 <code> 30 - 4 = 26 </code> and <code> 30 + 4 = 34 </code> that is a small interval around 30:
                 \[
                     Binomial(0.5, 60, 26) \ + \ Binomial(0.5, 60, 27) \ + \ 
@@ -830,7 +827,7 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
                 \[
                     \sum_{i=22}^{38} Binomial(0.5, 60, i) = 97.3 \%
                 \]
-                And of course the chance of getting any number of Heads between <code> 30 - 30 = 0 </code> and <code> 30 + 30 = 60 </code> Heads is 100%.
+                And of course the chance of getting any number of Heads between <code> 30 - 30 = 0 </code> and <code> 30 + 30 = 60 </code> is 100%.
             </p>
             <p>
                 We might think like this: after 60 trials,
@@ -846,10 +843,10 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
                 In the example above 97.3% confidence interval of <code>22 and 38</code> means that if we were to repeat the experiment over and over again we were expecting to get a result that is between <code>22 and 38</code> in 97.3% of the time.
             </p>
             <p>
-                Indeed we are always (100%) confident that result of the experiment would be between <code>0 and 60</code>, no matter how many times we redo the experiment.
+                Indeed we are always (100%) confident that the result of the experiment will be between <code>0 and 60</code>, no matter how many times we redo the experiment.
             </p>
             <p>
-                Remember that at the time of experiment we don't know the actual mean of the population. Confidence intervals are calculated based on sample's data.
+                Remember that at the time of experiment we don't know the real mean of the population. Confidence intervals are calculated based on sample's data.
             </p>
             <p>
                 Generally, for a sample of size <code>n</code>, if
@@ -893,7 +890,7 @@ Expected value = (0 &times; Chance of getting 0 Heads) +
             <p>
                 In the above graph, let's set the sample size (n) = 200, Probablity = 0.5 and \( \frac{a}{2} \) = 14
                 <a href='javascript:$("#binomial-confidence-range-histogram input[name=bins]").val(200).change();$("#binomial-confidence-range-histogram input[name=p]").val(0.5).change();$("#binomial-confidence-range-histogram input[name=a_2]").val(14).change()'>Do it!</a>
-                We end up with 96% confidence. This means that if we were to repeat this experiment with samples of 200 in size, in 96% of the time we would've end up with a mean that is between 86 and 114.
+                We end up with 96% confidence. This means that if we were to repeat this experiment with samples of 200 in size, in 96% of the time we would've ended up with a mean that is between 86 and 114.
             </p>
             <p>
                 A more natural of way expressing this fact is to say that the Margin of Error with 96% Confidence Interval for our experiment is \( \frac{\frac{(114 - 86)}{2}}{200} = \frac{14}{200} =  7 \% \)
